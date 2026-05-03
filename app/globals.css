@@ -45,6 +45,34 @@
     --elevation-md: 0 4px 20px rgba(0,0,0,0.50), 0 1px 4px rgba(0,0,0,0.28);
     --glow-primary: 0 0 20px rgba(99,102,241,0.25);
     --glow-primary-sm: 0 0 12px rgba(99,102,241,0.20);
+
+    --neon-indigo: #6366F1;
+    --neon-purple: #A855F7;
+    --neon-pink: #EC4899;
+    --neon-amber: #F59E0B;
+    --neon-emerald: #10B981;
+    --neon-cyan: #06B6D4;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --surface-0: #09090B;
+    --surface-1: #18181B;
+    --surface-2: #27272A;
+    --surface-3: #3F3F46;
+    --surface-4: #52525B;
+    --hover-overlay: rgba(255, 255, 255, 0.05);
+    --hover-overlay-md: rgba(255, 255, 255, 0.1);
+    --text-dim: #A1A1AA;
   }
 
   .light {
@@ -81,6 +109,22 @@
     --elevation-md: 0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
     --glow-primary: 0 0 20px rgba(79,82,208,0.15);
     --glow-primary-sm: 0 0 12px rgba(79,82,208,0.10);
+
+    --neon-indigo: #4F52D0;
+    --neon-purple: #9333EA;
+    --neon-pink: #DB2777;
+    --neon-amber: #D97706;
+    --neon-emerald: #059669;
+    --neon-cyan: #0891B2;
+
+    --surface-0: #FFFFFF;
+    --surface-1: #F4F5F7;
+    --surface-2: #EEEEF4;
+    --surface-3: #E4E5EC;
+    --surface-4: #D4D4D8;
+    --hover-overlay: rgba(0, 0, 0, 0.05);
+    --hover-overlay-md: rgba(0, 0, 0, 0.1);
+    --text-dim: #64646E;
   }
 }
 
@@ -90,5 +134,52 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .at-btn-xl {
+    @apply h-14 px-8 py-4 text-base;
+  }
+  .at-btn-lg {
+    @apply h-12 px-6 py-3;
+  }
+  .at-btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .at-btn-primary:hover {
+    background-color: var(--primary-hover);
+  }
+  .at-btn-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+  .at-btn-secondary:hover {
+    opacity: 0.8;
+  }
+  .at-tool-card {
+    @apply p-6 rounded-[var(--radius-card)] bg-card border border-border shadow-sm transition-all hover:-translate-y-1 cursor-pointer flex flex-col gap-4;
+    transition-property: border-color, transform, box-shadow;
+  }
+  .at-tool-card:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+  .at-pricing-card {
+    @apply p-8 rounded-[var(--radius-card)] bg-card border border-border shadow-sm;
+  }
+  .at-pricing-card-featured {
+    border-color: rgba(99, 102, 241, 0.5);
+    background-color: rgba(99, 102, 241, 0.05);
+    box-shadow: 0 0 24px rgba(99,102,241,0.1);
+  }
+  .at-hero-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  }
+  .at-section-divider {
+    @apply w-full h-[1px] bg-gradient-to-r from-transparent via-border to-transparent;
   }
 }

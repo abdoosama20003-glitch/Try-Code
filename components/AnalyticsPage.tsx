@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BarChart3, Eye, Clock, Target, Users, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { TopBar } from "./TopBar";
 import {
-  AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Area, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart,
 } from "recharts";
 
@@ -71,21 +71,21 @@ export function AnalyticsPage() {
       <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
 
         {/* ── KPIs ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div className="grid grid-cols-4 gap-[10px]">
           {kpis.map((s, i) => (
             <D key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}>
-              <div className="bg-card border border-border rounded-lg p-5 shadow-sm hover:border-surface-4 hover:shadow-md transition-all">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 600, color: "var(--text-dim)", letterSpacing: "0.03em" }}>{s.label}</span>
-                  <div style={{ width: 30, height: 30, borderRadius: "var(--radius)", background: "var(--subtle-overlay)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div className="bg-card border border-border rounded-lg p-5 shadow-sm transition-all hover:shadow-md">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-[10px] font-semibold text-[var(--text-dim)] tracking-[0.03em]">{s.label}</span>
+                  <div className="w-[30px] h-[30px] rounded-sm bg-[var(--subtle-overlay)] border border-border flex items-center justify-center">
                     <s.icon size={13} color={s.color} />
                   </div>
                 </div>
                 <div className="font-mono text-2xl font-extrabold text-foreground tracking-tighter">{s.val}</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 10 }}>
+                <div className="flex items-center gap-1 mt-[10px]">
                   {s.up ? <ArrowUpRight size={10} color="var(--neon-emerald)" /> : <ArrowDownRight size={10} color="var(--neon-red)" />}
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: s.up ? "var(--neon-emerald)" : "var(--neon-red)" }}>{s.change}</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>vs last period</span>
+                  <span className="text-[11px] font-semibold" style={{ color: s.up ? "var(--neon-emerald)" : "var(--neon-red)" }}>{s.change}</span>
+                  <span className="text-[10px] text-[var(--text-dim)]">vs last period</span>
                 </div>
               </div>
             </D>
@@ -93,32 +93,32 @@ export function AnalyticsPage() {
         </div>
 
         {/* ── Views + Categories ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 10 }}>
+        <div className="grid gap-[10px]" style={{ gridTemplateColumns: "1fr 280px" }}>
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div className="flex justify-between items-start mb-5">
                 <div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 4 }}>Performance</div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em" }}>Views &amp; Subscribers</div>
+                  <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1">Performance</div>
+                  <div className="text-base font-semibold text-foreground tracking-[-0.01em]">Views &amp; Subscribers</div>
                 </div>
-                <div style={{ display: "flex", background: "var(--surface-2)", borderRadius: "var(--radius)", border: "1px solid var(--border)", overflow: "hidden" }}>
+                <div className="flex bg-[var(--surface-2)] rounded-sm border border-border overflow-hidden">
                   {periods.map(p => (
-                    <button key={p} onClick={() => setPeriod(p)} style={{ padding: "4px 9px", fontSize: "10px", fontWeight: period === p ? 700 : 400, background: period === p ? "var(--active-overlay)" : "transparent", color: period === p ? "var(--foreground)" : "var(--text-dim)", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all 0.12s" }}>
-                      {p}
-                    </button>
+                    <button key={p} onClick={() => setPeriod(p)}
+                      className="px-[9px] py-1 text-[10px] border-none cursor-pointer font-sans transition-all duration-[120ms]"
+                      style={{ fontWeight: period === p ? 700 : 400, background: period === p ? "var(--active-overlay)" : "transparent", color: period === p ? "var(--foreground)" : "var(--text-dim)" }}
+                    >{p}</button>
                   ))}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 20, marginBottom: 14 }}>
+              <div className="flex gap-5 mb-[14px]">
                 {[{ l: "Views", c: "#6366F1" }, { l: "Subs", c: "#8B5CF6" }].map(l => (
-                  <div key={l.l} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <div style={{ width: 12, height: 3, borderRadius: 2, background: l.c }} />
-                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>{l.l}</span>
+                  <div key={l.l} className="flex items-center gap-1.5">
+                    <div className="w-3 h-[3px] rounded-[2px]" style={{ background: l.c }} />
+                    <span className="text-[10px] text-[var(--text-dim)]">{l.l}</span>
                   </div>
                 ))}
               </div>
-              {/* Gradient def hoisted outside recharts — avoids internal duplicate-key flattening */}
-              <svg style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }} aria-hidden="true">
+              <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
                 <defs>
                   <linearGradient id="ap-g1" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%"  stopColor="#6366F1" stopOpacity={0.15} />
@@ -127,7 +127,6 @@ export function AnalyticsPage() {
                 </defs>
               </svg>
               <ResponsiveContainer width="100%" height={230}>
-                {/* ComposedChart avoids recharts v2 duplicate-key issue with same-type siblings */}
                 <ComposedChart data={viewsData} margin={{ top: 0, right: 0, left: -22, bottom: 0 }}>
                   <CartesianGrid key="grid"  strokeDasharray="2 6" stroke="var(--border)" vertical={false} />
                   <XAxis         key="xaxis" dataKey="name" tick={{ fontSize: 10, fill: "var(--text-dim)", fontFamily: "var(--font-sans)" }} axisLine={false} tickLine={false} />
@@ -142,9 +141,8 @@ export function AnalyticsPage() {
 
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.34 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em", marginBottom: 18 }}>Content Categories</div>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-                {/* Fixed-size PieChart — no ResponsiveContainer needed for known pixel dimensions */}
+              <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-[18px]">Content Categories</div>
+              <div className="flex justify-center mb-4">
                 <PieChart width={130} height={130}>
                   <Pie data={catData} cx={65} cy={65} innerRadius={36} outerRadius={60} paddingAngle={3} dataKey="value">
                     {catData.map(e => <Cell key={e.name} fill={e.color} stroke="transparent" />)}
@@ -153,12 +151,12 @@ export function AnalyticsPage() {
               </div>
               <div>
                 {catData.map((c, i) => (
-                  <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 0", borderBottom: i < catData.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: c.color }} />
-                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--muted-foreground)" }}>{c.name}</span>
+                  <div key={c.name} className="flex items-center justify-between py-[9px]" style={{ borderBottom: i < catData.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: c.color }} />
+                      <span className="text-[11px] text-muted-foreground">{c.name}</span>
                     </div>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 800, color: "var(--foreground)" }}>{c.value}%</span>
+                    <span className="font-mono text-[11px] font-extrabold text-foreground">{c.value}%</span>
                   </div>
                 ))}
               </div>
@@ -167,25 +165,24 @@ export function AnalyticsPage() {
         </div>
 
         {/* ── CTR/Retention + Top Videos ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div className="grid grid-cols-2 gap-[10px]">
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div className="flex justify-between items-start mb-5">
                 <div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 4 }}>Engagement</div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em" }}>CTR &amp; Retention</div>
+                  <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1">Engagement</div>
+                  <div className="text-base font-semibold text-foreground tracking-[-0.01em]">CTR &amp; Retention</div>
                 </div>
-                <div style={{ display: "flex", gap: 14 }}>
+                <div className="flex gap-[14px]">
                   {[{ l: "CTR %", c: "var(--neon-amber)" }, { l: "Retention %", c: "var(--neon-pink)" }].map(l => (
-                    <div key={l.l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                      <div style={{ width: 12, height: 3, borderRadius: 2, background: l.c }} />
-                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>{l.l}</span>
+                    <div key={l.l} className="flex items-center gap-[5px]">
+                      <div className="w-3 h-[3px] rounded-[2px]" style={{ background: l.c }} />
+                      <span className="text-[10px] text-[var(--text-dim)]">{l.l}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <ResponsiveContainer width="100%" height={210}>
-                {/* ComposedChart avoids recharts v2 duplicate-key issue with same-type siblings */}
                 <ComposedChart data={perfData} margin={{ top: 0, right: 0, left: -22, bottom: 0 }}>
                   <CartesianGrid key="grid"  strokeDasharray="2 6" stroke="var(--border)" vertical={false} />
                   <XAxis         key="xaxis" dataKey="m" tick={{ fontSize: 10, fill: "var(--text-dim)", fontFamily: "var(--font-sans)" }} axisLine={false} tickLine={false} />
@@ -200,19 +197,19 @@ export function AnalyticsPage() {
 
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.43 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em", marginBottom: 18 }}>Top Videos</div>
+              <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-[18px]">Top Videos</div>
               <div>
                 {topVids.map((v, i) => (
-                  <div key={v.title} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 0", borderBottom: i < topVids.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)", width: 18, flexShrink: 0 }}>0{i + 1}</span>
-                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 500, color: "var(--foreground)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.title}</span>
+                  <div key={v.title} className="flex items-center justify-between py-[11px]" style={{ borderBottom: i < topVids.length - 1 ? "1px solid var(--border)" : "none" }}>
+                    <div className="flex items-center gap-[10px] flex-1 min-w-0">
+                      <span className="font-mono text-[10px] text-[var(--text-dim)] w-[18px] shrink-0">0{i + 1}</span>
+                      <span className="text-[11px] font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">{v.title}</span>
                     </div>
-                    <div style={{ display: "flex", gap: 14, flexShrink: 0, marginLeft: 12, alignItems: "center" }}>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 700, color: "var(--foreground)" }}>{v.views}</span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                    <div className="flex gap-[14px] shrink-0 ml-3 items-center">
+                      <span className="font-mono text-[11px] font-bold text-foreground">{v.views}</span>
+                      <div className="flex items-center gap-[3px]">
                         {v.up ? <ArrowUpRight size={10} color="var(--neon-emerald)" /> : <ArrowDownRight size={10} color="var(--neon-red)" />}
-                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: v.up ? "var(--neon-emerald)" : "var(--neon-red)" }}>{v.ctr}</span>
+                        <span className="text-[11px] font-semibold" style={{ color: v.up ? "var(--neon-emerald)" : "var(--neon-red)" }}>{v.ctr}</span>
                       </div>
                     </div>
                   </div>

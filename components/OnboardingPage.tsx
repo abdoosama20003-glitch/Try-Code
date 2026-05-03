@@ -43,14 +43,14 @@ const stepLabels = [
 ];
 
 const authProviders = [
-  { l: "Continue with Google",  icon: Globe,   },
-  { l: "Continue with YouTube", icon: Youtube, },
-  { l: "Continue with GitHub",  icon: Github,  },
+  { l: "Continue with Google",  icon: Globe   },
+  { l: "Continue with YouTube", icon: Youtube },
+  { l: "Continue with GitHub",  icon: Github  },
 ];
 
 export function OnboardingPage() {
-  const navigate   = useRouter();
-  const [step, setStep]         = useState(1);
+  const navigate     = useRouter();
+  const [step, setStep]           = useState(1);
   const [selNiches, setSelNiches] = useState<Set<string>>(new Set());
   const [selGoals, setSelGoals]   = useState<Set<string>>(new Set());
   const [loading, setLoading]     = useState(false);
@@ -67,41 +67,40 @@ export function OnboardingPage() {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", background: "var(--background)", fontFamily: "var(--font-sans)", overflow: "hidden", position: "relative" }}>
+    <div className="flex h-screen bg-background overflow-hidden relative">
 
-      {/* ── Theme toggle — fixed top-right corner ── */}
-      <div style={{ position: "fixed", top: 16, right: 16, zIndex: 50 }}>
+      {/* Theme toggle */}
+      <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* ── Left Rail ── */}
-      <div style={{ width: 300, flexShrink: 0, display: "flex", flexDirection: "column", background: "var(--surface-0)", borderRight: "1px solid var(--border)", padding: "40px 32px", position: "relative" }}>
+      {/* Left Rail */}
+      <div className="w-[300px] shrink-0 flex flex-col bg-[var(--surface-0)] border-r border-border px-8 py-10 relative">
 
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 52, cursor: "pointer" }} onClick={() => navigate.push("/")}>
+        <div className="flex items-center gap-[10px] mb-[52px] cursor-pointer" onClick={() => navigate.push("/")}>
           <LogoMark size={26} />
-          <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em" }}>AutoTube</span>
+          <span className="text-sm font-bold text-foreground tracking-[-0.02em]">AutoTube</span>
         </div>
 
         {/* Label + Title */}
-        <div style={{ marginBottom: 44 }}>
-          <div style={{ fontFamily: "var(--font-sans)", fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 10 }}>
-            Setup
-          </div>
-          <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(22px, 2.5vw, 30px)", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--foreground)", lineHeight: 1.1, margin: 0 }}>
-            Let's get<br />you set up.
+        <div className="mb-11">
+          <div className="text-[9.5px] font-bold tracking-[0.12em] uppercase text-[var(--text-dim)] mb-[10px]">Setup</div>
+          {/* clamp() font-size must stay inline */}
+          <h2 className="font-extrabold tracking-[-0.03em] text-foreground leading-[1.1] m-0"
+            style={{ fontSize: "clamp(22px, 2.5vw, 30px)" }}>
+            Let&apos;s get<br />you set up.
           </h2>
         </div>
 
         {/* Steps */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <div className="flex flex-col gap-0">
           {stepLabels.map((s, i) => {
             const done   = step > s.n;
             const active = step === s.n;
             return (
-              <div key={s.n} style={{ display: "flex", alignItems: "stretch", gap: 14 }}>
-                {/* Timeline */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div key={s.n} className="flex items-stretch gap-[14px]">
+                <div className="flex flex-col items-center">
                   <motion.div
                     initial={{ background: "rgba(0,0,0,0)", borderColor: "var(--border)" }}
                     animate={{
@@ -109,12 +108,11 @@ export function OnboardingPage() {
                       borderColor: done ? "var(--foreground)" : active ? "rgba(99,102,241,0.4)" : "var(--border)"
                     }}
                     transition={{ duration: 0.3 }}
-                    style={{ width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid", flexShrink: 0 }}
-                  >
+                    className="w-7 h-7 rounded-full flex items-center justify-center border shrink-0">
                     {done ? (
                       <Check size={12} color="var(--background)" />
                     ) : (
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 700, color: active ? "var(--primary-hover)" : "var(--text-dim)" }}>{s.n}</span>
+                      <span className="font-mono text-[10px] font-bold" style={{ color: active ? "var(--primary-hover)" : "var(--text-dim)" }}>{s.n}</span>
                     )}
                   </motion.div>
                   {i < stepLabels.length - 1 && (
@@ -122,12 +120,11 @@ export function OnboardingPage() {
                       initial={{ background: "rgba(0,0,0,0)" }}
                       animate={{ background: done ? "var(--foreground)" : "var(--border)" }}
                       transition={{ duration: 0.3 }}
-                      style={{ width: 1, flex: 1, margin: "4px 0", minHeight: 28 }}
-                    />
+                      className="w-px flex-1 my-1 min-h-[28px]" />
                   )}
                 </div>
                 <div style={{ paddingTop: 6, paddingBottom: i < stepLabels.length - 1 ? 24 : 0 }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: active ? 500 : 400, color: step >= s.n ? "var(--foreground)" : "var(--text-dim)", transition: "color 0.3s" }}>
+                  <span className="text-sm transition-colors duration-300" style={{ fontWeight: active ? 500 : 400, color: step >= s.n ? "var(--foreground)" : "var(--text-dim)" }}>
                     {s.l}
                   </span>
                 </div>
@@ -137,165 +134,145 @@ export function OnboardingPage() {
         </div>
 
         {/* Bottom testimonial */}
-        <div style={{ marginTop: "auto" }}>
-          <div style={{ height: 1, background: "var(--border)", marginBottom: 20 }} />
-          <blockquote style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.7, fontStyle: "italic", margin: "0 0 12px" }}>
-            "Setting up took 2 minutes. Found my first golden gap 5 minutes later."
+        <div className="mt-auto">
+          <div className="h-px bg-border mb-5" />
+          <blockquote className="text-sm text-muted-foreground leading-[1.7] italic m-0 mb-3">
+            &quot;Setting up took 2 minutes. Found my first golden gap 5 minutes later.&quot;
           </blockquote>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "linear-gradient(135deg, var(--primary), var(--neon-purple))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "8px", fontWeight: 800, color: "white" }}>SC</span>
+          <div className="flex items-center gap-2">
+            <div className="w-[22px] h-[22px] rounded-full bg-gradient-to-br from-primary to-[var(--neon-purple)] flex items-center justify-center">
+              <span className="text-[8px] font-extrabold text-white">SC</span>
             </div>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)" }}>Sarah Chen · 450K subscribers</span>
+            <span className="text-[11px] text-[var(--text-dim)]">Sarah Chen · 450K subscribers</span>
           </div>
         </div>
       </div>
 
-      {/* ── Right Panel ── */}
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 40px", overflowY: "auto" }}>
-        <div style={{ width: "100%", maxWidth: 480 }}>
+      {/* Right Panel */}
+      <div className="flex-1 flex items-center justify-center px-10 py-12 overflow-y-auto">
+        <div className="w-full max-w-[480px]">
           <AnimatePresence mode="wait">
 
-            {/* ── Step 1: Account ── */}
+            {/* Step 1: Account */}
             {step === 1 && (
               <MotionDiv key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-                <div style={{ marginBottom: 32 }}>
-                  <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--foreground)", margin: "0 0 8px", lineHeight: 1.2 }}>
+                <div className="mb-8">
+                  <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
+                    style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
                     Create your account
                   </h2>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)", margin: 0 }}>Get started in seconds. No credit card required.</p>
+                  <p className="text-sm text-[var(--text-dim)] m-0">Get started in seconds. No credit card required.</p>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
+                <div className="flex flex-col gap-2 mb-6">
                   {authProviders.map(p => (
-                    <button key={p.l} onClick={() => setStep(2)} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", height: 46, padding: "0 18px", borderRadius: "var(--radius-button)", background: "transparent", border: "1px solid var(--border)", color: "var(--foreground)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 500, transition: "all 0.15s" }}
-                      onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--surface-4)"; (e.currentTarget as HTMLButtonElement).style.background = "var(--hover-overlay)"; }}
-                      onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
-                    >
+                    <button key={p.l} onClick={() => setStep(2)}
+                      className="flex items-center gap-3 w-full h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)] hover:bg-[var(--hover-overlay)]">
                       <p.icon size={16} />
                       {p.l}
                     </button>
                   ))}
                 </div>
 
-                {/* Divider */}
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                  <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)" }}>or continue with email</span>
-                  <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex-1 h-px bg-border" />
+                  <span className="text-[11px] text-[var(--text-dim)]">or continue with email</span>
+                  <div className="flex-1 h-px bg-border" />
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                <div className="flex flex-col gap-3 mb-6">
                   {["Full Name", "Email address", "Password"].map(f => (
                     <div key={f}>
-                      <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 6 }}>{f}</div>
+                      <div className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--text-dim)] mb-1.5">{f}</div>
                       <input
                         type={f === "Password" ? "password" : f === "Email address" ? "email" : "text"}
                         placeholder={f === "Email address" ? "you@example.com" : f === "Password" ? "Min. 8 characters" : "Alex Turner"}
-                        style={{ width: "100%", height: 42, padding: "0 14px", background: "var(--surface-1)", border: "1px solid var(--border)", borderRadius: "var(--radius-button)", color: "var(--foreground)", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", outline: "none", boxSizing: "border-box", transition: "border-color 0.15s, box-shadow 0.15s" }}
-                        onFocus={e => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 2px var(--ring)"; }}
-                        onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
+                        className="w-full h-[42px] px-[14px] bg-[var(--surface-1)] border border-border rounded-[var(--radius-button)] text-foreground text-sm outline-none transition-[border-color,box-shadow] focus:border-primary focus:ring-2 focus:ring-[var(--ring)]"
                       />
                     </div>
                   ))}
                 </div>
 
-                <button onClick={() => setStep(2)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", height: 46, borderRadius: "var(--radius-button)", background: "var(--foreground)", color: "var(--background)", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 700, transition: "opacity 0.15s" }}
-                  onMouseEnter={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.opacity = "0.86"}
-                  onMouseLeave={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.opacity = "1"}
-                >
+                <button onClick={() => setStep(2)}
+                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86]">
                   Create account <ArrowRight size={14} />
                 </button>
               </MotionDiv>
             )}
 
-            {/* ── Step 2: Niche ── */}
+            {/* Step 2: Niche */}
             {step === 2 && (
               <MotionDiv key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-                <div style={{ marginBottom: 28 }}>
-                  <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--foreground)", margin: "0 0 8px", lineHeight: 1.2 }}>
-                    What's your niche?
+                <div className="mb-7">
+                  <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
+                    style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
+                    What&apos;s your niche?
                   </h2>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)", margin: 0 }}>Select all that apply. We'll personalize your experience.</p>
+                  <p className="text-sm text-[var(--text-dim)] m-0">Select all that apply. We&apos;ll personalize your experience.</p>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 32 }}>
+                <div className="grid grid-cols-3 gap-2 mb-8">
                   {niches.map(n => {
                     const sel = selNiches.has(n.id);
                     return (
-                      <motion.button
-                        key={n.id}
-                        whileTap={{ scale: 0.97 }}
+                      <motion.button key={n.id} whileTap={{ scale: 0.97 }}
                         onClick={() => toggleSet(selNiches, setSelNiches, n.id)}
+                        className="flex flex-col items-start gap-1.5 p-3 rounded-[var(--radius-card)] cursor-pointer text-left transition-all"
                         style={{
-                          display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6,
-                          padding: "12px 12px",
-                          borderRadius: "var(--radius-card)",
                           border: `1px solid ${sel ? "rgba(99,102,241,0.4)" : "var(--border)"}`,
                           background: sel ? "rgba(99,102,241,0.08)" : "var(--surface-1)",
-                          cursor: "pointer",
-                          textAlign: "left",
-                          transition: "all 0.15s",
                           boxShadow: sel ? "0 2px 8px rgba(99,102,241,0.12)" : "none",
-                        }}
-                        onMouseEnter={(e: React.MouseEvent<any>) => { if (!sel) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--surface-4)"; }}
-                        onMouseLeave={(e: React.MouseEvent<any>) => { if (!sel) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; }}
-                      >
-                        <span style={{ fontSize: 18 }}>{n.icon}</span>
-                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: sel ? 600 : 400, color: sel ? "var(--primary-hover)" : "var(--muted-foreground)", lineHeight: 1.2 }}>{n.label}</span>
+                        }}>
+                        <span className="text-[18px]">{n.icon}</span>
+                        <span className="text-[11px] leading-[1.2]" style={{ fontWeight: sel ? 600 : 400, color: sel ? "var(--primary-hover)" : "var(--muted-foreground)" }}>{n.label}</span>
                       </motion.button>
                     );
                   })}
                 </div>
 
-                <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setStep(1)} style={{ display: "flex", alignItems: "center", gap: 6, height: 46, padding: "0 18px", borderRadius: "var(--radius-button)", background: "transparent", border: "1px solid var(--border)", color: "var(--muted-foreground)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 500, transition: "all 0.15s" }}>
+                <div className="flex gap-[10px]">
+                  <button onClick={() => setStep(1)}
+                    className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)]">
                     <ArrowLeft size={13} /> Back
                   </button>
-                  <button onClick={() => setStep(3)} disabled={selNiches.size === 0} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 46, borderRadius: "var(--radius-button)", background: "var(--foreground)", color: "var(--background)", border: "none", cursor: selNiches.size === 0 ? "not-allowed" : "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 700, opacity: selNiches.size === 0 ? 0.4 : 1, transition: "opacity 0.15s" }}>
+                  <button onClick={() => setStep(3)} disabled={selNiches.size === 0}
+                    className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
                     Continue <ArrowRight size={14} />
                   </button>
                 </div>
               </MotionDiv>
             )}
 
-            {/* ── Step 3: Goals ── */}
+            {/* Step 3: Goals */}
             {step === 3 && (
               <MotionDiv key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-                <div style={{ marginBottom: 28 }}>
-                  <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--foreground)", margin: "0 0 8px", lineHeight: 1.2 }}>
+                <div className="mb-7">
+                  <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
+                    style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
                     What are your goals?
                   </h2>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)", margin: 0 }}>Select everything you want to achieve with AutoTube.</p>
+                  <p className="text-sm text-[var(--text-dim)] m-0">Select everything you want to achieve with AutoTube.</p>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 32 }}>
+                <div className="flex flex-col gap-2 mb-8">
                   {goals.map(g => {
                     const sel = selGoals.has(g.id);
                     const Icon = g.icon;
                     return (
-                      <motion.button
-                        key={g.id}
-                        whileTap={{ scale: 0.99 }}
+                      <motion.button key={g.id} whileTap={{ scale: 0.99 }}
                         onClick={() => toggleSet(selGoals, setSelGoals, g.id)}
+                        className="flex items-center gap-3 w-full px-4 py-[13px] rounded-[var(--radius-button)] cursor-pointer text-left transition-all"
                         style={{
-                          display: "flex", alignItems: "center", gap: 12, width: "100%",
-                          padding: "13px 16px",
-                          borderRadius: "var(--radius-button)",
                           border: `1px solid ${sel ? "rgba(99,102,241,0.35)" : "var(--border)"}`,
                           background: sel ? "rgba(99,102,241,0.06)" : "var(--surface-1)",
-                          cursor: "pointer", textAlign: "left",
-                          transition: "all 0.15s",
-                        }}
-                        onMouseEnter={(e: React.MouseEvent<any>) => { if (!sel) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--surface-4)"; }}
-                        onMouseLeave={(e: React.MouseEvent<any>) => { if (!sel) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; }}
-                      >
-                        <div style={{ width: 32, height: 32, borderRadius: "var(--radius)", background: sel ? "var(--accent)" : "var(--hover-overlay)", border: `1px solid ${sel ? "var(--border-active)" : "var(--border)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.15s" }}>
+                        }}>
+                        <div className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0 transition-all"
+                          style={{ background: sel ? "var(--accent)" : "var(--hover-overlay)", border: `1px solid ${sel ? "var(--border-active)" : "var(--border)"}` }}>
                           <Icon size={13} color={sel ? "var(--primary-hover)" : "var(--text-dim)"} />
                         </div>
-                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: sel ? 500 : 400, color: sel ? "var(--foreground)" : "var(--muted-foreground)", flex: 1 }}>{g.label}</span>
+                        <span className="text-sm flex-1" style={{ fontWeight: sel ? 500 : 400, color: sel ? "var(--foreground)" : "var(--muted-foreground)" }}>{g.label}</span>
                         {sel && (
-                          <div style={{ width: 18, height: 18, borderRadius: "50%", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <div className="w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center shrink-0">
                             <Check size={10} color="white" />
                           </div>
                         )}
@@ -304,71 +281,76 @@ export function OnboardingPage() {
                   })}
                 </div>
 
-                <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setStep(2)} style={{ display: "flex", alignItems: "center", gap: 6, height: 46, padding: "0 18px", borderRadius: "var(--radius-button)", background: "transparent", border: "1px solid var(--border)", color: "var(--muted-foreground)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 500, transition: "all 0.15s" }}>
+                <div className="flex gap-[10px]">
+                  <button onClick={() => setStep(2)}
+                    className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)]">
                     <ArrowLeft size={13} /> Back
                   </button>
-                  <button onClick={() => setStep(4)} disabled={selGoals.size === 0} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 46, borderRadius: "var(--radius-button)", background: "var(--foreground)", color: "var(--background)", border: "none", cursor: selGoals.size === 0 ? "not-allowed" : "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 700, opacity: selGoals.size === 0 ? 0.4 : 1, transition: "opacity 0.15s" }}>
+                  <button onClick={() => setStep(4)} disabled={selGoals.size === 0}
+                    className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
                     Continue <ArrowRight size={14} />
                   </button>
                 </div>
               </MotionDiv>
             )}
 
-            {/* ── Step 4: Launch ── */}
+            {/* Step 4: Launch */}
             {step === 4 && (
               <MotionDiv key="s4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
                 {loading ? (
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, padding: "40px 0" }}>
+                  <div className="flex flex-col items-center gap-4 py-10">
                     <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
                       <Loader2 size={32} color="var(--primary)" />
                     </motion.div>
-                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--foreground)" }}>
-                      Setting up your workspace…
-                    </div>
-                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)" }}>
-                      This will only take a moment.
-                    </div>
+                    <div className="text-base font-semibold text-foreground">Setting up your workspace…</div>
+                    <div className="text-sm text-[var(--text-dim)]">This will only take a moment.</div>
                   </div>
                 ) : (
                   <>
-                    {/* Summary card */}
-                    <div style={{ marginBottom: 28 }}>
-                      <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 800, letterSpacing: "-0.03em", color: "var(--foreground)", margin: "0 0 8px", lineHeight: 1.2 }}>
-                        You're all set!
+                    <div className="mb-7">
+                      <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
+                        style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
+                        You&apos;re all set!
                       </h2>
-                      <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)", margin: 0 }}>Review your setup below and launch your workspace.</p>
+                      <p className="text-sm text-[var(--text-dim)] m-0">Review your setup below and launch your workspace.</p>
                     </div>
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
-                      <div style={{ padding: "16px 18px", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--surface-1)" }}>
-                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 10 }}>Selected Niches</div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    <div className="flex flex-col gap-[10px] mb-8">
+                      <div className="px-[18px] py-4 rounded-[var(--radius-card)] border border-border bg-[var(--surface-1)]">
+                        <div className="text-[10px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-[10px]">Selected Niches</div>
+                        <div className="flex flex-wrap gap-1.5">
                           {[...selNiches].map(id => {
                             const n = niches.find(x => x.id === id);
-                            return n ? <span key={id} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 10px", borderRadius: "var(--radius)", background: "var(--accent)", color: "var(--primary-hover)", border: "1px solid var(--border-active)", fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 500 }}>{n.icon} {n.label}</span> : null;
+                            return n ? (
+                              <span key={id} className="inline-flex items-center gap-1 px-[10px] py-[3px] rounded-sm bg-[var(--accent)] text-[var(--primary-hover)] border border-[var(--border-active)] text-[11px] font-medium">
+                                {n.icon} {n.label}
+                              </span>
+                            ) : null;
                           })}
                         </div>
                       </div>
-                      <div style={{ padding: "16px 18px", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--surface-1)" }}>
-                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 10 }}>Your Goals</div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      <div className="px-[18px] py-4 rounded-[var(--radius-card)] border border-border bg-[var(--surface-1)]">
+                        <div className="text-[10px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-[10px]">Your Goals</div>
+                        <div className="flex flex-wrap gap-1.5">
                           {[...selGoals].map(id => {
                             const g = goals.find(x => x.id === id);
-                            return g ? <span key={id} style={{ padding: "3px 10px", borderRadius: "var(--radius)", background: "var(--hover-overlay-md)", color: "var(--muted-foreground)", border: "1px solid var(--border)", fontFamily: "var(--font-sans)", fontSize: "11px" }}>{g.label}</span> : null;
+                            return g ? (
+                              <span key={id} className="px-[10px] py-[3px] rounded-sm bg-[var(--hover-overlay-md)] text-muted-foreground border border-border text-[11px]">
+                                {g.label}
+                              </span>
+                            ) : null;
                           })}
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <button onClick={() => setStep(3)} style={{ display: "flex", alignItems: "center", gap: 6, height: 46, padding: "0 18px", borderRadius: "var(--radius-button)", background: "transparent", border: "1px solid var(--border)", color: "var(--muted-foreground)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 500 }}>
+                    <div className="flex gap-[10px]">
+                      <button onClick={() => setStep(3)}
+                        className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium">
                         <ArrowLeft size={13} /> Back
                       </button>
-                      <button onClick={handleFinish} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 46, borderRadius: "var(--radius-button)", background: "var(--primary)", color: "white", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 700, transition: "opacity 0.15s", boxShadow: "var(--glow-primary-sm)" }}
-                        onMouseEnter={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.opacity = "0.86"}
-                        onMouseLeave={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.opacity = "1"}
-                      >
+                      <button onClick={handleFinish}
+                        className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-primary text-white border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] shadow-[var(--glow-primary-sm)]">
                         <Sparkles size={14} />
                         Launch AutoTube
                       </button>

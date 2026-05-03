@@ -38,9 +38,6 @@ export function ScriptWriter() {
 
   const toggle = (id: string) => setExpanded(p => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
   const copy   = (text: string, id: string) => {
-    // Skip navigator.clipboard entirely — Permissions-Policy blocks it in sandboxed
-    // iframes and logs a NotAllowedError at the browser level even with .catch().
-    // execCommand('copy') works without any permissions policy.
     try {
       const ta = document.createElement("textarea");
       ta.value = text;
@@ -52,7 +49,7 @@ export function ScriptWriter() {
       document.body.removeChild(ta);
       setCopied(id);
       setTimeout(() => setCopied(null), 2000);
-    } catch (_) { /* clipboard unavailable in this context — silently no-op */ }
+    } catch (_) {}
   };
 
   return (
@@ -61,15 +58,15 @@ export function ScriptWriter() {
 
       <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
 
-        {/* ── Config row ── */}
+        {/* Config row */}
         <D initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
           <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 180px 180px", gap: 14 }}>
+            <div className="grid gap-[14px]" style={{ gridTemplateColumns: "1fr 180px 180px" }}>
               <div>
-                <div style={{ fontFamily: "var(--font-sans)", fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 6 }}>Topic</div>
-                <div style={{ position: "relative" }}>
-                  <Search size={12} style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)", pointerEvents: "none" }} />
-                  <input defaultValue="Python Automation for Beginners" className="w-full h-9.5 px-3 bg-surface-1 border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted hover:border-surface-4 focus:border-primary focus:ring-3 focus:ring-ring" style={{ paddingLeft: 32 }} />
+                <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1.5">Topic</div>
+                <div className="relative">
+                  <Search size={12} className="absolute left-[11px] top-1/2 -translate-y-1/2 text-[var(--text-dim)] pointer-events-none" />
+                  <input defaultValue="Python Automation for Beginners" className="w-full h-[38px] bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted-foreground hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] pl-8 pr-3" />
                 </div>
               </div>
               {[
@@ -77,8 +74,8 @@ export function ScriptWriter() {
                 { label: "Length", opts: ["Short (5-8m)", "Medium (10-15m)", "Long (20-30m)"] },
               ].map(f => (
                 <div key={f.label}>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 6 }}>{f.label}</div>
-                  <select defaultValue={f.opts[0]} className="w-full h-9.5 px-3 bg-surface-1 border border-border rounded-md text-foreground text-sm outline-none hover:border-surface-4 focus:border-primary focus:ring-3 focus:ring-ring appearance-none cursor-pointer">
+                  <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1.5">{f.label}</div>
+                  <select defaultValue={f.opts[0]} className="w-full h-[38px] px-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] appearance-none cursor-pointer">
                     {f.opts.map(o => <option key={o} value={o} style={{ background: "var(--popover)" }}>{o}</option>)}
                   </select>
                 </div>
@@ -87,32 +84,32 @@ export function ScriptWriter() {
           </div>
         </D>
 
-        {/* ── Stats ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        {/* Stats */}
+        <div className="grid grid-cols-4 gap-[10px]">
           {stats.map((s, i) => (
             <D key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 + i * 0.06 }}>
-              <div className="bg-card border border-border rounded-lg p-5 shadow-sm hover:border-surface-4 hover:shadow-md transition-all" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" }}>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", fontWeight: 500 }}>{s.label}</span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-lg)", fontWeight: 800, color: s.color, letterSpacing: "-0.03em" }}>{s.value}</span>
+              <div className="bg-card border border-border rounded-lg shadow-sm hover:border-[var(--surface-4)] hover:shadow-md transition-all flex items-center justify-between px-5 py-4">
+                <span className="text-[11px] text-[var(--text-dim)] font-medium">{s.label}</span>
+                <span className="font-mono text-lg font-extrabold tracking-[-0.03em]" style={{ color: s.color }}>{s.value}</span>
               </div>
             </D>
           ))}
         </div>
 
-        {/* ── Script Sections ── */}
-        <div className="bg-card border border-border rounded-lg shadow-sm" style={{ overflow: "hidden" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", borderBottom: "1px solid var(--border)" }}>
+        {/* Script Sections */}
+        <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+          <div className="flex justify-between items-center px-5 py-[14px] border-b border-border">
             <div>
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em" }}>Script Sections</div>
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)", marginTop: 2 }}>Python Automation for Beginners · 14:23</div>
+              <div className="text-sm font-semibold text-foreground tracking-[-0.01em]">Script Sections</div>
+              <div className="text-[10px] text-[var(--text-dim)] mt-0.5">Python Automation for Beginners · 14:23</div>
             </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none bg-secondary text-muted-foreground border border-border hover:bg-surface-3 hover:text-foreground hover:border-surface-4 h-7.5 px-3 text-[11px]" style={{ fontFamily: "var(--font-sans)" }}>
+            <div className="flex gap-2">
+              <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-[30px] px-3 text-[11px]">
                 <Download size={11} /> Export
               </button>
               <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2500); }}
-                style={{ display: "flex", alignItems: "center", gap: 5, height: 30, padding: "0 12px", borderRadius: "var(--radius)", background: "var(--accent)", color: "var(--primary-hover)", border: "1px solid var(--border-active)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, transition: "all 0.15s" }}
-              >
+                className="inline-flex items-center gap-[5px] h-[30px] px-3 rounded-sm text-[var(--primary-hover)] border border-[var(--border-active)] cursor-pointer text-[11px] font-semibold transition-all hover:bg-[var(--accent)]"
+                style={{ background: "var(--accent)" }}>
                 {isGen ? <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}><RefreshCw size={10} /></motion.div> : <Sparkles size={10} />}
                 {isGen ? "Regenerating…" : "Regenerate"}
               </motion.button>
@@ -124,28 +121,25 @@ export function ScriptWriter() {
             const Icon = section.icon;
             return (
               <div key={section.id} style={{ borderBottom: idx < scriptSections.length - 1 ? "1px solid var(--border)" : "none" }}>
-                {/* div[role=button] instead of <button> to allow the inner Copy <button> without nesting violation */}
                 <div role="button" tabIndex={0} onClick={() => toggle(section.id)}
                   onKeyDown={e => (e.key === "Enter" || e.key === " ") && toggle(section.id)}
-                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "13px 20px", background: open ? "var(--subtle-overlay)" : "transparent", border: "none", cursor: "pointer", textAlign: "left" }}
-                  onMouseEnter={(e: React.MouseEvent<any>) => { if (!open) (e.currentTarget as HTMLDivElement).style.background = "var(--hover-overlay)"; }}
-                  onMouseLeave={(e: React.MouseEvent<any>) => { if (!open) (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
-                >
-                  <div style={{ width: 32, height: 32, borderRadius: "var(--radius)", background: `color-mix(in srgb, ${section.color} 10%, transparent)`, border: `1px solid color-mix(in srgb, ${section.color} 20%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  className="w-full flex items-center gap-3 px-5 py-[13px] border-none cursor-pointer text-left transition-colors hover:bg-[var(--hover-overlay)]"
+                  style={{ background: open ? "var(--subtle-overlay)" : "transparent" }}>
+                  {/* color-mix() bg stays inline */}
+                  <div className="w-8 h-8 rounded-sm flex items-center justify-center shrink-0"
+                    style={{ background: `color-mix(in srgb, ${section.color} 10%, transparent)`, border: `1px solid color-mix(in srgb, ${section.color} 20%, transparent)` }}>
                     <Icon size={13} color={section.color} />
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)" }}>{section.label}</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground">{section.label}</span>
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-white/5 text-muted-foreground">{section.timing}</span>
                     </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div className="flex items-center gap-2">
                     {open && (
-                      <button onClick={e => { e.stopPropagation(); copy(section.content, section.id); }} style={{ display: "flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: "var(--radius)", background: "transparent", color: "var(--text-dim)", border: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "10px", transition: "all 0.12s" }}
-                        onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--foreground)"; }}
-                        onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--text-dim)"; }}
-                      >
+                      <button onClick={e => { e.stopPropagation(); copy(section.content, section.id); }}
+                        className="flex items-center gap-1 px-2 py-[3px] rounded-sm bg-transparent text-[var(--text-dim)] border border-border cursor-pointer text-[10px] transition-all hover:text-foreground hover:border-[var(--surface-4)]">
                         {copied === section.id ? <Check size={10} /> : <Copy size={10} />}
                         {copied === section.id ? "Copied" : "Copy"}
                       </button>
@@ -158,10 +152,11 @@ export function ScriptWriter() {
 
                 <AnimatePresence>
                   {open && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }} style={{ overflow: "hidden" }}>
-                      <div style={{ padding: "4px 20px 20px" }}>
-                        <div style={{ borderLeft: `2px solid color-mix(in srgb, ${section.color} 30%, transparent)`, paddingLeft: 16 }}>
-                          <pre style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--secondary-foreground)", lineHeight: 1.75, margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{section.content}</pre>
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
+                      <div className="px-5 pb-5 pt-1">
+                        {/* color-mix() border stays inline */}
+                        <div className="pl-4" style={{ borderLeft: `2px solid color-mix(in srgb, ${section.color} 30%, transparent)` }}>
+                          <pre className="text-sm text-[var(--secondary-foreground)] leading-[1.75] m-0 whitespace-pre-wrap break-words font-sans">{section.content}</pre>
                         </div>
                       </div>
                     </motion.div>

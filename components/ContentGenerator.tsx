@@ -38,10 +38,8 @@ const contentTabs = [
 
 function CopyBtn({ text, id, copied, onCopy }: { text: string; id: string; copied: string | null; onCopy: (t: string, id: string) => void }) {
   return (
-    <button onClick={() => onCopy(text, id)} style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: "var(--radius)", background: "transparent", color: "var(--text-dim)", border: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "10px", flexShrink: 0 }}
-      onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--surface-4)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--foreground)"; }}
-      onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-dim)"; }}
-    >
+    <button onClick={() => onCopy(text, id)}
+      className="flex items-center gap-[5px] px-[10px] py-1 rounded-sm bg-transparent text-[var(--text-dim)] border border-border cursor-pointer text-[10px] shrink-0 transition-all hover:border-[var(--surface-4)] hover:text-foreground">
       {copied === id ? <Check size={10} /> : <Copy size={10} />}
       {copied === id ? "Copied" : "Copy"}
     </button>
@@ -64,33 +62,32 @@ export function ContentGenerator() {
     <>
       <TopBar label="Creation" title="Content Generator" subtitle="Complete video packages: titles, descriptions, tags, hooks, and thumbnail text" actionLabel="Generate Pack" actionIcon={Sparkles} onAction={generate} />
 
-      <div style={{ flex: 1, overflow: "hidden", padding: "20px 28px 0", display: "flex", gap: 14, background: "var(--background)", minHeight: 0 }}>
+      <div className="flex-1 overflow-hidden px-7 pt-5 pb-0 flex gap-[14px] bg-background min-h-0">
 
-        {/* ── Left panel ── */}
-        <div style={{ width: 248, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10, overflowY: "auto", paddingBottom: 24 }}>
+        {/* Left panel */}
+        <div className="w-[248px] shrink-0 flex flex-col gap-[10px] overflow-y-auto pb-6">
 
           {/* Input */}
-          <div className="bg-card border border-border rounded-lg shadow-sm p-4" style={{ padding: "16px" }}>
-            <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 10 }}>New Pack</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <div style={{ position: "relative" }}>
-                <Search size={11} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-dim)", pointerEvents: "none" }} />
-                <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && generate()} placeholder="Python Automation…" className="w-full h-9.5 px-3 bg-surface-1 border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted hover:border-surface-4 focus:border-primary focus:ring-3 focus:ring-ring" style={{ paddingLeft: 28 }} />
+          <div className="bg-card border border-border rounded-lg shadow-sm p-4">
+            <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[10px]">New Pack</div>
+            <div className="flex flex-col gap-2">
+              <div className="relative">
+                <Search size={11} className="absolute left-[10px] top-1/2 -translate-y-1/2 text-[var(--text-dim)] pointer-events-none" />
+                <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && generate()} placeholder="Python Automation…"
+                  className="w-full h-[38px] bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted-foreground hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] pl-7 pr-3" />
               </div>
               <motion.button whileTap={{ scale: 0.97 }} onClick={generate} disabled={isGen}
-                className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none bg-primary text-primary-foreground shadow-glow-primary-sm hover:opacity-90 hover:shadow-glow-primary h-9 px-4"
-                style={{ width: "100%", fontFamily: "var(--font-sans)" }}
-              >
+                className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-primary text-primary-foreground shadow-[var(--glow-primary-sm)] hover:opacity-90 hover:shadow-[var(--glow-primary)] h-9 px-4 w-full disabled:opacity-40 disabled:pointer-events-none">
                 {isGen ? <><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}><RefreshCw size={11} /></motion.div>Generating…</> : <><Sparkles size={11} />Generate Pack</>}
               </motion.button>
               <div>
-                <div style={{ fontFamily: "var(--font-sans)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 5 }}>Quick ideas</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                <div className="text-[9px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-[5px]">Quick ideas</div>
+                <div className="flex flex-wrap gap-1">
                   {["Python Automation", "AI Tools 2026", "React vs Next.js"].map(s => (
-                    <button key={s} onClick={() => setInput(s)} style={{ padding: "2px 7px", borderRadius: "var(--radius)", background: "var(--hover-overlay)", color: "var(--text-dim)", fontSize: "10px", border: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all 0.12s" }}
-                      onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--accent)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--primary-hover)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-active)"; }}
-                      onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--hover-overlay)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-dim)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; }}
-                    >{s}</button>
+                    <button key={s} onClick={() => setInput(s)}
+                      className="px-[7px] py-[2px] rounded-sm bg-[var(--hover-overlay)] text-[var(--text-dim)] text-[10px] border border-border cursor-pointer transition-all hover:bg-[var(--accent)] hover:text-[var(--primary-hover)] hover:border-[var(--border-active)]">
+                      {s}
+                    </button>
                   ))}
                 </div>
               </div>
@@ -99,24 +96,24 @@ export function ContentGenerator() {
 
           {/* History */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, padding: "0 2px" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: "var(--muted-foreground)" }}>Generated Packs</span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "9px", padding: "1px 6px", borderRadius: "var(--radius)", background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text-dim)" }}>{samplePacks.length}</span>
+            <div className="flex items-center justify-between mb-2 px-0.5">
+              <span className="text-[11px] font-semibold text-muted-foreground">Generated Packs</span>
+              <span className="font-mono text-[9px] px-1.5 py-px rounded-sm bg-[var(--surface-2)] border border-border text-[var(--text-dim)]">{samplePacks.length}</span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            <div className="flex flex-col gap-[5px]">
               {samplePacks.map((p, i) => (
                 <D key={p.id} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + i * 0.06 }}
                   onClick={() => setPack(p)}
-                  style={{ padding: "11px 13px", borderRadius: "var(--radius-card)", border: `1px solid ${pack.id === p.id ? "rgba(99,102,241,0.35)" : "var(--border)"}`, background: pack.id === p.id ? "rgba(99,102,241,0.06)" : "var(--card)", cursor: "pointer", transition: "all 0.15s", boxShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
-                  onMouseEnter={(e: React.MouseEvent<any>) => { if (pack.id !== p.id) (e.currentTarget as HTMLDivElement).style.borderColor = "var(--surface-4)"; }}
-                  onMouseLeave={(e: React.MouseEvent<any>) => { if (pack.id !== p.id) (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)"; }}
-                >
-                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 6 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: "var(--foreground)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 5 }}>{p.keyword}</div>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-emerald-500/12 text-emerald-500">Score {p.seoScore}</span>
+                  className="px-[13px] py-[11px] rounded-[var(--radius-card)] cursor-pointer transition-all shadow-sm"
+                  style={{ border: `1px solid ${pack.id === p.id ? "rgba(99,102,241,0.35)" : "var(--border)"}`, background: pack.id === p.id ? "rgba(99,102,241,0.06)" : "var(--card)" }}>
+                  <div className="flex items-start justify-between gap-1.5">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[11px] font-semibold text-foreground overflow-hidden text-ellipsis whitespace-nowrap mb-[5px]">{p.keyword}</div>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-emerald-500/10 text-emerald-500">Score {p.seoScore}</span>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); toggleSave(p.id); }} style={{ background: "none", border: "none", cursor: "pointer", color: saved.has(p.id) ? "var(--neon-amber)" : "var(--text-dim)", padding: 2, transition: "color 0.15s" }}>
+                    <button onClick={e => { e.stopPropagation(); toggleSave(p.id); }}
+                      className="bg-transparent border-none cursor-pointer p-0.5 transition-colors"
+                      style={{ color: saved.has(p.id) ? "var(--neon-amber)" : "var(--text-dim)" }}>
                       <Bookmark size={11} fill={saved.has(p.id) ? "var(--neon-amber)" : "none"} />
                     </button>
                   </div>
@@ -126,35 +123,39 @@ export function ContentGenerator() {
           </div>
         </div>
 
-        {/* ── Right panel ── */}
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", paddingBottom: 24, overflow: "hidden" }}>
-          <div className="bg-card border border-border rounded-lg shadow-sm" style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+        {/* Right panel */}
+        <div className="flex-1 min-w-0 flex flex-col pb-6 overflow-hidden">
+          <div className="bg-card border border-border rounded-lg shadow-sm flex flex-col flex-1 overflow-hidden">
             {/* Header */}
-            <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexShrink: 0 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pack.keyword}</span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-emerald-500/12 text-emerald-500">SEO {pack.seoScore}</span>
+            <div className="px-5 py-[14px] border-b border-border flex items-center justify-between gap-3 shrink-0">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-sm font-semibold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">{pack.keyword}</span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-emerald-500/10 text-emerald-500">SEO {pack.seoScore}</span>
                 </div>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>5 elements generated · Ready to use</span>
+                <span className="text-[10px] text-[var(--text-dim)]">5 elements generated · Ready to use</span>
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none bg-secondary text-muted-foreground border border-border hover:bg-surface-3 hover:text-foreground hover:border-surface-4 h-7.5 px-3 text-[11px]" style={{ fontFamily: "var(--font-sans)" }}>
+              <div className="flex gap-1.5">
+                <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-[28px] px-[10px] text-[11px]">
                   <Download size={10} /> Export
                 </button>
-                <motion.button whileTap={{ scale: 0.97 }} onClick={generate} style={{ display: "flex", alignItems: "center", gap: 5, height: 28, padding: "0 10px", borderRadius: "var(--radius)", background: "var(--accent)", color: "var(--primary-hover)", border: "1px solid var(--border-active)", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 600 }}>
+                <motion.button whileTap={{ scale: 0.97 }} onClick={generate}
+                  className="flex items-center gap-[5px] h-7 px-[10px] rounded-sm text-[var(--primary-hover)] border border-[var(--border-active)] cursor-pointer text-[10px] font-semibold"
+                  style={{ background: "var(--accent)" }}>
                   <RefreshCw size={9} /> Refresh
                 </motion.button>
               </div>
             </div>
 
             {/* Tabs */}
-            <div style={{ display: "flex", borderBottom: "1px solid var(--border)", flexShrink: 0, padding: "0 4px" }}>
+            <div className="flex border-b border-border shrink-0 px-1">
               {contentTabs.map(t => {
                 const Icon = t.icon;
                 const active = tab === t.key;
                 return (
-                  <button key={t.key} onClick={() => setTab(t.key)} style={{ display: "flex", alignItems: "center", gap: 5, padding: "9px 13px", fontSize: "11px", fontWeight: active ? 600 : 400, color: active ? "var(--foreground)" : "var(--text-dim)", background: "transparent", border: "none", borderBottom: `2px solid ${active ? "var(--primary)" : "transparent"}`, cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all 0.12s", whiteSpace: "nowrap", marginBottom: -1 }}>
+                  <button key={t.key} onClick={() => setTab(t.key)}
+                    className="flex items-center gap-[5px] px-[13px] py-[9px] text-[11px] bg-transparent border-none cursor-pointer whitespace-nowrap transition-all -mb-px"
+                    style={{ fontWeight: active ? 600 : 400, color: active ? "var(--foreground)" : "var(--text-dim)", borderBottom: `2px solid ${active ? "var(--primary)" : "transparent"}` }}>
                     <Icon size={10} /> {t.label}
                   </button>
                 );
@@ -162,22 +163,22 @@ export function ContentGenerator() {
             </div>
 
             {/* Content */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "22px" }}>
+            <div className="flex-1 overflow-y-auto p-[22px]">
               <AnimatePresence mode="wait">
                 <D key={tab} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.14 }}>
 
                   {tab === "title" && (
                     <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 16 }}>
-                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--foreground)", lineHeight: 1.35, flex: 1, letterSpacing: "-0.02em" }}>{pack.title}</div>
+                      <div className="flex justify-between items-start gap-3 mb-4">
+                        <div className="text-xl font-bold text-foreground leading-[1.35] flex-1 tracking-[-0.02em]">{pack.title}</div>
                         <CopyBtn text={pack.title} id="title" copied={copied} onCopy={copy} />
                       </div>
-                      <div style={{ height: 1, background: "var(--border)", marginBottom: 16 }} />
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                      <div className="h-px bg-border mb-4" />
+                      <div className="grid grid-cols-3 gap-[10px]">
                         {[{ l: "Characters", v: `${pack.title.length}/100` }, { l: "Keyword Match", v: "Strong" }, { l: "Click Score", v: "94/100" }].map(s => (
-                          <div key={s.l} style={{ padding: "10px 12px", borderRadius: "var(--radius)", background: "var(--surface-1)", border: "1px solid var(--border)" }}>
-                            <div style={{ fontFamily: "var(--font-sans)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.09em", color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 4 }}>{s.l}</div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", fontWeight: 700, color: "var(--foreground)" }}>{s.v}</div>
+                          <div key={s.l} className="px-3 py-[10px] rounded-sm bg-[var(--surface-1)] border border-border">
+                            <div className="text-[9px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-1">{s.l}</div>
+                            <div className="font-mono text-sm font-bold text-foreground">{s.v}</div>
                           </div>
                         ))}
                       </div>
@@ -186,10 +187,10 @@ export function ContentGenerator() {
 
                   {tab === "description" && (
                     <div>
-                      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+                      <div className="flex justify-end mb-[10px]">
                         <CopyBtn text={pack.description} id="desc" copied={copied} onCopy={copy} />
                       </div>
-                      <div style={{ padding: "16px 18px", borderRadius: "var(--radius-card)", background: "var(--surface-1)", border: "1px solid var(--border)", fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--secondary-foreground)", lineHeight: 1.75 }}>
+                      <div className="px-[18px] py-4 rounded-[var(--radius-card)] bg-[var(--surface-1)] border border-border text-sm text-[var(--secondary-foreground)] leading-[1.75]">
                         {pack.description}
                       </div>
                     </div>
@@ -197,29 +198,27 @@ export function ContentGenerator() {
 
                   {tab === "tags" && (
                     <div>
-                      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+                      <div className="flex justify-end mb-[10px]">
                         <CopyBtn text={pack.tags.join(", ")} id="tags" copied={copied} onCopy={copy} />
                       </div>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+                      <div className="flex flex-wrap gap-[7px]">
                         {pack.tags.map(tag => (
-                          <span key={tag} style={{ padding: "4px 11px", borderRadius: "var(--radius)", background: "var(--surface-2)", border: "1px solid var(--border)", fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--muted-foreground)" }}>#{tag}</span>
+                          <span key={tag} className="px-[11px] py-1 rounded-sm bg-[var(--surface-2)] border border-border text-[11px] text-muted-foreground">#{tag}</span>
                         ))}
                       </div>
                     </div>
                   )}
 
                   {tab === "hooks" && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div className="flex flex-col gap-2">
                       {pack.hooks.map((h, i) => (
-                        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "14px 16px", borderRadius: "var(--radius-card)", background: "var(--surface-1)", border: "1px solid var(--border)" }}>
-                          <div style={{ width: 22, height: 22, borderRadius: "var(--radius)", background: "var(--accent)", border: "1px solid var(--border-active)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 800, color: "var(--primary-hover)" }}>{i + 1}</span>
+                        <div key={i} className="flex items-start gap-3 px-4 py-[14px] rounded-[var(--radius-card)] bg-[var(--surface-1)] border border-border">
+                          <div className="w-[22px] h-[22px] rounded-sm bg-[var(--accent)] border border-[var(--border-active)] flex items-center justify-center shrink-0">
+                            <span className="font-mono text-[10px] font-extrabold text-[var(--primary-hover)]">{i + 1}</span>
                           </div>
-                          <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--secondary-foreground)", lineHeight: 1.65, flex: 1, margin: 0 }}>{h}</p>
-                          <button onClick={() => copy(h, `hook${i}`)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)", padding: 2, flexShrink: 0, transition: "color 0.15s" }}
-                            onMouseEnter={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.color = "var(--foreground)"}
-                            onMouseLeave={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.color = "var(--text-dim)"}
-                          >
+                          <p className="text-sm text-[var(--secondary-foreground)] leading-[1.65] flex-1 m-0">{h}</p>
+                          <button onClick={() => copy(h, `hook${i}`)}
+                            className="bg-transparent border-none cursor-pointer p-0.5 shrink-0 transition-colors text-[var(--text-dim)] hover:text-foreground">
                             {copied === `hook${i}` ? <Check size={12} /> : <Copy size={12} />}
                           </button>
                         </div>
@@ -228,18 +227,17 @@ export function ContentGenerator() {
                   )}
 
                   {tab === "thumbnails" && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div className="flex flex-col gap-2">
                       {pack.thumbnails.map((t, i) => (
-                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: "var(--radius-card)", background: "var(--surface-1)", border: "1px solid var(--border)" }}>
-                          <div style={{ width: 76, height: 42, borderRadius: "var(--radius)", background: `hsl(${i * 55 + 220}, 55%, 18%)`, border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            <span style={{ fontFamily: "var(--font-sans)", fontSize: "7.5px", fontWeight: 800, color: "rgba(255,255,255,0.8)", padding: "0 4px", textAlign: "center", lineHeight: 1.3 }}>{t}</span>
+                        <div key={i} className="flex items-center gap-3 px-4 py-[14px] rounded-[var(--radius-card)] bg-[var(--surface-1)] border border-border">
+                          <div className="w-[76px] h-[42px] rounded-sm border border-border flex items-center justify-center shrink-0"
+                            style={{ background: `hsl(${i * 55 + 220}, 55%, 18%)` }}>
+                            <span className="text-[7.5px] font-extrabold text-white/80 px-1 text-center leading-[1.3]">{t}</span>
                           </div>
-                          <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", flex: 1 }}>{t}</span>
+                          <span className="text-sm font-semibold text-foreground flex-1">{t}</span>
                           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap ${i === 0 ? "at-badge-warning" : "at-badge-default"}`}>{i === 0 ? "Top Pick" : `Option ${i + 1}`}</span>
-                          <button onClick={() => copy(t, `th${i}`)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)", padding: 2, transition: "color 0.15s" }}
-                            onMouseEnter={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.color = "var(--foreground)"}
-                            onMouseLeave={(e: React.MouseEvent<any>) => (e.currentTarget as HTMLButtonElement).style.color = "var(--text-dim)"}
-                          >
+                          <button onClick={() => copy(t, `th${i}`)}
+                            className="bg-transparent border-none cursor-pointer p-0.5 transition-colors text-[var(--text-dim)] hover:text-foreground">
                             {copied === `th${i}` ? <Check size={12} /> : <Copy size={12} />}
                           </button>
                         </div>

@@ -19,23 +19,23 @@ interface CardProps {
   active?: boolean;
   onClick?: () => void;
 }
-export function Card({ children, style, pad = 24, hover = false, active = false, onClick }: CardProps) {
-  const base: CSSProperties = {
-    background: "var(--card)",
-    border: `1px solid ${active ? "rgba(99,102,241,0.35)" : "var(--border)"}`,
-    borderRadius: "var(--radius-card)",
-    padding: typeof pad === "number" ? `${pad}px` : pad,
-    boxShadow: "0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25)",
-    transition: "border-color 0.18s, box-shadow 0.18s",
-    cursor: onClick ? "pointer" : undefined,
-    ...(active && { background: "var(--surface-2)", boxShadow: "0 2px 8px rgba(99,102,241,0.12), 0 1px 3px rgba(0,0,0,0.35)" }),
-    ...style,
-  };
+export function Card({ children, style, className = "", pad = 24, hover = false, active = false, onClick }: CardProps) {
+  const base = [
+    "bg-card rounded-lg shadow-elevation-sm transition-[border-color,box-shadow] duration-[180ms]",
+    active
+      ? "border border-[rgba(99,102,241,0.35)] bg-[var(--surface-2)] shadow-[0_2px_8px_rgba(99,102,241,0.12),0_1px_3px_rgba(0,0,0,0.35)]"
+      : "border border-border",
+    onClick ? "cursor-pointer" : "",
+    className,
+  ].join(" ");
+
+  const paddingStyle: CSSProperties = { padding: typeof pad === "number" ? `${pad}px` : pad, ...style };
 
   if (hover) {
     return (
       <div
-        style={base}
+        className={base}
+        style={paddingStyle}
         onClick={onClick}
         onMouseEnter={(e: React.MouseEvent<any>) => {
           (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.10)";
@@ -43,14 +43,16 @@ export function Card({ children, style, pad = 24, hover = false, active = false,
         }}
         onMouseLeave={(e: React.MouseEvent<any>) => {
           (e.currentTarget as HTMLDivElement).style.borderColor = active ? "rgba(99,102,241,0.35)" : "var(--border)";
-          (e.currentTarget as HTMLDivElement).style.boxShadow = active ? "0 2px 8px rgba(99,102,241,0.12), 0 1px 3px rgba(0,0,0,0.35)" : "0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25)";
+          (e.currentTarget as HTMLDivElement).style.boxShadow = active
+            ? "0 2px 8px rgba(99,102,241,0.12), 0 1px 3px rgba(0,0,0,0.35)"
+            : "0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25)";
         }}
       >
         {children}
       </div>
     );
   }
-  return <div style={base} onClick={onClick}>{children}</div>;
+  return <div className={base} style={paddingStyle} onClick={onClick}>{children}</div>;
 }
 
 // ─── Section Header ─────────────────────────────────────────────
@@ -63,23 +65,23 @@ interface SectionHeaderProps {
 }
 export function SectionHeader({ label, title, description, action, compact = false }: SectionHeaderProps) {
   return (
-    <div style={{ display: "flex", alignItems: compact ? "center" : "flex-start", justifyContent: "space-between", gap: 12, marginBottom: compact ? 16 : 20 }}>
+    <div className={`flex ${compact ? "items-center" : "items-start"} justify-between gap-3 ${compact ? "mb-4" : "mb-5"}`}>
       <div>
         {label && (
-          <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 4 }}>
+          <div className="text-[10px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1">
             {label}
           </div>
         )}
-        <div style={{ fontFamily: "var(--font-sans)", fontSize: compact ? "var(--text-sm)" : "var(--text-base)", fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.01em", lineHeight: 1.3 }}>
+        <div className={`font-semibold text-foreground tracking-[-0.01em] leading-[1.3] ${compact ? "text-sm" : "text-base"}`}>
           {title}
         </div>
         {description && (
-          <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", marginTop: 3, lineHeight: 1.5 }}>
+          <div className="text-[11px] text-[var(--text-dim)] mt-[3px] leading-[1.5]">
             {description}
           </div>
         )}
       </div>
-      {action && <div style={{ flexShrink: 0 }}>{action}</div>}
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }
@@ -102,25 +104,25 @@ export function StatCard({ label, value, change, changeUp = true, icon: Icon, ic
       transition={{ delay, ease: [0.16, 1, 0.3, 1], duration: 0.5 }}
     >
       <Card hover>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-          <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: "var(--text-dim)", letterSpacing: "0.04em" }}>
+        <div className="flex justify-between items-start mb-4">
+          <div className="text-[11px] font-semibold text-[var(--text-dim)] tracking-[0.04em]">
             {label}
           </div>
           {Icon && (
-            <div style={{ width: 30, height: 30, borderRadius: "var(--radius)", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div className="w-[30px] h-[30px] rounded-sm bg-[rgba(255,255,255,0.03)] border border-border flex items-center justify-center">
               <Icon size={13} color={iconColor} />
             </div>
           )}
         </div>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 10 }}>
+        <div className="font-mono text-2xl font-extrabold text-foreground tracking-[-0.04em] leading-none mb-[10px]">
           {value}
         </div>
         {change && (
-          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", fontWeight: 600, color: changeUp ? "var(--neon-emerald)" : "var(--neon-red)" }}>
+          <div className="flex items-center gap-1">
+            <span className="text-[11px] font-semibold" style={{ color: changeUp ? "var(--neon-emerald)" : "var(--neon-red)" }}>
               {changeUp ? "↑" : "↓"} {change}
             </span>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>vs last month</span>
+            <span className="text-[10px] text-[var(--text-dim)]">vs last month</span>
           </div>
         )}
       </Card>
@@ -142,8 +144,12 @@ interface InputProps {
 }
 export function Input({ value, onChange, placeholder, prefix, suffix, style, onKeyDown, type = "text", defaultValue }: InputProps) {
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-      {prefix && <div style={{ position: "absolute", left: 11, zIndex: 1, pointerEvents: "none", color: "var(--text-dim)", display: "flex", alignItems: "center" }}>{prefix}</div>}
+    <div className="relative flex items-center">
+      {prefix && (
+        <div className="absolute left-[11px] z-[1] pointer-events-none text-[var(--text-dim)] flex items-center">
+          {prefix}
+        </div>
+      )}
       <input
         type={type}
         value={value}
@@ -151,25 +157,20 @@ export function Input({ value, onChange, placeholder, prefix, suffix, style, onK
         placeholder={placeholder}
         defaultValue={defaultValue}
         onKeyDown={onKeyDown}
+        className="w-full h-[38px] bg-[var(--surface-1)] border border-border rounded-md text-foreground font-sans text-sm outline-none transition-[border-color,box-shadow] duration-150 focus:border-[var(--primary)] focus:shadow-[0_0_0_2px_var(--ring)]"
         style={{
-          width: "100%",
-          height: 38,
           paddingLeft: prefix ? 34 : 12,
           paddingRight: suffix ? 34 : 12,
-          background: "var(--surface-1)",
-          border: "1px solid var(--border)",
-          borderRadius: "var(--radius-button)",
-          color: "var(--foreground)",
-          fontFamily: "var(--font-sans)",
-          fontSize: "var(--text-sm)",
-          outline: "none",
-          transition: "border-color 0.15s, box-shadow 0.15s",
           ...style,
         }}
         onFocus={e => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 2px var(--ring)"; }}
         onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
       />
-      {suffix && <div style={{ position: "absolute", right: 11, zIndex: 1, pointerEvents: "none", color: "var(--text-dim)", display: "flex", alignItems: "center" }}>{suffix}</div>}
+      {suffix && (
+        <div className="absolute right-[11px] z-[1] pointer-events-none text-[var(--text-dim)] flex items-center">
+          {suffix}
+        </div>
+      )}
     </div>
   );
 }
@@ -189,21 +190,8 @@ export function Textarea({ value, onChange, placeholder, rows = 4, style }: Text
       onChange={e => onChange?.(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      style={{
-        width: "100%",
-        padding: "10px 12px",
-        background: "var(--surface-1)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-button)",
-        color: "var(--foreground)",
-        fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-sm)",
-        outline: "none",
-        resize: "vertical",
-        lineHeight: 1.6,
-        transition: "border-color 0.15s, box-shadow 0.15s",
-        ...style,
-      }}
+      className="w-full px-3 py-[10px] bg-[var(--surface-1)] border border-border rounded-md text-foreground font-sans text-sm outline-none resize-y leading-[1.6] transition-[border-color,box-shadow] duration-150"
+      style={style}
       onFocus={e => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 2px var(--ring)"; }}
       onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
     />
@@ -224,21 +212,8 @@ export function Select({ options, value, onChange, style, defaultValue }: Select
       value={value}
       defaultValue={defaultValue}
       onChange={e => onChange?.(e.target.value)}
-      style={{
-        width: "100%",
-        height: 38,
-        padding: "0 12px",
-        background: "var(--surface-1)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-button)",
-        color: "var(--foreground)",
-        fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-sm)",
-        outline: "none",
-        cursor: "pointer",
-        transition: "border-color 0.15s",
-        ...style,
-      }}
+      className="w-full h-[38px] px-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground font-sans text-sm outline-none cursor-pointer transition-[border-color] duration-150"
+      style={style}
       onFocus={e => { e.target.style.borderColor = "var(--primary)"; e.target.style.boxShadow = "0 0 0 2px var(--ring)"; }}
       onBlur={e => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
     >
@@ -260,37 +235,33 @@ interface ButtonProps {
   style?: CSSProperties;
   type?: "button" | "submit";
 }
+
+const variantClasses: Record<BtnVariant, string> = {
+  primary:   "bg-foreground text-background border border-transparent",
+  secondary: "bg-[var(--surface-2)] text-muted-foreground border border-border",
+  ghost:     "bg-transparent text-muted-foreground border border-transparent",
+  danger:    "bg-[rgba(239,68,68,0.08)] text-[var(--neon-red)] border border-[rgba(239,68,68,0.20)]",
+};
+
+const sizeClasses: Record<"sm" | "md" | "lg", string> = {
+  sm: "h-[30px] px-3 text-[11px] rounded-sm",
+  md: "h-9 px-4 text-sm rounded-md",
+  lg: "h-11 px-6 text-sm rounded-md",
+};
+
 export function Button({ children, variant = "secondary", size = "md", onClick, disabled, icon: Icon, iconRight: IconRight, style, type = "button" }: ButtonProps) {
-  const variants: Record<BtnVariant, CSSProperties> = {
-    primary:   { background: "var(--foreground)", color: "var(--background)", border: "1px solid transparent" },
-    secondary: { background: "var(--surface-2)", color: "var(--muted-foreground)", border: "1px solid var(--border)" },
-    ghost:     { background: "transparent", color: "var(--muted-foreground)", border: "1px solid transparent" },
-    danger:    { background: "rgba(239,68,68,0.08)", color: "var(--neon-red)", border: "1px solid rgba(239,68,68,0.20)" },
-  };
-  const sizes: Record<"sm"|"md"|"lg", CSSProperties> = {
-    sm: { height: 30, padding: "0 12px", fontSize: "11px", borderRadius: "var(--radius)" },
-    md: { height: 36, padding: "0 16px", fontSize: "var(--text-sm)", borderRadius: "var(--radius-button)" },
-    lg: { height: 44, padding: "0 24px", fontSize: "var(--text-sm)", borderRadius: "var(--radius-button)" },
-  };
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      style={{
-        display: "inline-flex", alignItems: "center", gap: 6, justifyContent: "center",
-        fontFamily: "var(--font-sans)", fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.45 : 1,
-        transition: "opacity 0.15s, background 0.15s, border-color 0.15s, transform 0.1s",
-        whiteSpace: "nowrap",
-        ...variants[variant],
-        ...sizes[size],
-        ...style,
-      }}
-      onMouseEnter={(e: React.MouseEvent<any>) => { if (!disabled) (e.currentTarget as HTMLButtonElement).style.opacity = "0.85"; }}
-      onMouseLeave={(e: React.MouseEvent<any>) => { if (!disabled) (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
-      onMouseDown={e => { if (!disabled) (e.currentTarget as HTMLButtonElement).style.transform = "scale(0.98)"; }}
-      onMouseUp={e => { if (!disabled) (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
+      className={[
+        "inline-flex items-center gap-1.5 justify-center font-semibold font-sans whitespace-nowrap transition-[opacity,background,border-color,transform] duration-150",
+        variantClasses[variant],
+        sizeClasses[size],
+        disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:opacity-85 active:scale-[0.98]",
+      ].join(" ")}
+      style={style}
     >
       {Icon && <Icon size={size === "sm" ? 11 : 13} />}
       {children}
@@ -308,17 +279,20 @@ interface BadgeProps {
 }
 const badgeColors: Record<BadgeVariant, { bg: string; color: string; dot?: string }> = {
   default: { bg: "rgba(255,255,255,0.06)", color: "var(--muted-foreground)" },
-  success: { bg: "rgba(16,185,129,0.10)", color: "var(--neon-emerald)", dot: "var(--neon-emerald)" },
-  warning: { bg: "rgba(245,158,11,0.10)", color: "var(--neon-amber)", dot: "var(--neon-amber)" },
-  danger:  { bg: "rgba(239,68,68,0.10)", color: "var(--neon-red)", dot: "var(--neon-red)" },
-  info:    { bg: "rgba(6,182,212,0.10)", color: "var(--neon-cyan)", dot: "var(--neon-cyan)" },
-  purple:  { bg: "rgba(139,92,246,0.10)", color: "var(--neon-purple)", dot: "var(--neon-purple)" },
+  success: { bg: "rgba(16,185,129,0.10)",  color: "var(--neon-emerald)", dot: "var(--neon-emerald)" },
+  warning: { bg: "rgba(245,158,11,0.10)",  color: "var(--neon-amber)",   dot: "var(--neon-amber)"   },
+  danger:  { bg: "rgba(239,68,68,0.10)",   color: "var(--neon-red)",     dot: "var(--neon-red)"     },
+  info:    { bg: "rgba(6,182,212,0.10)",   color: "var(--neon-cyan)",    dot: "var(--neon-cyan)"    },
+  purple:  { bg: "rgba(139,92,246,0.10)",  color: "var(--neon-purple)",  dot: "var(--neon-purple)"  },
 };
 export function Badge({ children, variant = "default", dot = false }: BadgeProps) {
   const c = badgeColors[variant];
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "2px 8px", borderRadius: "var(--radius)", background: c.bg, color: c.color, fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" }}>
-      {dot && c.dot && <span style={{ width: 5, height: 5, borderRadius: "50%", background: c.dot, flexShrink: 0 }} />}
+    <span
+      className="inline-flex items-center gap-[5px] px-2 py-[2px] rounded-sm text-[10px] font-semibold tracking-[0.02em] whitespace-nowrap"
+      style={{ background: c.bg, color: c.color }}
+    >
+      {dot && c.dot && <span className="w-[5px] h-[5px] rounded-full shrink-0" style={{ background: c.dot }} />}
       {children}
     </span>
   );
@@ -327,7 +301,7 @@ export function Badge({ children, variant = "default", dot = false }: BadgeProps
 // ─── Label ──────────────────────────────────────────────────────
 export function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 6 }}>
+    <div className="text-[10px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-1.5">
       {children}
     </div>
   );
@@ -335,7 +309,7 @@ export function FieldLabel({ children }: { children: ReactNode }) {
 
 // ─── Divider ────────────────────────────────────────────────────
 export function Divider({ style }: { style?: CSSProperties }) {
-  return <div style={{ height: 1, background: "var(--border)", ...style }} />;
+  return <div className="h-px bg-border" style={style} />;
 }
 
 // ─── Empty State ────────────────────────────────────────────────
@@ -347,15 +321,17 @@ interface EmptyStateProps {
 }
 export function EmptyState({ icon: Icon, title, description, action }: EmptyStateProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "60px 24px", textAlign: "center", gap: 12 }}>
+    <div className="flex flex-col items-center justify-center px-6 py-[60px] text-center gap-3">
       {Icon && (
-        <div style={{ width: 48, height: 48, borderRadius: "var(--radius-card)", background: "var(--surface-2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 4 }}>
+        <div className="w-12 h-12 rounded-lg bg-[var(--surface-2)] border border-border flex items-center justify-center mb-1">
           <Icon size={20} color="var(--text-dim)" />
         </div>
       )}
-      <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)" }}>{title}</div>
-      {description && <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-xs)", color: "var(--text-dim)", maxWidth: 280, lineHeight: 1.6 }}>{description}</div>}
-      {action && <div style={{ marginTop: 8 }}>{action}</div>}
+      <div className="text-sm font-semibold text-foreground">{title}</div>
+      {description && (
+        <div className="text-xs text-[var(--text-dim)] max-w-[280px] leading-[1.6]">{description}</div>
+      )}
+      {action && <div className="mt-2">{action}</div>}
     </div>
   );
 }
@@ -363,10 +339,10 @@ export function EmptyState({ icon: Icon, title, description, action }: EmptyStat
 // ─── Row divider with label ──────────────────────────────────────
 export function DividerLabel({ children }: { children: ReactNode }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-      <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 600, color: "var(--text-dim)", letterSpacing: "0.05em" }}>{children}</span>
-      <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+    <div className="flex items-center gap-3">
+      <div className="flex-1 h-px bg-border" />
+      <span className="text-[10px] font-semibold text-[var(--text-dim)] tracking-[0.05em]">{children}</span>
+      <div className="flex-1 h-px bg-border" />
     </div>
   );
 }
@@ -380,28 +356,13 @@ export function Toggle({ checked, onChange }: ToggleProps) {
   return (
     <button
       onClick={() => onChange(!checked)}
-      style={{
-        width: 36, height: 20,
-        borderRadius: 10,
-        background: checked ? "var(--primary)" : "var(--surface-3)",
-        border: "none",
-        cursor: "pointer",
-        position: "relative",
-        transition: "background 0.2s",
-        flexShrink: 0,
-        padding: 0,
-      }}
+      className="relative w-9 h-5 rounded-[10px] border-none cursor-pointer shrink-0 p-0 transition-colors duration-200"
+      style={{ background: checked ? "var(--primary)" : "var(--surface-3)" }}
     >
-      <div style={{
-        position: "absolute",
-        top: 2,
-        left: checked ? 18 : 2,
-        width: 16, height: 16,
-        borderRadius: "50%",
-        background: "white",
-        transition: "left 0.2s",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-      }} />
+      <div
+        className="absolute top-[2px] w-4 h-4 rounded-full bg-white transition-[left] duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.3)]"
+        style={{ left: checked ? 18 : 2 }}
+      />
     </button>
   );
 }
@@ -409,8 +370,11 @@ export function Toggle({ checked, onChange }: ToggleProps) {
 // ─── Score Bar ──────────────────────────────────────────────────
 export function MiniBar({ value, color = "var(--primary)", height = 3 }: { value: number; color?: string; height?: number }) {
   return (
-    <div style={{ width: "100%", height, borderRadius: height, background: "var(--surface-3)", overflow: "hidden" }}>
-      <div style={{ width: `${value}%`, height: "100%", background: color, borderRadius: height, transition: "width 0.6s ease" }} />
+    <div className="w-full overflow-hidden" style={{ height, borderRadius: height, background: "var(--surface-3)" }}>
+      <div
+        className="h-full transition-[width] duration-[600ms] ease-out"
+        style={{ width: `${value}%`, background: color, borderRadius: height }}
+      />
     </div>
   );
 }
