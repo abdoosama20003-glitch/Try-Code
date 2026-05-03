@@ -2,9 +2,34 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import { useState, useEffect } from "react";
 
 export function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // To prevent hydration errors, we wait until the component has mounted on the client
+  // before rendering the theme-dependent icon.
+  if (!mounted) {
+    return (
+      <button
+        className="at-theme-toggle"
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          width: 30, // Approximate width
+          height: 30, // Approximate height
+          background: "transparent",
+          border: "none",
+        }}
+        aria-hidden="true"
+      />
+    );
+  }
 
   return (
     <motion.button
