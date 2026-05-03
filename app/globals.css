@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    --radius: 6px;
+    --radius-card: 14px;
+    --radius-button: 12px;
+    --radius-tooltip: 6px;
+
+    --background: #09090B;
+    --foreground: #FAFAFA;
+    --card: #18181B;
+    --card-foreground: #FAFAFA;
+    --popover: #0F0F12;
+    --popover-foreground: #FAFAFA;
+    --primary: #6366F1;
+    --primary-hover: #818CF8;
+    --primary-foreground: #FFFFFF;
+    --secondary: #27272A;
+    --secondary-foreground: #D4D4D8;
+    --muted: #3F3F46;
+    --muted-foreground: #A1A1AA;
+    --accent: rgba(99, 102, 241, 0.10);
+    --accent-foreground: #818CF8;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-active: rgba(99, 102, 241, 0.40);
+    --input: #09090B;
+    --ring: rgba(99, 102, 241, 0.40);
+
+    --chart-1: #6366F1;
+    --chart-2: #10B981;
+    --chart-3: #8B5CF6;
+    --chart-4: #EC4899;
+    --chart-5: #F59E0B;
+
+    --elevation-xs: 0 1px 2px rgba(0,0,0,0.30);
+    --elevation-sm: 0 1px 3px rgba(0,0,0,0.40), 0 1px 2px rgba(0,0,0,0.28);
+    --elevation-md: 0 4px 20px rgba(0,0,0,0.50), 0 1px 4px rgba(0,0,0,0.28);
+    --glow-primary: 0 0 20px rgba(99,102,241,0.25);
+    --glow-primary-sm: 0 0 12px rgba(99,102,241,0.20);
+  }
+
+  .light {
+    --background: #F4F5F7;
+    --foreground: #0A0A0C;
+    --card: #FFFFFF;
+    --card-foreground: #0A0A0C;
+    --popover: #FFFFFF;
+    --popover-foreground: #0A0A0C;
+    --primary: #4F52D0;
+    --primary-hover: #5C5FE5;
+    --primary-foreground: #FFFFFF;
+    --secondary: #EEEEF4;
+    --secondary-foreground: #3A3A45;
+    --muted: #E4E5EC;
+    --muted-foreground: #64646E;
+    --accent: rgba(79, 82, 208, 0.09);
+    --accent-foreground: #4F52D0;
+    --destructive: #D32F2F;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(0, 0, 0, 0.085);
+    --border-active: rgba(79, 82, 208, 0.50);
+    --input: #FFFFFF;
+    --ring: rgba(79, 82, 208, 0.25);
+
+    --chart-1: #4F52D0;
+    --chart-2: #065F46;
+    --chart-3: #6D28D9;
+    --chart-4: #BE185D;
+    --chart-5: #92400E;
+
+    --elevation-xs: 0 1px 2px rgba(0,0,0,0.05);
+    --elevation-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    --elevation-md: 0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
+    --glow-primary: 0 0 20px rgba(79,82,208,0.15);
+    --glow-primary-sm: 0 0 12px rgba(79,82,208,0.10);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
