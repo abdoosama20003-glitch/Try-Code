@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion, useSpring, useTransform, useMotionValue, animate } from "framer-motion";
+import { motion, useSpring, useTransform, useMotionValue, animate, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogoMark } from "./LogoMark";
 
@@ -43,6 +44,7 @@ export function Navbar() {
   const navigate = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -168,16 +170,7 @@ export function Navbar() {
           </motion.button>
 
           {/* Center nav — gradient separator + links */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 9,
-              flex: 1,
-              overflow: "hidden",
-            }}
-          >
+          <div className="hidden md:flex flex-col items-center gap-[9px] flex-1 overflow-hidden">
             {/* Gradient line fades out when scrolled */}
             <motion.div
               style={{ width: "100%" }}
@@ -210,21 +203,7 @@ export function Navbar() {
 
             <button
               onClick={() => navigate.push("/onboarding")}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "var(--font-sans)",
-                fontSize: "var(--text-sm)",
-                fontWeight: "var(--font-weight-medium)",
-                color: "var(--muted-foreground)",
-                padding: "6px 10px",
-                borderRadius: "var(--radius-button)",
-                transition: "color 0.15s",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--foreground)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--muted-foreground)"; }}
+              className="hidden sm:block hover:text-[var(--foreground)] text-[var(--muted-foreground)] bg-transparent border-none cursor-pointer font-sans text-sm font-medium px-2.5 py-1.5 rounded-[var(--radius-button)] transition-colors whitespace-nowrap"
             >
               Log in
             </button>
@@ -238,28 +217,82 @@ export function Navbar() {
                 paddingRight: scrolled ? 20 : 18,
               }}
               transition={spring}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: 36,
-                borderRadius: 12,
-                background: "var(--foreground)",
-                color: "var(--background)",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "var(--font-sans)",
-                fontSize: "var(--text-sm)",
-                fontWeight: "var(--font-weight-bold)",
-                letterSpacing: "-0.01em",
-                whiteSpace: "nowrap",
-              }}
+              className="hidden md:flex items-center justify-center h-9 rounded-xl bg-[var(--foreground)] text-[var(--background)] border-none cursor-pointer font-sans text-sm font-bold tracking-[-0.01em] whitespace-nowrap"
             >
               Get started →
             </motion.button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden flex items-center justify-center w-9 h-9 rounded-md text-[var(--foreground)] hover:bg-[var(--hover-overlay)] transition-colors ml-1"
+            >
+              <Menu size={20} />
+            </button>
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-sm pointer-events-auto"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[var(--surface-0)] z-[120] border-l border-[var(--border)] p-6 shadow-2xl flex flex-col pointer-events-auto"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-2">
+                  <LogoMark size={24} />
+                  <span className="font-sans font-bold text-sm text-[var(--foreground)]">AutoTube</span>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-[var(--hover-overlay)] text-[var(--muted-foreground)] transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="font-sans text-base font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors py-2"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+              <div className="mt-auto flex flex-col gap-3">
+                <button
+                  onClick={() => navigate.push("/onboarding")}
+                  className="w-full text-[var(--foreground)] font-sans text-sm font-medium h-11 rounded-md border border-[var(--border)] hover:bg-[var(--hover-overlay)] transition-colors cursor-pointer"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => navigate.push("/onboarding")}
+                  className="w-full bg-[var(--foreground)] text-[var(--background)] font-sans text-sm font-bold h-11 rounded-md transition-all hover:scale-[0.98] cursor-pointer"
+                >
+                  Get started →
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

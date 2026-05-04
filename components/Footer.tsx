@@ -146,10 +146,7 @@ export function Footer() {
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
-      style={{
-        padding: "0 24px 24px",
-        background: "var(--background)",
-      }}
+      className="px-4 md:px-6 pb-6 bg-[var(--background)]"
     >
       {/* Outer card */}
       <motion.div
@@ -163,16 +160,7 @@ export function Footer() {
         }}
       >
         {/* ── CTA Section ── */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: 32,
-            padding: "48px 56px 44px",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 p-8 md:p-12 lg:p-[48px_56px_44px] flex-wrap">
           {/* Left: headline + subtitle */}
           <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 460 }}>
             <h2
@@ -251,15 +239,7 @@ export function Footer() {
         <div style={{ height: 1, background: "rgba(255,255,255,0.07)", margin: "0 32px" }} />
 
         {/* ── Link Columns ── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr repeat(3, auto)",
-            gap: "40px 48px",
-            padding: "40px 56px 36px",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto] gap-10 lg:gap-12 p-8 md:p-12 lg:p-[40px_56px_36px] flex-wrap">
           {/* Brand column */}
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <span
@@ -284,7 +264,7 @@ export function Footer() {
           </div>
 
           {/* Main Pages col 1 + col 2 grouped */}
-          <div style={{ display: "flex", gap: 40 }}>
+          <div className="flex flex-col sm:flex-row gap-10 sm:gap-[40px] col-span-1 md:col-span-2 lg:col-span-1">
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <span
                 style={{
@@ -298,7 +278,7 @@ export function Footer() {
               >
                 Main Pages
               </span>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 32px" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-[10px_32px]">
                 {[...mainPagesCol1, ...mainPagesCol2].map((l) => (
                   <FooterLink key={l.label} href={l.href}>{l.label}</FooterLink>
                 ))}
@@ -314,16 +294,7 @@ export function Footer() {
         <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "0 32px" }} />
 
         {/* ── Bottom bar: copyright + socials ── */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "18px 56px 22px",
-            gap: 16,
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between p-6 md:p-8 lg:p-[18px_56px_22px] gap-6 flex-wrap text-center md:text-left">
           <span
             style={{
               fontFamily: "var(--font-sans)",

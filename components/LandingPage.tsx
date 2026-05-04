@@ -97,7 +97,8 @@ function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: 
 ───────────────────────────────────────────────*/
 function ProductPreview() {
   return (
-    <div style={{ width: "100%", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--surface-1)", overflow: "hidden", boxShadow: "var(--elevation-lg)" }}>
+    <div className="w-full rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface-1)] overflow-hidden shadow-[var(--elevation-lg)] overflow-x-auto">
+      <div className="min-w-[700px]">
       {/* Titlebar */}
       <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", borderBottom: "1px solid var(--border)", background: "var(--surface-0)" }}>
         <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444", opacity: 0.7 }} />
@@ -161,6 +162,7 @@ function ProductPreview() {
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
 }
@@ -186,7 +188,7 @@ export function LandingPage() {
         {/* Subtle radial glow */}
         <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: 600, height: 300, background: "radial-gradient(ellipse at center, rgba(99,102,241,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px" }}>
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10">
           {/* Top tag */}
           <D {...fadeUp(0)} style={{ display: "flex", justifyContent: "center", marginBottom: 40, paddingTop: 48 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px 6px 8px", borderRadius: 100, background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}>
@@ -223,14 +225,14 @@ export function LandingPage() {
           </D>
 
           {/* Stats strip */}
-          <D {...fadeIn(0.3)} style={{ display: "flex", justifyContent: "center", gap: 0, marginBottom: 72 }}>
+          <D {...fadeIn(0.3)} className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-0 mb-12 md:mb-[72px]">
             {[
               { v: "50K+",  l: "Active creators" },
               { v: "2.4M",  l: "Analyses run" },
               { v: "340K",  l: "Videos made" },
               { v: "4.9★",  l: "Average rating" },
             ].map((s, i) => (
-              <div key={s.l} style={{ padding: "0 32px", borderRight: i < 3 ? "1px solid var(--border)" : "none", textAlign: "center" }}>
+              <div key={s.l} className="px-0 sm:px-8 text-center sm:border-r border-[var(--border)] last:border-none">
                 <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 4 }}>{s.v}</div>
                 <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", fontWeight: 500 }}>{s.l}</div>
               </div>
@@ -249,7 +251,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════
           TOOLS / FEATURES
       ═══════════════════════════════════════ */}
-      <section style={{ padding: "100px 0", maxWidth: 1280, margin: "0 auto", paddingLeft: 40, paddingRight: 40 }} id="features">
+      <section className="py-[60px] md:py-[100px] max-w-[1280px] mx-auto px-5 md:px-10" id="features">
         <D {...fadeUp(0)} style={{ marginBottom: 60 }}>
           <SectionLabel>Features</SectionLabel>
           <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: 0, maxWidth: 560 }}>
@@ -257,7 +259,7 @@ export function LandingPage() {
           </h2>
         </D>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px]">
           {tools.map((t, i) => (
             <D key={t.title} {...fadeUp(i * 0.07)} className="at-tool-card">
               <div style={{ width: 42, height: 42, borderRadius: 10, background: `color-mix(in srgb, ${t.color} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${t.color} 25%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -281,7 +283,7 @@ export function LandingPage() {
       {/* ═══════════════════════════════════════
           HOW IT WORKS
       ═══════════════════════════════════════ */}
-      <section style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }}>
+      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto">
         <D {...fadeUp(0)} style={{ marginBottom: 64 }}>
           <SectionLabel>Process</SectionLabel>
           <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: 0 }}>
@@ -289,7 +291,7 @@ export function LandingPage() {
           </h2>
         </D>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px]">
           {[
             { n: "01", title: "Discover Gaps",    desc: "Enter your niche. AutoTube scans millions of data points to surface topics your audience is actively searching for — and creators are ignoring.", icon: Crosshair,  color: "var(--neon-indigo)"  },
             { n: "02", title: "Generate Content", desc: "One click builds a complete package: optimized title, full description, 15+ tags, complete script with hooks, and 4 thumbnail concepts.", icon: Sparkles,   color: "var(--neon-purple)"  },
@@ -306,7 +308,7 @@ export function LandingPage() {
               <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.7 }}>{s.desc}</div>
               {/* Connector arrow */}
               {i < 2 && (
-                <div style={{ position: "absolute", right: -14, top: "50%", transform: "translateY(-50%)", width: 28, height: 28, borderRadius: "50%", background: "var(--surface-2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
+                <div className="hidden md:flex absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[var(--surface-2)] border border-[var(--border)] items-center justify-center z-10">
                   <ChevronRight size={12} color="var(--text-dim)" />
                 </div>
               )}
@@ -320,8 +322,8 @@ export function LandingPage() {
       {/* ═══════════════════════════════════════
           TESTIMONIALS
       ═══════════════════════════════════════ */}
-      <section style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }} id="testimonials">
-        <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", gap: 80, alignItems: "start" }}>
+      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto" id="testimonials">
+        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-10 lg:gap-20 items-start">
           {/* Left */}
           <D {...fadeUp(0)}>
             <SectionLabel>Testimonials</SectionLabel>
@@ -339,7 +341,7 @@ export function LandingPage() {
           </D>
 
           {/* Testimonials grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {testimonials.map((t, i) => (
               <D key={t.name} {...fadeUp(i * 0.08)} style={{ padding: "24px", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--card)", display: "flex", flexDirection: "column", gap: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.25)", transition: "border-color 0.2s, transform 0.2s", cursor: "default" }}
                 onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--surface-4)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
@@ -371,7 +373,7 @@ export function LandingPage() {
       {/* ═══════════════════════════════════════
           PRICING
       ═══════════════════════════════════════ */}
-      <section style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }} id="pricing">
+      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto" id="pricing">
         <D {...fadeUp(0)} style={{ textAlign: "center", marginBottom: 64 }}>
           <SectionLabel>Pricing</SectionLabel>
           <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: "0 auto 16px", maxWidth: 480 }}>
@@ -380,7 +382,7 @@ export function LandingPage() {
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", color: "var(--muted-foreground)", margin: 0 }}>No hidden fees. No lock-in. Cancel anytime.</p>
         </D>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {pricing.map((plan, i) => (
             <D key={plan.name} {...fadeUp(i * 0.08)} className={`at-pricing-card ${plan.highlight ? "at-pricing-card-featured" : ""}`} style={{ position: "relative", overflow: "hidden" }}>
               {plan.highlight && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, var(--primary), var(--neon-purple))" }} />}
@@ -424,9 +426,9 @@ export function LandingPage() {
           FINAL CTA
       ═══════════════════════════════════════ */}
       <section style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }}>
-        <D {...fadeUp(0)} style={{ background: "var(--surface-1)", border: "1px solid var(--border)", borderRadius: "var(--radius-card)", padding: "72px 64px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 48, flexWrap: "wrap", position: "relative", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }}>
+        <D {...fadeUp(0)} className="bg-[var(--surface-1)] border border-[var(--border)] rounded-[var(--radius-card)] p-8 md:p-16 lg:p-[72px_64px] flex items-center justify-between gap-8 md:gap-12 flex-wrap relative overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
           {/* Background accent */}
-          <div style={{ position: "absolute", right: -80, top: "50%", transform: "translateY(-50%)", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)" }} />
           <div style={{ position: "relative" }}>
             <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 16 }}>Get started today</div>
             <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: "0 0 16px", maxWidth: 500 }}>
