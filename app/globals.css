@@ -73,6 +73,15 @@
     --hover-overlay: rgba(255, 255, 255, 0.05);
     --hover-overlay-md: rgba(255, 255, 255, 0.1);
     --text-dim: #A1A1AA;
+
+    --sidebar: #09090B;
+    --sidebar-foreground: #FAFAFA;
+    --sidebar-primary: #6366F1;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: rgba(255, 255, 255, 0.05);
+    --sidebar-accent-foreground: #FAFAFA;
+    --sidebar-border: rgba(255, 255, 255, 0.06);
+    --sidebar-ring: rgba(99, 102, 241, 0.40);
   }
 
   .light {
@@ -125,6 +134,15 @@
     --hover-overlay: rgba(0, 0, 0, 0.05);
     --hover-overlay-md: rgba(0, 0, 0, 0.1);
     --text-dim: #64646E;
+
+    --sidebar: #F4F5F7;
+    --sidebar-foreground: #0A0A0C;
+    --sidebar-primary: #4F52D0;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: rgba(0, 0, 0, 0.05);
+    --sidebar-accent-foreground: #0A0A0C;
+    --sidebar-border: rgba(0, 0, 0, 0.085);
+    --sidebar-ring: rgba(79, 82, 208, 0.25);
   }
 }
 

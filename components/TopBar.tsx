@@ -28,7 +28,7 @@ export function TopBar({ title, subtitle, label, actionLabel, actionIcon: Action
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="flex items-end justify-between px-7 pt-5 pb-4 border-b border-border bg-background shrink-0 gap-4 relative z-10"
+      className="flex items-end justify-between px-7 pt-5 pb-4 border-b border-border bg-background shrink-0 gap-4 sticky top-0 z-50"
     >
       <div>
         {label && (

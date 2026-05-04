@@ -183,7 +183,7 @@ function NavButton({
       {active && (
         <motion.div
           layoutId="nav-pill"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-[2.5px] h-4 rounded-r-[3px] bg-[var(--sidebar-primary)]"
+          className="absolute bottom-0 left-0 w-full h-[2px] rounded-t-[2px] bg-[var(--sidebar-primary)] shadow-[0_0_12px_var(--sidebar-primary)]"
           transition={{ type: "spring", stiffness: 440, damping: 32 }}
         />
       )}
