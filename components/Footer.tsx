@@ -1,12 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { Facebook, Twitter, Youtube, Linkedin } from "lucide-react";
 import svgPaths from "./imports/NewFooterMain/svg-gp5vq1tb83";
 
 const MotionDiv = motion.create("div" as any);
 
 /* ── Social icon circle button ── */
-function SocialBtn({ label }: { label: string }) {
+function SocialBtn({ icon: Icon, label }: { icon: any; label: string }) {
   return (
     <motion.button
       whileHover={{ scale: 1.08, background: "rgba(255,255,255,0.09)" }}
@@ -46,7 +47,7 @@ function SocialBtn({ label }: { label: string }) {
           lineHeight: 1,
         }}
       >
-        {label}
+        <Icon size={12} color="#555562" />
       </span>
     </motion.button>
   );
@@ -309,10 +310,10 @@ export function Footer() {
 
           {/* Social icon row */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <SocialBtn label="f" />
-            <SocialBtn label="𝕏" />
-            <SocialBtn label="▶" />
-            <SocialBtn label="in" />
+            <SocialBtn icon={Facebook} label="Facebook" />
+            <SocialBtn icon={Twitter} label="Twitter" />
+            <SocialBtn icon={Youtube} label="YouTube" />
+            <SocialBtn icon={Linkedin} label="LinkedIn" />
           </div>
         </div>
       </motion.div>

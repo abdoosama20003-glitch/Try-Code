@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, ArrowLeft, Check, Youtube, Github, Globe,
   Sparkles, Crosshair, PenTool, Image, BarChart3, Target, Loader2,
+  Terminal, Bot, Palette, Briefcase, Gamepad2, TrendingUp, HeartPulse, BookOpen, Music, Utensils
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogoMark } from "./LogoMark";
@@ -12,18 +13,18 @@ import { LogoMark } from "./LogoMark";
 const MotionDiv = motion.create("div" as any);
 
 const niches = [
-  { id: "prog",   label: "Programming",    icon: "💻" },
-  { id: "ai",     label: "AI & ML",        icon: "🤖" },
-  { id: "web",    label: "Web Dev",        icon: "🌐" },
-  { id: "design", label: "UI/UX Design",  icon: "🎨" },
-  { id: "biz",    label: "Business",       icon: "💼" },
-  { id: "game",   label: "Gaming",         icon: "🎮" },
-  { id: "fin",    label: "Finance",        icon: "📈" },
-  { id: "health", label: "Health",         icon: "💪" },
-  { id: "edu",    label: "Education",      icon: "📚" },
-  { id: "life",   label: "Lifestyle",      icon: "✨" },
-  { id: "music",  label: "Music",          icon: "🎵" },
-  { id: "cook",   label: "Cooking",        icon: "🍳" },
+  { id: "prog",   label: "Programming",    icon: Terminal },
+  { id: "ai",     label: "AI & ML",        icon: Bot },
+  { id: "web",    label: "Web Dev",        icon: Globe },
+  { id: "design", label: "UI/UX Design",   icon: Palette },
+  { id: "biz",    label: "Business",       icon: Briefcase },
+  { id: "game",   label: "Gaming",         icon: Gamepad2 },
+  { id: "fin",    label: "Finance",        icon: TrendingUp },
+  { id: "health", label: "Health",         icon: HeartPulse },
+  { id: "edu",    label: "Education",      icon: BookOpen },
+  { id: "life",   label: "Lifestyle",      icon: Sparkles },
+  { id: "music",  label: "Music",          icon: Music },
+  { id: "cook",   label: "Cooking",        icon: Utensils },
 ];
 
 const goals = [
@@ -223,7 +224,7 @@ export function OnboardingPage() {
                           background: sel ? "rgba(99,102,241,0.08)" : "var(--surface-1)",
                           boxShadow: sel ? "0 2px 8px rgba(99,102,241,0.12)" : "none",
                         }}>
-                        <span className="text-[18px]">{n.icon}</span>
+                        <span className="text-[18px]"><n.icon size={18} /></span>
                         <span className="text-[11px] leading-[1.2]" style={{ fontWeight: sel ? 600 : 400, color: sel ? "var(--primary-hover)" : "var(--muted-foreground)" }}>{n.label}</span>
                       </motion.button>
                     );
@@ -323,7 +324,7 @@ export function OnboardingPage() {
                             const n = niches.find(x => x.id === id);
                             return n ? (
                               <span key={id} className="inline-flex items-center gap-1 px-[10px] py-[3px] rounded-sm bg-[var(--accent)] text-[var(--primary-hover)] border border-[var(--border-active)] text-[11px] font-medium">
-                                {n.icon} {n.label}
+                                <n.icon size={11} /> {n.label}
                               </span>
                             ) : null;
                           })}

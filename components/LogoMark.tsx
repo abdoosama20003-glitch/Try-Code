@@ -12,6 +12,7 @@ interface LogoMarkProps {
 export function LogoMark({ size = 30 }: LogoMarkProps) {
   return (
     <div
+      className="invert hue-rotate-180 dark:invert-0 dark:hue-rotate-0 transition-all duration-300"
       style={{
         width: size,
         height: size,

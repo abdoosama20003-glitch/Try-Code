@@ -230,7 +230,7 @@ export function LandingPage() {
               { v: "50K+",  l: "Active creators" },
               { v: "2.4M",  l: "Analyses run" },
               { v: "340K",  l: "Videos made" },
-              { v: "4.9★",  l: "Average rating" },
+              { v: <span className="flex items-center justify-center gap-[2px]">4.9<Star size={24} fill="currentColor" /></span>,  l: "Average rating" },
             ].map((s, i) => (
               <div key={s.l} className="px-0 sm:px-8 text-center sm:border-r border-[var(--border)] last:border-none">
                 <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 4 }}>{s.v}</div>
