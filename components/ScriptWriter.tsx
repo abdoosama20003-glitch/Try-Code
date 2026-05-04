@@ -56,12 +56,12 @@ export function ScriptWriter() {
     <>
       <TopBar label="Creation" title="Script Writer" subtitle="Full scripts with hooks and CTAs tuned for maximum watch time" actionLabel="Write Script" actionIcon={PenTool} onAction={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2500); }} />
 
-      <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
+      <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1">
 
         {/* Config row */}
         <D initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
           <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-            <div className="grid gap-[14px]" style={{ gridTemplateColumns: "1fr 180px 180px" }}>
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_180px_180px] gap-[14px]">
               <div>
                 <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1.5">Topic</div>
                 <div className="relative">
@@ -85,7 +85,7 @@ export function ScriptWriter() {
         </D>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-[10px]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[10px]">
           {stats.map((s, i) => (
             <D key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 + i * 0.06 }}>
               <div className="bg-card border border-border rounded-lg shadow-sm hover:border-[var(--surface-4)] hover:shadow-md transition-all flex items-center justify-between px-5 py-4">
@@ -98,7 +98,7 @@ export function ScriptWriter() {
 
         {/* Script Sections */}
         <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
-          <div className="flex justify-between items-center px-5 py-[14px] border-b border-border">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-5 py-[14px] border-b border-border gap-3">
             <div>
               <div className="text-sm font-semibold text-foreground tracking-[-0.01em]">Script Sections</div>
               <div className="text-[10px] text-[var(--text-dim)] mt-0.5">Python Automation for Beginners · 14:23</div>

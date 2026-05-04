@@ -68,10 +68,10 @@ export function AnalyticsPage() {
     <>
       <TopBar label="Insights" title="Analytics" subtitle="Track content performance and audience growth in real time" actionLabel="Export Report" actionIcon={BarChart3} />
 
-      <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
+      <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1">
 
         {/* ── KPIs ── */}
-        <div className="grid grid-cols-4 gap-[10px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[10px]">
           {kpis.map((s, i) => (
             <D key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}>
               <div className="bg-card border border-border rounded-lg p-5 shadow-sm transition-all hover:shadow-md">
@@ -93,7 +93,7 @@ export function AnalyticsPage() {
         </div>
 
         {/* ── Views + Categories ── */}
-        <div className="grid gap-[10px]" style={{ gridTemplateColumns: "1fr 280px" }}>
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_280px] gap-[10px]">
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
               <div className="flex justify-between items-start mb-5">
@@ -165,7 +165,7 @@ export function AnalyticsPage() {
         </div>
 
         {/* ── CTR/Retention + Top Videos ── */}
-        <div className="grid grid-cols-2 gap-[10px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
               <div className="flex justify-between items-start mb-5">

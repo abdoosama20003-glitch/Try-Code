@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, X } from "lucide-react";
+import { Bell, X, Menu } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { useSidebar } from "@/context/SidebarContext";
 
 interface TopBarProps {
   title: string;
@@ -22,13 +23,14 @@ const notifs = [
 
 export function TopBar({ title, subtitle, label, actionLabel, actionIcon: ActionIcon, onAction }: TopBarProps) {
   const [bell, setBell] = useState(false);
+  const { setIsMobileOpen } = useSidebar();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="flex items-end justify-between px-7 pt-5 pb-4 border-b border-border bg-background shrink-0 gap-4 sticky top-0 z-50"
+      className="flex items-end justify-between px-4 md:px-7 pt-5 pb-4 border-b border-border bg-background shrink-0 gap-4 sticky top-0 z-50 flex-wrap"
     >
       <div>
         {label && (
@@ -47,12 +49,19 @@ export function TopBar({ title, subtitle, label, actionLabel, actionIcon: Action
       </div>
 
       <div className="flex items-center gap-2 shrink-0 pb-[2px]">
+        <button
+          onClick={() => setIsMobileOpen(true)}
+          className="md:hidden flex items-center justify-center w-[30px] h-[30px] rounded-[var(--radius)] text-[var(--text-dim)] bg-transparent border border-border cursor-pointer transition-colors hover:bg-[var(--surface-2)] hover:text-foreground"
+        >
+          <Menu size={14} />
+        </button>
+
         <ThemeToggle />
 
         <div className="relative">
           <button
             onClick={() => setBell(!bell)}
-            className="at-theme-toggle relative"
+            className="relative flex items-center justify-center w-[30px] h-[30px] rounded-[var(--radius)] text-[var(--text-dim)] bg-transparent border border-transparent cursor-pointer transition-colors hover:bg-[var(--surface-2)] hover:text-foreground"
             style={{ background: bell ? "var(--hover-overlay-md)" : undefined, borderColor: bell ? "var(--surface-4)" : undefined }}
           >
             <Bell size={13} />
@@ -66,7 +75,7 @@ export function TopBar({ title, subtitle, label, actionLabel, actionIcon: Action
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.96 }}
                 transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-[calc(100%+10px)] right-0 w-[306px] bg-popover border border-border rounded-lg shadow-elevation-md z-[100] overflow-hidden"
+                className="absolute top-[calc(100%+10px)] -right-2 sm:right-0 w-[calc(100vw-32px)] sm:w-[306px] max-w-[360px] bg-popover border border-border rounded-lg shadow-elevation-md z-[100] overflow-hidden"
               >
                 <div className="flex justify-between items-center px-4 py-3 border-b border-border">
                   <span className="text-xs font-semibold text-foreground">Notifications</span>

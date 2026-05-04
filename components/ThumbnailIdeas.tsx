@@ -26,7 +26,7 @@ export function ThumbnailIdeas() {
     <>
       <TopBar label="Visual" title="Thumbnail Ideas" subtitle="Concepts with color psychology, CTR scoring, and layout briefs" actionLabel="Generate Ideas" actionIcon={Image} onAction={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2000); }} />
 
-      <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
+      <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1">
 
         {/* Search bar */}
         <D initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
@@ -48,10 +48,10 @@ export function ThumbnailIdeas() {
         </D>
 
         {/* Grid + Detail */}
-        <div className="grid gap-3" style={{ gridTemplateColumns: selected ? "1fr 320px" : "1fr" }}>
+        <div className="flex flex-col xl:grid gap-3" style={{ gridTemplateColumns: selected ? "1fr 320px" : "1fr" }}>
 
           {/* Concept cards */}
-          <div className="grid grid-cols-2 gap-[10px] content-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[10px] content-start">
             {concepts.map((c, i) => (
               <D key={c.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.07 }}
                 onClick={() => setSelected(selected?.id === c.id ? null : c)}

@@ -62,10 +62,10 @@ export function ContentGenerator() {
     <>
       <TopBar label="Creation" title="Content Generator" subtitle="Complete video packages: titles, descriptions, tags, hooks, and thumbnail text" actionLabel="Generate Pack" actionIcon={Sparkles} onAction={generate} />
 
-      <div className="flex-1 overflow-hidden px-7 pt-5 pb-0 flex gap-[14px] bg-background min-h-0">
+      <div className="flex-1 overflow-auto md:overflow-hidden px-4 md:px-7 pt-5 pb-4 md:pb-0 flex flex-col md:flex-row gap-[14px] bg-background min-h-0">
 
         {/* Left panel */}
-        <div className="w-[248px] shrink-0 flex flex-col gap-[10px] overflow-y-auto pb-6">
+        <div className="w-full md:w-[248px] shrink-0 flex flex-col gap-[10px] overflow-y-auto md:pb-6">
 
           {/* Input */}
           <div className="bg-card border border-border rounded-lg shadow-sm p-4">
@@ -174,7 +174,7 @@ export function ContentGenerator() {
                         <CopyBtn text={pack.title} id="title" copied={copied} onCopy={copy} />
                       </div>
                       <div className="h-px bg-border mb-4" />
-                      <div className="grid grid-cols-3 gap-[10px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-[10px]">
                         {[{ l: "Characters", v: `${pack.title.length}/100` }, { l: "Keyword Match", v: "Strong" }, { l: "Click Score", v: "94/100" }].map(s => (
                           <div key={s.l} className="px-3 py-[10px] rounded-sm bg-[var(--surface-1)] border border-border">
                             <div className="text-[9px] font-bold tracking-[0.09em] uppercase text-[var(--text-dim)] mb-1">{s.l}</div>

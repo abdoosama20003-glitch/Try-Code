@@ -56,11 +56,11 @@ export function SettingsPage() {
     <>
       <TopBar label="Account" title="Settings" subtitle="Manage preferences, integrations, and billing" actionLabel={saved ? "Saved!" : "Save Changes"} actionIcon={saved ? Check : Save} onAction={save} />
 
-      <div className="flex-1 overflow-y-auto px-7 py-6 bg-background">
-        <div className="max-w-[820px] flex gap-5">
+      <div className="flex-1 overflow-y-auto px-4 md:px-7 py-6 bg-background min-w-0">
+        <div className="max-w-[820px] flex flex-col md:flex-row gap-5">
 
           {/* Left nav */}
-          <div className="w-[190px] shrink-0 flex flex-col gap-0.5">
+          <div className="w-full md:w-[190px] shrink-0 flex md:flex-col gap-1 md:gap-0.5 overflow-x-auto md:pb-0 pb-2 custom-scrollbar">
             {tabs.map(t => (
               <button key={t.key} onClick={() => setTab(t.key)}
                 className="flex items-center gap-[9px] px-3 py-[9px] rounded-sm cursor-pointer text-sm text-left transition-colors"
@@ -86,7 +86,7 @@ export function SettingsPage() {
                     <div className="bg-card border border-border rounded-lg shadow-sm p-6">
                       <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-4">Profile Information</div>
                       <div className="h-px bg-border mb-5" />
-                      <div className="flex items-center gap-[14px] mb-[22px] pb-5 border-b border-border">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-[14px] mb-[22px] pb-5 border-b border-border">
                         <div className="w-[52px] h-[52px] rounded-[var(--radius-card)] bg-gradient-to-br from-primary to-[var(--neon-purple)] flex items-center justify-center shrink-0 shadow-[0_0_0_3px_rgba(99,102,241,0.2)]">
                           <span className="text-lg font-extrabold text-white">AT</span>
                         </div>
@@ -96,7 +96,7 @@ export function SettingsPage() {
                         </div>
                         <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-[30px] px-3 text-[11px]">Change photo</button>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <Field label="Full Name" value="Alex Turner" />
                         <Field label="Email" value="alex@autotube.io" type="email" />
                         <Field label="YouTube Channel" value="@AlexTurnerTech" />
@@ -262,7 +262,7 @@ export function SettingsPage() {
                     <div className="text-[11px] text-[var(--text-dim)] mb-[18px]">Customize the look and feel of the interface.</div>
                     <div className="h-px bg-border mb-5" />
                     <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-[10px]">Theme</div>
-                    <div className="grid grid-cols-3 gap-[9px] mb-[22px]">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-[9px] mb-[22px]">
                       {[
                         { key: "dark",   label: "Dark",   bg: "#09090B" },
                         { key: "light",  label: "Light",  bg: "#F8F9FA" },

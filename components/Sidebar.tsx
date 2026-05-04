@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { LogoMark } from "./LogoMark";
 
+import { useSidebar } from "@/context/SidebarContext";
+
 const M = motion.create("div" as any);
 
 const navItems = [
@@ -23,6 +25,7 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = usePathname();
   const navigate = useRouter();
+  const { isMobileOpen, setIsMobileOpen } = useSidebar();
 
   const isActive = (path: string) =>
     path === "/dashboard"
@@ -30,15 +33,29 @@ export function Sidebar() {
       : location.startsWith(path);
 
   return (
-    <M
-      animate={{ width: collapsed ? 56 : 220 }}
-      transition={{ type: "spring", stiffness: 400, damping: 38 }}
-      className="h-screen flex flex-col bg-[var(--sidebar)] border-r border-[var(--sidebar-border)] overflow-hidden shrink-0 z-20"
-    >
+    <>
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setIsMobileOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <M
+        animate={{ width: collapsed ? 56 : 220 }}
+        transition={{ type: "spring", stiffness: 400, damping: 38 }}
+        className={`fixed inset-y-0 left-0 z-50 h-screen flex flex-col bg-[var(--sidebar)] border-r border-[var(--sidebar-border)] overflow-hidden shrink-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
       {/* ── Brand ── */}
       <div
         className={`flex items-center gap-2 min-h-[54px] border-b border-[var(--sidebar-border)] cursor-pointer shrink-0 ${collapsed ? "px-[14px]" : "pl-4 pr-[14px]"}`}
-        onClick={() => navigate.push("/")}
+        onClick={() => { navigate.push("/"); setIsMobileOpen(false); }}
       >
         <div className="w-[26px] h-[26px] shrink-0 flex items-center justify-center">
           <LogoMark size={26} />
@@ -104,7 +121,10 @@ export function Sidebar() {
             icon={item.icon}
             active={isActive(item.path)}
             collapsed={collapsed}
-            onClick={() => navigate.push(item.path)}
+            onClick={() => {
+              navigate.push(item.path);
+              setIsMobileOpen(false);
+            }}
           />
         ))}
       </div>
@@ -127,7 +147,7 @@ export function Sidebar() {
           )}
         </AnimatePresence>
 
-        <NavButton label="Settings" icon={Settings} active={isActive("/dashboard/settings")} collapsed={collapsed} onClick={() => navigate.push("/dashboard/settings")} />
+        <NavButton label="Settings" icon={Settings} active={isActive("/dashboard/settings")} collapsed={collapsed} onClick={() => { navigate.push("/dashboard/settings"); setIsMobileOpen(false); }} />
 
         {/* User */}
         <div
@@ -157,6 +177,7 @@ export function Sidebar() {
         </div>
       </div>
     </M>
+    </>
   );
 }
 

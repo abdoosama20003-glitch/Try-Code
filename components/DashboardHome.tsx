@@ -66,10 +66,10 @@ export function DashboardHome() {
     <>
       <TopBar label="Overview" title="Dashboard" subtitle={`${today} — Welcome back, Alex`} actionLabel="Quick Analysis" actionIcon={Zap} onAction={() => navigate.push("/dashboard/gap-analyzer")} />
 
-      <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
+      <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1">
 
         {/* KPI Strip */}
-        <div className="grid grid-cols-4 gap-[10px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[10px]">
           {kpis.map((k, i) => (
             <D key={k.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}>
               <div className="bg-card border border-border rounded-lg p-5 shadow-sm hover:border-surface-4 hover:shadow-md transition-all">
@@ -91,7 +91,7 @@ export function DashboardHome() {
         </div>
 
         {/* Chart + Activity */}
-        <div className="grid gap-[10px]" style={{ gridTemplateColumns: "1fr 300px" }}>
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-[10px]">
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
               <div className="flex justify-between items-start mb-5">
@@ -157,7 +157,7 @@ export function DashboardHome() {
         </div>
 
         {/* Quick Actions + Opportunities */}
-        <div className="grid grid-cols-2 gap-[10px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
           <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.36 }}>
             <div className="bg-card border border-border rounded-lg shadow-sm p-6">
               <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-4">Quick Actions</div>

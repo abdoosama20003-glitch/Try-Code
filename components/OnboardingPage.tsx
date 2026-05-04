@@ -68,24 +68,29 @@ export function OnboardingPage() {
   };
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden relative">
+    <div className="flex flex-col md:flex-row h-screen bg-background overflow-hidden relative">
 
       {/* Theme toggle */}
-      <div className="fixed top-4 right-4 z-50">
+      <div className="hidden md:block fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
       {/* Left Rail */}
-      <div className="w-[300px] shrink-0 flex flex-col bg-[var(--surface-0)] border-r border-border px-8 py-10 relative">
+      <div className="w-full md:w-[300px] shrink-0 flex flex-col bg-[var(--surface-0)] border-b md:border-b-0 md:border-r border-border px-6 py-6 md:px-8 md:py-10 relative z-10">
 
         {/* Logo */}
-        <div className="flex items-center gap-[10px] mb-[52px] cursor-pointer" onClick={() => navigate.push("/")}>
-          <LogoMark size={26} />
-          <span className="text-sm font-bold text-foreground tracking-[-0.02em]">AutoTube</span>
+        <div className="flex items-center justify-between md:justify-start gap-[10px] mb-6 md:mb-[52px]">
+          <div className="flex items-center gap-[10px] cursor-pointer" onClick={() => navigate.push("/")}>
+            <LogoMark size={26} />
+            <span className="text-sm font-bold text-foreground tracking-[-0.02em]">AutoTube</span>
+          </div>
+          <div className="md:hidden">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Label + Title */}
-        <div className="mb-11">
+        <div className="hidden md:block mb-11">
           <div className="text-[9.5px] font-bold tracking-[0.12em] uppercase text-[var(--text-dim)] mb-[10px]">Setup</div>
           {/* clamp() font-size must stay inline */}
           <h2 className="font-extrabold tracking-[-0.03em] text-foreground leading-[1.1] m-0"
@@ -95,13 +100,14 @@ export function OnboardingPage() {
         </div>
 
         {/* Steps */}
-        <div className="flex flex-col gap-0">
+        <div className="flex flex-row md:flex-col justify-between md:justify-start gap-0">
           {stepLabels.map((s, i) => {
             const done   = step > s.n;
             const active = step === s.n;
             return (
-              <div key={s.n} className="flex items-stretch gap-[14px]">
-                <div className="flex flex-col items-center">
+              <div key={s.n} className="flex flex-col md:flex-row items-center md:items-stretch gap-2 md:gap-[14px] flex-1 md:flex-none">
+                <div className="flex flex-row md:flex-col items-center w-full md:w-auto">
+                  <div className={`flex-1 md:hidden h-px ${i === 0 ? "bg-transparent" : done || active ? "bg-foreground" : "bg-border"}`} />
                   <motion.div
                     initial={{ background: "rgba(0,0,0,0)", borderColor: "var(--border)" }}
                     animate={{
@@ -109,23 +115,24 @@ export function OnboardingPage() {
                       borderColor: done ? "var(--foreground)" : active ? "rgba(99,102,241,0.4)" : "var(--border)"
                     }}
                     transition={{ duration: 0.3 }}
-                    className="w-7 h-7 rounded-full flex items-center justify-center border shrink-0">
+                    className="w-7 h-7 rounded-full flex items-center justify-center border shrink-0 mx-2 md:mx-0">
                     {done ? (
                       <Check size={12} color="var(--background)" />
                     ) : (
                       <span className="font-mono text-[10px] font-bold" style={{ color: active ? "var(--primary-hover)" : "var(--text-dim)" }}>{s.n}</span>
                     )}
                   </motion.div>
+                  <div className={`flex-1 md:hidden h-px ${i === stepLabels.length - 1 ? "bg-transparent" : step > s.n ? "bg-foreground" : "bg-border"}`} />
                   {i < stepLabels.length - 1 && (
                     <motion.div
                       initial={{ background: "rgba(0,0,0,0)" }}
                       animate={{ background: done ? "var(--foreground)" : "var(--border)" }}
                       transition={{ duration: 0.3 }}
-                      className="w-px flex-1 my-1 min-h-[28px]" />
+                      className="hidden md:block w-px flex-1 my-1 min-h-[28px]" />
                   )}
                 </div>
-                <div style={{ paddingTop: 6, paddingBottom: i < stepLabels.length - 1 ? 24 : 0 }}>
-                  <span className="text-sm transition-colors duration-300" style={{ fontWeight: active ? 500 : 400, color: step >= s.n ? "var(--foreground)" : "var(--text-dim)" }}>
+                <div className={`md:pt-[6px] ${i < stepLabels.length - 1 ? "md:pb-6" : ""}`}>
+                  <span className="text-[10px] md:text-sm transition-colors duration-300 text-center md:text-left block" style={{ fontWeight: active ? 500 : 400, color: step >= s.n ? "var(--foreground)" : "var(--text-dim)" }}>
                     {s.l}
                   </span>
                 </div>
@@ -135,7 +142,7 @@ export function OnboardingPage() {
         </div>
 
         {/* Bottom testimonial */}
-        <div className="mt-auto">
+        <div className="hidden md:block mt-auto">
           <div className="h-px bg-border mb-5" />
           <blockquote className="text-sm text-muted-foreground leading-[1.7] italic m-0 mb-3">
             &quot;Setting up took 2 minutes. Found my first golden gap 5 minutes later.&quot;
@@ -150,7 +157,7 @@ export function OnboardingPage() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center px-10 py-12 overflow-y-auto">
+      <div className="flex-1 flex items-start md:items-center justify-center px-6 md:px-10 py-8 md:py-12 overflow-y-auto">
         <div className="w-full max-w-[480px]">
           <AnimatePresence mode="wait">
 
@@ -212,7 +219,7 @@ export function OnboardingPage() {
                   <p className="text-sm text-[var(--text-dim)] m-0">Select all that apply. We&apos;ll personalize your experience.</p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 mb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-8">
                   {niches.map(n => {
                     const sel = selNiches.has(n.id);
                     return (

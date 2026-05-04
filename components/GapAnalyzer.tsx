@@ -57,10 +57,10 @@ export function GapAnalyzer() {
     });
 
   return (
-    <div className="p-7 md:p-8 flex flex-col gap-5 flex-1">
+    <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1 min-w-0">
 
       {/* Stats Strip */}
-      <div className="grid grid-cols-4 gap-[10px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[10px]">
         {[
           { label: "Topics Analyzed",  value: "2,847", icon: Target,     color: "var(--neon-indigo)",  change: "12%", delay: 0.04 },
           { label: "Easy Wins Found",  value: "186",   icon: Zap,        color: "var(--neon-emerald)", change: "24%", delay: 0.08 },
@@ -87,8 +87,8 @@ export function GapAnalyzer() {
 
       {/* Search bar */}
       <MotionDiv initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-        <div className="bg-card border border-border rounded-lg shadow-sm px-5 py-[18px]">
-          <div className="flex gap-[10px] items-stretch">
+        <div className="bg-card border border-border rounded-lg shadow-sm p-4 md:px-5 md:py-[18px]">
+          <div className="flex flex-col md:flex-row gap-[10px] items-stretch">
             <div className="flex-1 relative">
               <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-dim)] pointer-events-none" />
               <input
@@ -152,10 +152,12 @@ export function GapAnalyzer() {
       </MotionDiv>
 
       {/* Results + Detail Panel */}
-      <div className="grid gap-[10px] flex-1 min-h-0" style={{ gridTemplateColumns: selected ? "1fr 330px" : "1fr" }}>
+      <div className="flex flex-col xl:grid gap-[10px] flex-1 min-h-0" style={{ gridTemplateColumns: selected ? "1fr 330px" : "1fr" }}>
 
-        <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
-          <div className="grid px-5 py-[10px] border-b border-border bg-[var(--surface-1)]"
+        <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden flex flex-col min-w-0">
+          <div className="overflow-x-auto min-w-0">
+            <div className="min-w-[700px]">
+              <div className="grid px-5 py-[10px] border-b border-border bg-[var(--surface-1)]"
             style={{ gridTemplateColumns: "2fr 100px 90px 90px 90px 80px 36px" }}>
             {["Keyword / Topic", "Gap Score", "Demand", "Competition", "Trend", "Volume", ""].map(h => (
               <div key={h} className="at-table-head-cell">{h}</div>
@@ -198,6 +200,8 @@ export function GapAnalyzer() {
                 </div>
               </MotionDiv>
             ))}
+            </div>
+            </div>
           </div>
         </div>
 
