@@ -35,7 +35,6 @@ const navLinks = [
   { label: "Features",     href: "#features" },
   { label: "Pricing",      href: "#pricing" },
   { label: "Testimonials", href: "#testimonials" },
-  { label: "Blog",         href: "#blog" },
 ];
 
 const SCROLL_THRESHOLD = 60;

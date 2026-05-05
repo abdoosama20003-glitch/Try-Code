@@ -61,14 +61,7 @@ export function ThumbnailIdeas() {
                   background: selected?.id === c.id ? "rgba(99,102,241,0.04)" : "var(--card)",
                   boxShadow: selected?.id === c.id ? "0 2px 12px rgba(99,102,241,0.15)" : "0 1px 3px rgba(0,0,0,0.25)",
                 }}>
-                {/* Color banner */}
-                <div className="h-[60px] flex overflow-hidden">
-                  {c.colors.map((col, ci) => (
-                    <div key={ci} className="flex-1 flex items-center justify-center" style={{ background: col }}>
-                      {ci === 0 && <span className="text-[7px] font-extrabold text-white/60 -rotate-[20deg]">A</span>}
-                    </div>
-                  ))}
-                </div>
+
                 <div className="px-[14px] py-3">
                   <div className="flex items-start justify-between gap-2 mb-1.5">
                     <div>
@@ -97,18 +90,7 @@ export function ThumbnailIdeas() {
                 <div className="text-sm font-semibold text-foreground mb-4">{selected.title}</div>
                 <div className="h-px bg-border mb-[18px]" />
 
-                {/* Color palette */}
-                <div className="mb-4">
-                  <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-2">Color Palette</div>
-                  <div className="flex gap-1.5">
-                    {selected.colors.map((col, i) => (
-                      <div key={i} className="flex-1 flex flex-col gap-1 items-center">
-                        <div className="w-full h-[34px] rounded-sm border border-border" style={{ background: col }} />
-                        <span className="font-mono text-[8.5px] text-[var(--text-dim)]">{col}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
 
                 {/* Headline */}
                 <div className="mb-[14px]">
@@ -141,9 +123,6 @@ export function ThumbnailIdeas() {
                 </div>
 
                 <div className="flex gap-[7px]">
-                  <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-9 px-4 flex-1">
-                    <Download size={12} /> Export Brief
-                  </button>
                   <button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }}
                     className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-foreground text-background shadow-xs hover:opacity-90 h-9 px-4">
                     {copied ? <Check size={12} /> : <Copy size={12} />}

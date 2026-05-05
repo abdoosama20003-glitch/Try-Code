@@ -48,7 +48,7 @@ const pricing = [
   {
     name: "Starter", price: "$0",  period: "forever", highlight: false,
     desc: "For creators just getting started",
-    features: ["5 gap analyses / month", "3 video packs", "Basic scripts", "Community support"],
+    features: ["5 gap analyses / month", "3 video packs", "Basic scripts"],
   },
   {
     name: "Pro",     price: "$29", period: "/month",  highlight: true,
@@ -58,7 +58,7 @@ const pricing = [
   {
     name: "Agency",  price: "$99", period: "/month",  highlight: false,
     desc: "For teams and content agencies",
-    features: ["Unlimited everything", "Custom AI models", "Team workspace", "API access", "Dedicated manager", "White-label"],
+    features: ["Unlimited everything", "Custom AI models", "Team workspace", "Dedicated manager", "White-label"],
   },
 ];
 
@@ -269,13 +269,15 @@ export function LandingPage() {
                 <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--foreground)", marginBottom: 6, letterSpacing: "-0.01em" }}>{t.title}</div>
                 <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.65 }}>{t.desc}</div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: "auto" }}>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: t.color, fontWeight: 600 }}>Explore</span>
-                <ChevronRight size={10} color={t.color} />
-              </div>
             </D>
           ))}
         </div>
+
+        <D {...fadeUp(0.5)} style={{ display: "flex", justifyContent: "center", marginTop: 48 }}>
+          <PrimaryBtn onClick={() => navigate.push("/onboarding")} large>
+            Explore <ArrowRight size={16} />
+          </PrimaryBtn>
+        </D>
       </section>
 
       <div className="at-section-divider" />
@@ -439,10 +441,7 @@ export function LandingPage() {
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start", flexShrink: 0, position: "relative" }}>
-            <PrimaryBtn onClick={() => navigate.push("/onboarding")} large>
-              Start for free <ArrowRight size={16} />
-            </PrimaryBtn>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", textAlign: "center", width: "100%" }}>No credit card required</span>
+            <span style={{ fontFamily: "var(--font-sans)", fontSize: "16px", fontStyle: "italic", color: "var(--foreground)", maxWidth: 300, lineHeight: 1.6 }}>"The best time to start was yesterday. The next best time is now."</span>
           </div>
         </D>
       </section>

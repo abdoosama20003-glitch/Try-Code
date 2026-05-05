@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, LayoutDashboard, Crosshair, Sparkles, PenTool,
-  Image, BarChart3, Settings, ChevronLeft, LogOut, Crown,
+  Image, BarChart3, Settings, ChevronLeft, LogOut, Crown, Film
 } from "lucide-react";
 import { LogoMark } from "./LogoMark";
 
@@ -15,10 +15,11 @@ const M = motion.create("div" as any);
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard",         path: "/dashboard"                  },
   { icon: Crosshair,       label: "Gap Analyzer",      path: "/dashboard/gap-analyzer"      },
-  { icon: Sparkles,        label: "Content Generator", path: "/dashboard/content-generator" },
+  { icon: Film,            label: "Video Generating",  path: "/dashboard/video-generator"   },
   { icon: PenTool,         label: "Script Writer",     path: "/dashboard/script-writer"     },
   { icon: Image,           label: "Thumbnail Ideas",   path: "/dashboard/thumbnails"        },
   { icon: BarChart3,       label: "Analytics",         path: "/dashboard/analytics"         },
+  { icon: Sparkles,        label: "All In One Pack",   path: "/dashboard/content-generator" },
 ];
 
 export function Sidebar() {

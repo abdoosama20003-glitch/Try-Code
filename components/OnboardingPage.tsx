@@ -46,7 +46,6 @@ const stepLabels = [
 const authProviders = [
   { l: "Continue with Google",  icon: Globe   },
   { l: "Continue with YouTube", icon: Youtube },
-  { l: "Continue with GitHub",  icon: Github  },
 ];
 
 export function OnboardingPage() {
@@ -55,6 +54,7 @@ export function OnboardingPage() {
   const [selNiches, setSelNiches] = useState<Set<string>>(new Set());
   const [selGoals, setSelGoals]   = useState<Set<string>>(new Set());
   const [loading, setLoading]     = useState(false);
+  const [isLogin, setIsLogin]     = useState(false);
 
   const toggleSet = (set: Set<string>, setFn: (s: Set<string>) => void, id: string) => {
     const n = new Set(set);
@@ -167,9 +167,11 @@ export function OnboardingPage() {
                 <div className="mb-8">
                   <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
                     style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
-                    Create your account
+                    {isLogin ? "Welcome back" : "Create your account"}
                   </h2>
-                  <p className="text-sm text-[var(--text-dim)] m-0">Get started in seconds. No credit card required.</p>
+                  <p className="text-sm text-[var(--text-dim)] m-0">
+                    {isLogin ? "Sign in to your AutoTube workspace." : "Get started in seconds. No credit card required."}
+                  </p>
                 </div>
 
                 <div className="flex flex-col gap-2 mb-6">
@@ -189,7 +191,7 @@ export function OnboardingPage() {
                 </div>
 
                 <div className="flex flex-col gap-3 mb-6">
-                  {["Full Name", "Email address", "Password"].map(f => (
+                  {(!isLogin ? ["Full Name", "Email address", "Password"] : ["Email address", "Password"]).map(f => (
                     <div key={f}>
                       <div className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--text-dim)] mb-1.5">{f}</div>
                       <input
@@ -202,9 +204,16 @@ export function OnboardingPage() {
                 </div>
 
                 <button onClick={() => setStep(2)}
-                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86]">
-                  Create account <ArrowRight size={14} />
+                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] mb-4">
+                  {isLogin ? "Sign in" : "Create account"} <ArrowRight size={14} />
                 </button>
+
+                <div className="text-center text-sm text-[var(--text-dim)]">
+                  {isLogin ? "Don't have an account? " : "Already have an account? "}
+                  <button onClick={() => setIsLogin(!isLogin)} className="bg-transparent border-none p-0 cursor-pointer text-[var(--foreground)] font-semibold hover:underline">
+                    {isLogin ? "Sign up" : "Sign in"}
+                  </button>
+                </div>
               </MotionDiv>
             )}
 

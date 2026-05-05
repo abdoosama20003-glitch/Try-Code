@@ -28,7 +28,6 @@ const stats = [
   { label: "Total Words",   value: "2,847",   color: "var(--neon-indigo)"  },
   { label: "Duration",      value: "14:23",   color: "var(--neon-purple)"  },
   { label: "Readability",   value: "Grade 7", color: "var(--neon-emerald)" },
-  { label: "Hook Strength", value: "94/100",  color: "var(--neon-amber)"   },
 ];
 
 export function ScriptWriter() {
@@ -71,7 +70,7 @@ export function ScriptWriter() {
               </div>
               {[
                 { label: "Tone",   opts: ["Conversational", "Professional", "Energetic", "Educational"] },
-                { label: "Length", opts: ["Short (5-8m)", "Medium (10-15m)", "Long (20-30m)"] },
+                { label: "Length", opts: ["2-10 sec", "10-20 sec", "20-30 sec"] },
               ].map(f => (
                 <div key={f.label}>
                   <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1.5">{f.label}</div>
@@ -85,7 +84,7 @@ export function ScriptWriter() {
         </D>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-[10px]">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-[10px]">
           {stats.map((s, i) => (
             <D key={s.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 + i * 0.06 }}>
               <div className="bg-card border border-border rounded-lg shadow-sm hover:border-[var(--surface-4)] hover:shadow-md transition-all flex items-center justify-between px-5 py-4">

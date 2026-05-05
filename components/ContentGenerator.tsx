@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles, Search, Copy, Check, FileText, Tag, AlignLeft,
-  Image, Wand2, RefreshCw, Download, Bookmark,
+  Image, Wand2, RefreshCw, Download, Bookmark, Film
 } from "lucide-react";
 import { TopBar } from "./TopBar";
 
@@ -34,6 +34,7 @@ const contentTabs = [
   { key: "tags",        label: "Tags",        icon: Tag       },
   { key: "hooks",       label: "Hooks",       icon: Wand2     },
   { key: "thumbnails",  label: "Thumbnails",  icon: Image     },
+  { key: "video",       label: "Video Generation", icon: Film   },
 ] as const;
 
 function CopyBtn({ text, id, copied, onCopy }: { text: string; id: string; copied: string | null; onCopy: (t: string, id: string) => void }) {
@@ -242,6 +243,27 @@ export function ContentGenerator() {
                           </button>
                         </div>
                       ))}
+                    </div>
+                  )}
+
+                  {tab === "video" && (
+                    <div className="flex flex-col items-center justify-center py-6 px-4 text-center max-w-[400px] mx-auto">
+                      <div className="w-16 h-16 rounded-full bg-[var(--accent)] flex items-center justify-center mb-6 border border-[var(--border-active)]">
+                        <Film size={24} color="var(--primary-hover)" />
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground tracking-[-0.01em] mb-2">Transform to Video</h3>
+                      <p className="text-sm text-[var(--text-dim)] mb-6 leading-[1.6]">
+                        Use our AI engine to convert this content pack into a ready-to-publish video.
+                      </p>
+                      
+                      <div className="w-full text-left mb-6">
+                        <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[6px]">Video Description</div>
+                        <textarea placeholder="Describe how you want the video to look and feel..." className="w-full min-h-[100px] p-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted-foreground hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] resize-none" />
+                      </div>
+                      
+                      <button className="flex items-center justify-center gap-2 h-10 w-full rounded-md bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86]">
+                        <Sparkles size={14} /> Generate AI Video
+                      </button>
                     </div>
                   )}
 

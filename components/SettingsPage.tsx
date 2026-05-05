@@ -9,9 +9,7 @@ const D = motion.create("div" as any);
 const tabs = [
   { key: "profile",  label: "Profile",       icon: User       },
   { key: "notif",    label: "Notifications", icon: Bell       },
-  { key: "api",      label: "API Keys",      icon: Key        },
   { key: "billing",  label: "Billing",       icon: CreditCard },
-  { key: "look",     label: "Appearance",    icon: Palette    },
 ];
 
 function Field({ label, value, type = "text", placeholder }: { label: string; value?: string; type?: string; placeholder?: string }) {
@@ -154,61 +152,7 @@ export function SettingsPage() {
                   </div>
                 )}
 
-                {/* API */}
-                {tab === "api" && (
-                  <div className="flex flex-col gap-[14px]">
-                    <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-                      <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-1">Your API Key</div>
-                      <div className="text-[11px] text-[var(--text-dim)] mb-4">Use this key to access the AutoTube API programmatically.</div>
-                      <div className="h-px bg-border mb-[18px]" />
-                      <div className="flex gap-2 mb-[14px]">
-                        <div className="flex-1 relative">
-                          <input type={showKey ? "text" : "password"} readOnly defaultValue="at_prod_sk_9f2x8kL3nQ7mPvR1wYbD5cH4jA0tE6iU"
-                            className="w-full h-10 pl-3 pr-10 bg-[var(--surface-1)] border border-border rounded-[var(--radius-button)] text-foreground font-mono text-[11px] outline-none" />
-                          <button onClick={() => setShowKey(!showKey)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-[var(--text-dim)]">
-                            {showKey ? <EyeOff size={13} /> : <Eye size={13} />}
-                          </button>
-                        </div>
-                        <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-9 px-4">
-                          <Check size={12} /> Copy
-                        </button>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap bg-emerald-500/10 text-emerald-500">● Active</span>
-                        <span className="text-[11px] text-[var(--text-dim)]">Created Jan 15, 2026 · Last used 2 hours ago</span>
-                      </div>
-                    </div>
 
-                    <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-                      <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-1">Integrations</div>
-                      <div className="text-[11px] text-[var(--text-dim)] mb-[14px]">Connect external services to AutoTube.</div>
-                      <div className="h-px bg-border mb-1.5" />
-                      {[
-                        { name: "YouTube Data API", status: "connected",    c: "var(--neon-red)"     },
-                        { name: "OpenAI GPT-4o",    status: "connected",    c: "var(--neon-emerald)" },
-                        { name: "Ahrefs",           status: "disconnected", c: "var(--text-dim)"     },
-                        { name: "Semrush",          status: "disconnected", c: "var(--text-dim)"     },
-                      ].map((int, i, arr) => (
-                        <div key={int.name}>
-                          <div className="flex items-center justify-between py-[11px]">
-                            <div className="flex items-center gap-[10px]">
-                              <div className="w-[30px] h-[30px] rounded-sm bg-[var(--surface-2)] border border-border flex items-center justify-center">
-                                <Key size={12} color={int.c} />
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium text-foreground mb-[3px]">{int.name}</div>
-                                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider whitespace-nowrap ${int.status === "connected" ? "at-badge-success" : "at-badge-default"}`}>● {int.status}</span>
-                              </div>
-                            </div>
-                            <button className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all bg-secondary text-muted-foreground border border-border hover:bg-[var(--surface-3)] hover:text-foreground hover:border-[var(--surface-4)] h-[30px] px-3 text-[11px]">{int.status === "connected" ? "Manage" : "Connect"}</button>
-                          </div>
-                          {i < arr.length - 1 && <div className="h-px bg-border" />}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* Billing */}
                 {tab === "billing" && (
@@ -255,46 +199,7 @@ export function SettingsPage() {
                   </div>
                 )}
 
-                {/* Appearance */}
-                {tab === "look" && (
-                  <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-                    <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-1">Appearance</div>
-                    <div className="text-[11px] text-[var(--text-dim)] mb-[18px]">Customize the look and feel of the interface.</div>
-                    <div className="h-px bg-border mb-5" />
-                    <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-[10px]">Theme</div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-[9px] mb-[22px]">
-                      {[
-                        { key: "dark",   label: "Dark",   bg: "#09090B" },
-                        { key: "light",  label: "Light",  bg: "#F8F9FA" },
-                        { key: "system", label: "System", bg: "linear-gradient(135deg, #09090B 50%, #F8F9FA 50%)" },
-                      ].map(t => (
-                        <button key={t.key} onClick={() => setAppearance(t.key)}
-                          className="rounded-[var(--radius-card)] cursor-pointer p-0 overflow-hidden bg-[var(--surface-1)] transition-[border-color] text-left"
-                          style={{ border: `1px solid ${appearance === t.key ? "var(--primary)" : "var(--border)"}` }}>
-                          <div className="h-12 border-b border-border" style={{ background: t.bg }} />
-                          <div className="px-[10px] py-[7px] flex items-center gap-[5px]">
-                            {appearance === t.key && (
-                              <div className="w-[11px] h-[11px] rounded-full bg-primary flex items-center justify-center">
-                                <Check size={6} color="white" />
-                              </div>
-                            )}
-                            <span className="text-[11px] font-medium text-foreground">{t.label}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                    <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-[10px]">Sidebar density</div>
-                    <div className="flex gap-[7px]">
-                      {["Compact", "Default", "Comfortable"].map(d => (
-                        <button key={d}
-                          className="px-[13px] py-[5px] rounded-sm text-[11px] font-medium cursor-pointer transition-all"
-                          style={{ background: d === "Default" ? "var(--active-overlay)" : "transparent", color: d === "Default" ? "var(--foreground)" : "var(--text-dim)", border: `1px solid ${d === "Default" ? "var(--surface-3)" : "var(--border)"}` }}>
-                          {d}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
 
               </D>
             </AnimatePresence>
