@@ -253,9 +253,18 @@ export function ContentGenerator() {
                       </div>
                       <h3 className="text-lg font-bold text-foreground tracking-[-0.01em] mb-2">Transform to Video</h3>
                       <p className="text-sm text-[var(--text-dim)] mb-6 leading-[1.6]">
-                        Use our AI engine to convert this content pack into a ready-to-publish video.
+                        Use our AI engine to convert this content pack into a ready-to-publish video with voiceovers.
                       </p>
                       
+                      <div className="w-full text-left mb-4">
+                        <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[6px]">Voiceover (Max 30s)</div>
+                        <select className="w-full h-[40px] px-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] appearance-none cursor-pointer">
+                          <option>Marcus (Energetic)</option>
+                          <option>Sarah (Professional)</option>
+                          <option>James (Narrator)</option>
+                        </select>
+                      </div>
+
                       <div className="w-full text-left mb-6">
                         <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[6px]">Video Description</div>
                         <textarea placeholder="Describe how you want the video to look and feel..." className="w-full min-h-[100px] p-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted-foreground hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] resize-none" />

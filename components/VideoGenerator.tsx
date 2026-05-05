@@ -44,7 +44,14 @@ export function VideoGenerator() {
                 ))}
               </div>
 
-              <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[2px] mt-1">Video Description</div>
+              <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[2px] mt-1">Voiceover (Max 30s)</div>
+              <select className="w-full h-[38px] px-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] appearance-none cursor-pointer">
+                <option>Marcus (Energetic)</option>
+                <option>Sarah (Professional)</option>
+                <option>James (Narrator)</option>
+              </select>
+
+              <div className="text-[10px] font-bold tracking-[0.10em] uppercase text-[var(--text-dim)] mb-[2px] mt-2">Video Description</div>
               <textarea placeholder="Describe how you want the video to look and feel..." className="w-full min-h-[80px] p-3 bg-[var(--surface-1)] border border-border rounded-md text-foreground text-sm outline-none placeholder:text-muted-foreground hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] resize-none" />
 
               <motion.button whileTap={{ scale: 0.97 }} onClick={generate} disabled={isGen}
