@@ -55,6 +55,7 @@ export function OnboardingPage() {
   const [selGoals, setSelGoals]   = useState<Set<string>>(new Set());
   const [loading, setLoading]     = useState(false);
   const [isLogin, setIsLogin]     = useState(false);
+  const [formData, setFormData]   = useState({ name: "", email: "", password: "" });
 
   const toggleSet = (set: Set<string>, setFn: (s: Set<string>) => void, id: string) => {
     const n = new Set(set);
@@ -191,20 +192,27 @@ export function OnboardingPage() {
                 </div>
 
                 <div className="flex flex-col gap-3 mb-6">
-                  {(!isLogin ? ["Full Name", "Email address", "Password"] : ["Email address", "Password"]).map(f => (
-                    <div key={f}>
-                      <div className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--text-dim)] mb-1.5">{f}</div>
-                      <input
-                        type={f === "Password" ? "password" : f === "Email address" ? "email" : "text"}
-                        placeholder={f === "Email address" ? "you@example.com" : f === "Password" ? "Min. 8 characters" : "Alex Turner"}
-                        className="w-full h-[42px] px-[14px] bg-[var(--surface-1)] border border-border rounded-[var(--radius-button)] text-foreground text-sm outline-none transition-[border-color,box-shadow] focus:border-primary focus:ring-2 focus:ring-[var(--ring)]"
-                      />
-                    </div>
-                  ))}
+                  {(!isLogin ? ["Full Name", "Email address", "Password"] : ["Email address", "Password"]).map(f => {
+                    const fieldKey = f === "Password" ? "password" : f === "Email address" ? "email" : "name";
+                    return (
+                      <div key={f}>
+                        <div className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--text-dim)] mb-1.5">{f}</div>
+                        <input
+                          type={f === "Password" ? "password" : f === "Email address" ? "email" : "text"}
+                          placeholder={f === "Email address" ? "you@example.com" : f === "Password" ? "Min. 8 characters" : "Alex Turner"}
+                          value={formData[fieldKey as keyof typeof formData]}
+                          onChange={(e) => setFormData(prev => ({ ...prev, [fieldKey]: e.target.value }))}
+                          className="w-full h-[42px] px-[14px] bg-[var(--surface-1)] border border-border rounded-[var(--radius-button)] text-foreground text-sm outline-none transition-[border-color,box-shadow] focus:border-primary focus:ring-2 focus:ring-[var(--ring)]"
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
 
-                <button onClick={() => setStep(2)}
-                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] mb-4">
+                <button 
+                  onClick={() => setStep(2)}
+                  disabled={isLogin ? (!formData.email || !formData.password) : (!formData.name || !formData.email || !formData.password)}
+                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] mb-4 disabled:opacity-40 disabled:cursor-not-allowed">
                   {isLogin ? "Sign in" : "Create account"} <ArrowRight size={14} />
                 </button>
 
