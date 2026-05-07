@@ -6,6 +6,7 @@ import {
   Image, Wand2, RefreshCw, Download, Bookmark, Film, Menu, Bell,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { ExportModal, NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 
 const D = motion.create("div" as any);
@@ -56,6 +57,8 @@ export function ContentGenerator() {
   const [tab, setTab] = useState<string>("title");
   const [copied, setCopied] = useState<string | null>(null);
   const [saved, setSaved] = useState<Set<number>>(new Set());
+  const [showExport, setShowExport] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   const copy = (text: string, id: string) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
@@ -76,11 +79,11 @@ export function ContentGenerator() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={generate}
               className="hidden sm:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
-              <Sparkles size={11} /> Generate Pack
+              <Sparkles size={11} /> Generate All Now!
             </motion.button>
           </div>
         </div>
@@ -100,19 +103,8 @@ export function ContentGenerator() {
               <motion.button whileTap={{ scale: 0.97 }} onClick={generate} disabled={isGen}
                 className="w-full h-10 rounded-xl text-sm font-bold text-white border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40"
                 style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
-                {isGen ? <><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}><RefreshCw size={12} /></motion.div>Generating…</> : <><Sparkles size={12} />Generate Pack</>}
+                {isGen ? <><motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}><RefreshCw size={12} /></motion.div>Generating…</> : <><Sparkles size={12} />Generate All Now!</>}
               </motion.button>
-              <div>
-                <div className="text-[9px] font-bold tracking-widest uppercase text-[var(--text-dim)] mb-1.5">Quick ideas</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {["Python Automation", "AI Tools 2026", "React vs Next.js"].map(s => (
-                    <button key={s} onClick={() => setInput(s)}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-[var(--surface-1)] text-[var(--text-dim)] border border-border cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all">
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           </D>
 
@@ -156,7 +148,7 @@ export function ContentGenerator() {
                 <span className="text-[10px] text-[var(--text-dim)]">5 elements generated · Ready to use</span>
               </div>
               <div className="flex gap-2">
-                <button className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
+                <button onClick={() => setShowExport(true)} className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
                   <Download size={11} /> Export
                 </button>
                 <button onClick={generate} className="h-8 px-3 rounded-lg text-[11px] font-medium text-primary border border-primary/20 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-all flex items-center gap-1.5">
@@ -286,6 +278,8 @@ export function ContentGenerator() {
           </div>
         </D>
       </div>
+      <ExportModal open={showExport} onClose={() => setShowExport(false)} title="Export Content Pack" />
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

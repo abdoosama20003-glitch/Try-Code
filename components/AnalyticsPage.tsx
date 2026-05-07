@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, Eye, Clock, Target, Users, ArrowUpRight, ArrowDownRight, Search, Bell, Menu } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { ExportModal, NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 import {
   Area, Line, XAxis, YAxis, CartesianGrid,
@@ -53,6 +54,8 @@ const ttStyle = {
 
 export function AnalyticsPage() {
   const [period, setPeriod] = useState("7D");
+  const [showExport, setShowExport] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   const kpis = [
@@ -76,8 +79,8 @@ export function AnalyticsPage() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setShowExport(true)}
               className="hidden sm:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
               <BarChart3 size={11} /> Export Report
@@ -238,6 +241,8 @@ export function AnalyticsPage() {
           </D>
         </div>
       </div>
+      <ExportModal open={showExport} onClose={() => setShowExport(false)} title="Export Analytics Report" />
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

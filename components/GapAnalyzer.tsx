@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, Sparkles, Bookmark, TrendingUp, Target, Zap, X, Menu, Bell } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 
 const D = motion.create("div" as any);
@@ -43,6 +44,7 @@ export function GapAnalyzer() {
   const [savedItems, setSavedItems] = useState<Set<number>>(new Set());
   const [selected, setSelected] = useState<TopicData | null>(null);
   const [activeCategories, setActiveCategories] = useState<Set<string>>(new Set());
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   const handleAnalyze = () => { setIsAnalyzing(true); setTimeout(() => setIsAnalyzing(false), 2000); };
@@ -73,7 +75,7 @@ export function GapAnalyzer() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
           </div>
         </div>
       </div>
@@ -259,6 +261,7 @@ export function GapAnalyzer() {
           </AnimatePresence>
         </div>
       </div>
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

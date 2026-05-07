@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Film, Sparkles, Copy, Check, Play, RefreshCw, Download, MonitorPlay, Clapperboard, Menu, Bell } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { ExportModal, NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 
 const D = motion.create("div" as any);
@@ -11,6 +12,8 @@ const fade = (d = 0) => ({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1
 export function VideoGenerator() {
   const [isGen, setIsGen] = useState(false);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [showExport, setShowExport] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   const generate = () => { setIsGen(true); setTimeout(() => { setIsGen(false); setActiveVideo("rendered"); }, 2500); };
@@ -29,7 +32,7 @@ export function VideoGenerator() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={generate}
               className="hidden sm:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
@@ -44,16 +47,6 @@ export function VideoGenerator() {
         <div className="w-full md:w-[300px] shrink-0 flex flex-col gap-3">
           <D {...fade(0.05)}>
             <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
-              <div>
-                <div className="text-[10px] font-bold tracking-widest uppercase text-[var(--text-dim)] mb-2">Select Content Pack</div>
-                <select className="w-full h-10 px-3 bg-[var(--surface-1)] border border-border rounded-xl text-foreground text-sm outline-none hover:border-[var(--surface-4)] focus:border-primary focus:ring-2 focus:ring-[var(--ring)] appearance-none cursor-pointer">
-                  <option>Python Automation for Beginners</option>
-                  <option>7 Hidden AI Tools</option>
-                </select>
-              </div>
-
-              <div className="h-px bg-border" />
-
               <div>
                 <div className="text-[10px] font-bold tracking-widest uppercase text-[var(--text-dim)] mb-2">Avatar Style</div>
                 <div className="grid grid-cols-2 gap-2">
@@ -99,7 +92,7 @@ export function VideoGenerator() {
                 </div>
                 <span className="text-[10px] text-[var(--text-dim)]">14:23 duration · 1080p60</span>
               </div>
-              <button className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
+              <button onClick={() => setShowExport(true)} className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
                 <Download size={11} /> Download MP4
               </button>
             </div>
@@ -127,6 +120,8 @@ export function VideoGenerator() {
           </div>
         </D>
       </div>
+      <ExportModal open={showExport} onClose={() => setShowExport(false)} title="Download Video" />
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

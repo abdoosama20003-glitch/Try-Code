@@ -222,6 +222,9 @@ export function OnboardingPage() {
                     {isLogin ? "Sign up" : "Sign in"}
                   </button>
                 </div>
+                <div className="text-center text-[12px] text-[var(--text-dim)] mt-3">
+                  Admin? <button onClick={() => navigate.push("/admin")} className="bg-transparent border-none p-0 cursor-pointer text-primary font-semibold hover:underline text-[12px]">Login here</button>
+                </div>
               </MotionDiv>
             )}
 

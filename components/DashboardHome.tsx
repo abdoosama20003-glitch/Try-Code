@@ -8,6 +8,7 @@ import {
   TrendingUp, Menu, ChevronRight, Star, Flame,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 import { Area, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart } from "recharts";
 
@@ -48,6 +49,7 @@ const opportunities = [
 
 export function DashboardHome() {
   const router = useRouter();
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
@@ -68,12 +70,10 @@ export function DashboardHome() {
           <div className="flex items-center gap-1">
             <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] hover:text-foreground transition-colors"><Search size={15} /></button>
             <ThemeToggle />
-            <div className="relative">
-              <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] hover:text-foreground transition-colors">
+              <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] hover:text-foreground transition-colors relative">
                 <Bell size={15} />
                 <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
               </button>
-            </div>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/dashboard/gap-analyzer")}
               className="hidden md:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
@@ -227,7 +227,7 @@ export function DashboardHome() {
                   </div>
                   <span className="text-sm font-bold text-foreground">Recent Activity</span>
                 </div>
-                <span className="text-[10px] text-primary cursor-pointer hover:text-primary-hover font-medium">View all</span>
+                <span onClick={() => router.push("/dashboard/analytics")} className="text-[10px] text-primary cursor-pointer hover:text-primary-hover font-medium">View all</span>
               </div>
               {feed.map((f, i) => (
                 <div key={i} className="flex items-center gap-3 py-3 hover:bg-[var(--hover-overlay)] rounded-xl px-3 -mx-3 cursor-pointer transition-colors"
@@ -246,6 +246,7 @@ export function DashboardHome() {
           </D>
         </div>
       </div>
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

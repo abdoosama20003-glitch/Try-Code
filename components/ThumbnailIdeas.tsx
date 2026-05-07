@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Image, Sparkles, Heart, Download, Search, Copy, Check, Menu, Bell } from "lucide-react";
+import { Image, Sparkles, Heart, Download, Search, Check, Menu, Bell } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 
 const D = motion.create("div" as any);
@@ -22,7 +23,8 @@ export function ThumbnailIdeas() {
   const [liked, setLiked] = useState<Set<number>>(new Set());
   const [isGen, setIsGen] = useState(false);
   const [query, setQuery] = useState("Python Automation for Beginners");
-  const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   return (
@@ -39,7 +41,7 @@ export function ThumbnailIdeas() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2000); }}
               className="hidden sm:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
@@ -76,21 +78,23 @@ export function ThumbnailIdeas() {
               <D key={c.id} {...fade(0.1 + i * 0.06)} onClick={() => setSelected(selected?.id === c.id ? null : c)}
                 className="bg-card border rounded-2xl cursor-pointer overflow-hidden transition-all hover:border-[var(--surface-4)]"
                 style={{ borderColor: selected?.id === c.id ? "var(--primary)" : "var(--border)", background: selected?.id === c.id ? "rgba(124,92,252,0.04)" : "var(--card)" }}>
-                {/* Color preview */}
-                <div className="h-2 flex">
-                  {c.colors.map((col, ci) => <div key={ci} className="flex-1" style={{ background: col }} />)}
-                </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div>
                       <div className="text-sm font-bold text-foreground mb-0.5">{c.title}</div>
                       <div className="text-[9px] font-bold text-[var(--text-dim)] tracking-widest uppercase">{c.style}</div>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); setLiked(p => { const n = new Set(p); n.has(c.id) ? n.delete(c.id) : n.add(c.id); return n; }); }}
-                      className="bg-transparent border-none cursor-pointer p-1 shrink-0 transition-colors hover:scale-110"
-                      style={{ color: liked.has(c.id) ? "#EF4444" : "var(--text-dim)" }}>
-                      <Heart size={14} fill={liked.has(c.id) ? "#EF4444" : "none"} />
-                    </button>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button onClick={e => { e.stopPropagation(); }}
+                        className="bg-transparent border-none cursor-pointer p-1 transition-colors hover:scale-110 text-[var(--text-dim)] hover:text-primary">
+                        <Download size={14} />
+                      </button>
+                      <button onClick={e => { e.stopPropagation(); setLiked(p => { const n = new Set(p); n.has(c.id) ? n.delete(c.id) : n.add(c.id); return n; }); }}
+                        className="bg-transparent border-none cursor-pointer p-1 transition-colors hover:scale-110"
+                        style={{ color: liked.has(c.id) ? "#EF4444" : "var(--text-dim)" }}>
+                        <Heart size={14} fill={liked.has(c.id) ? "#EF4444" : "none"} />
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)", color: ctrColor(c.ctr) }}>CTR {c.ctr}</span>
@@ -135,11 +139,11 @@ export function ThumbnailIdeas() {
                 </div>
 
                 <div className="flex gap-2">
-                  <button onClick={() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+                  <button onClick={() => { setDownloaded(true); setTimeout(() => setDownloaded(false), 2000); }}
                     className="h-10 px-5 rounded-xl text-sm font-bold text-white border-none cursor-pointer flex items-center gap-2"
                     style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
-                    {copied ? <Check size={13} /> : <Copy size={13} />}
-                    {copied ? "Copied!" : "Copy Brief"}
+                    {downloaded ? <Check size={13} /> : <Download size={13} />}
+                    {downloaded ? "Downloaded!" : "Download Brief"}
                   </button>
                 </div>
               </div>
@@ -147,6 +151,7 @@ export function ThumbnailIdeas() {
           )}
         </div>
       </div>
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

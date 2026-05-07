@@ -6,6 +6,7 @@ import {
   Download, Sparkles, Volume2, Target, Lightbulb, RefreshCw, MessageSquare, Menu, Bell,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { ExportModal, NotificationPanel } from "./Overlays";
 import { useSidebar } from "@/context/SidebarContext";
 
 const D = motion.create("div" as any);
@@ -32,6 +33,8 @@ export function ScriptWriter() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set(["hook", "intro"]));
   const [copied, setCopied] = useState<string | null>(null);
   const [isGen, setIsGen] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
   const { setIsMobileOpen } = useSidebar();
 
   const toggle = (id: string) => setExpanded(p => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
@@ -53,7 +56,7 @@ export function ScriptWriter() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors"><Bell size={15} /></button>
+            <button onClick={() => setShowNotifs(!showNotifs)} className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] transition-colors relative"><Bell size={15} /><div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" /></button>
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2500); }}
               className="hidden sm:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
               style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
@@ -111,7 +114,7 @@ export function ScriptWriter() {
                 <div className="text-[10px] text-[var(--text-dim)] mt-0.5">Python Automation for Beginners · 14:23</div>
               </div>
               <div className="flex gap-2">
-                <button className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
+                <button onClick={() => setShowExport(true)} className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-all flex items-center gap-1.5">
                   <Download size={11} /> Export
                 </button>
                 <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setIsGen(true); setTimeout(() => setIsGen(false), 2500); }}
@@ -171,6 +174,8 @@ export function ScriptWriter() {
           </div>
         </D>
       </div>
+      <ExportModal open={showExport} onClose={() => setShowExport(false)} title="Export Script" />
+      <NotificationPanel open={showNotifs} onClose={() => setShowNotifs(false)} />
     </div>
   );
 }

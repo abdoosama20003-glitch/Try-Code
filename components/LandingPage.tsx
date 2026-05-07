@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Crosshair, Sparkles, PenTool, Image as ImageIcon, BarChart3,
   ArrowRight, ArrowUp, Play, Star, Check, Zap, Shield,
-  ChevronRight, Users, TrendingUp, Clock, Eye,
+  ChevronRight, Users, TrendingUp, Clock, Eye, X,
 } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { Modal } from "./Modal";
 
 const D = motion.create("div" as any);
 
@@ -21,12 +22,12 @@ const fadeUp = (delay = 0) => ({
 
 /* ── Data ── */
 const tools = [
-  { icon: Crosshair, color: "#7C5CFC", title: "Gap Analyzer", desc: "Surface high-demand, low-competition topics with AI-powered scoring.", size: "lg" },
-  { icon: Sparkles,  color: "#A855F7", title: "Video Pack Generator", desc: "One click creates a complete, ready-to-upload content package.", size: "sm" },
-  { icon: PenTool,   color: "#F472B6", title: "Script Writer", desc: "Full scripts with hooks, transitions, and CTAs built for watch time.", size: "sm" },
-  { icon: ImageIcon,  color: "#FBBF24", title: "Thumbnail Concepts", desc: "Visual briefs with color psychology and CTR probability estimates.", size: "sm" },
-  { icon: BarChart3,  color: "#34D399", title: "Analytics Dashboard", desc: "Real-time views, retention, CTR, and subscriber growth tracking.", size: "lg" },
-  { icon: Shield,     color: "#22D3EE", title: "Competitor Intel", desc: "Find the blind spots your competitors consistently miss.", size: "sm" },
+  { icon: Crosshair, color: "#7C5CFC", title: "Gap Analyzer", desc: "Surface high-demand, low-competition topics with AI-powered scoring.", detail: "Scan millions of YouTube data points to uncover untapped topics with massive demand and minimal competition. Our AI scores every opportunity from 0-100, factoring in search volume, trend velocity, competition density, and monetisation potential. Filter by niche, language, or audience size to find your next viral hit." },
+  { icon: Sparkles,  color: "#A855F7", title: "Video Pack Generator", desc: "One click creates a complete, ready-to-upload content package.", detail: "Generate optimised titles, descriptions, tags, scripts, and thumbnail briefs in one click. Each element is fine-tuned for YouTube's algorithm — SEO-packed, hook-driven, and audience-tested. Export everything as a ready-to-upload content pack." },
+  { icon: PenTool,   color: "#F472B6", title: "Script Writer", desc: "Full scripts with hooks, transitions, and CTAs built for watch time.", detail: "Our AI writes retention-optimised scripts with pattern interrupts, open loops, and strategic CTAs. Choose from multiple tones, lengths, and formats — from short-form hooks to long-form deep dives. Every script is structured to maximise average view duration." },
+  { icon: ImageIcon,  color: "#FBBF24", title: "Thumbnail Concepts", desc: "Visual briefs with color psychology and CTR probability estimates.", detail: "Get detailed visual briefs with layout suggestions, colour psychology insights, text overlay recommendations, and predicted CTR scores. Each concept is based on top-performing thumbnails in your niche, giving you a competitive visual edge." },
+  { icon: BarChart3,  color: "#34D399", title: "Analytics Dashboard", desc: "Real-time views, retention, CTR, and subscriber growth tracking.", detail: "Track every metric that matters — views, watch time, CTR, retention curves, subscriber velocity, and revenue estimates. Compare performance across videos, spot trends early, and get AI-powered recommendations for improvement." },
+  { icon: Shield,     color: "#22D3EE", title: "Competitor Intel", desc: "Find the blind spots your competitors consistently miss.", detail: "Monitor competitor channels, track their upload patterns, identify their top-performing content, and discover the gaps they're ignoring. Get alerts when opportunities emerge in your niche and stay one step ahead." },
 ];
 
 const testimonials = [
@@ -60,6 +61,14 @@ const steps = [
 export function LandingPage() {
   const router = useRouter();
   const go = (path: string) => router.push(path);
+  const [showDemo, setShowDemo] = useState(false);
+  const [selectedTool, setSelectedTool] = useState<typeof tools[0] | null>(null);
+  const [flippingIdx, setFlippingIdx] = useState<number | null>(null);
+
+  const handleCardClick = (tool: typeof tools[0], idx: number) => {
+    setFlippingIdx(idx);
+    setTimeout(() => { setSelectedTool(tool); setFlippingIdx(null); }, 600);
+  };
 
   return (
     <div className="bg-background font-sans overflow-x-hidden min-h-screen relative">
@@ -106,7 +115,7 @@ export function LandingPage() {
                 <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:shadow-glow-primary hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
                   Start for free <ArrowRight size={15} />
                 </button>
-                <button className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--hover-overlay-md)] text-sm font-medium cursor-pointer transition-all">
+                <button onClick={() => setShowDemo(true)} className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--hover-overlay-md)] text-sm font-medium cursor-pointer transition-all">
                   <Play size={13} fill="currentColor" /> Watch demo
                 </button>
               </D>
@@ -193,27 +202,81 @@ export function LandingPage() {
         </D>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {tools.map((t, i) => (
-            <D key={t.title} {...fadeUp(i * 0.06)}
-              className={`group relative p-6 rounded-[var(--radius-card)] border border-border bg-card hover:border-[${t.color}40] transition-all duration-300 cursor-pointer overflow-hidden ${t.size === "lg" ? "md:col-span-2 lg:col-span-1 lg:row-span-2 flex flex-col justify-between min-h-[220px]" : ""}`}
-            >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(ellipse at 30% 20%, ${t.color}08 0%, transparent 60%)` }} />
-              <div className="relative">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110" style={{ background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
-                  <t.icon size={18} color={t.color} />
-                </div>
-                <h3 className="font-heading text-base font-semibold text-foreground mb-2">{t.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-              </div>
-              {t.size === "lg" && (
-                <div className="flex items-center gap-1 mt-4 text-xs font-medium text-accent-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn more <ArrowRight size={12} />
-                </div>
-              )}
-            </D>
-          ))}
+          {tools.map((t, i) => {
+            const isLg = i === 0 || i === 4;
+            return (
+              <D key={t.title} {...fadeUp(i * 0.06)}
+                onClick={() => handleCardClick(t, i)}
+                style={{ perspective: "800px" }}
+                className={isLg ? "md:col-span-2 lg:col-span-1 lg:row-span-2" : ""}
+              >
+                <motion.div
+                  animate={flippingIdx === i ? { rotateY: [0, 360, 720] } : { rotateY: 0 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ transformStyle: "preserve-3d" }}
+                  className={`group relative p-6 rounded-[var(--radius-card)] border border-border bg-card hover:border-primary/30 transition-all duration-300 cursor-pointer overflow-hidden h-full ${isLg ? "flex flex-col justify-between min-h-[220px]" : ""}`}
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(ellipse at 30% 20%, ${t.color}08 0%, transparent 60%)` }} />
+                  <div className="relative">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110" style={{ background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
+                      <t.icon size={18} color={t.color} />
+                    </div>
+                    <h3 className="font-heading text-base font-semibold text-foreground mb-2">{t.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
+                  </div>
+                </motion.div>
+              </D>
+            );
+          })}
         </div>
+
+        {/* Explore All button */}
+        <D {...fadeUp(0.3)} className="flex justify-center mt-10">
+          <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => go("/onboarding")}
+            className="inline-flex items-center gap-2 h-12 px-8 rounded-full text-sm font-bold text-white border-none cursor-pointer"
+            style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
+            Explore All Features <ArrowRight size={14} />
+          </motion.button>
+        </D>
       </section>
+
+      {/* Feature Detail Overlay */}
+      <AnimatePresence>
+        {selectedTool && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedTool(null)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              exit={{ opacity: 0, scale: 0.8, rotateY: 90 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="relative bg-card border border-border rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+            >
+              <div className="absolute top-0 inset-x-0 h-1" style={{ background: `linear-gradient(90deg, ${selectedTool.color}, ${selectedTool.color}80)` }} />
+              <div className="p-7">
+                <div className="flex items-start justify-between mb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: `${selectedTool.color}15`, border: `1px solid ${selectedTool.color}30` }}>
+                      <selectedTool.icon size={22} color={selectedTool.color} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground">{selectedTool.title}</h3>
+                      <p className="text-[11px] text-[var(--text-dim)]">{selectedTool.desc}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setSelectedTool(null)} className="w-8 h-8 rounded-lg flex items-center justify-center bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-colors"><X size={15} /></button>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">{selectedTool.detail}</p>
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => { setSelectedTool(null); go("/onboarding"); }}
+                  className="w-full h-11 rounded-xl text-sm font-bold text-white border-none cursor-pointer flex items-center justify-center gap-2"
+                  style={{ background: `linear-gradient(135deg, ${selectedTool.color}, ${selectedTool.color}cc)`, boxShadow: `0 0 20px ${selectedTool.color}30` }}>
+                  Try {selectedTool.title} <ArrowRight size={13} />
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="at-section-divider" />
 
@@ -317,7 +380,7 @@ export function LandingPage() {
                   <span className="font-mono font-extrabold text-foreground tracking-tighter" style={{ fontSize: "clamp(36px, 4vw, 44px)" }}>{plan.price}</span>
                   <span className="text-sm text-[var(--text-dim)]">{plan.period}</span>
                 </div>
-                <button onClick={() => go("/onboarding")} className={`w-full h-10 rounded-md text-sm font-bold cursor-pointer transition-all active:scale-[0.98] mb-5 border-none ${plan.highlight ? "text-white shadow-glow-primary-sm" : "bg-secondary text-secondary-foreground hover:opacity-80"}`} style={plan.highlight ? { background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" } : {}}>
+                <button onClick={() => go("/payment")} className={`w-full h-10 rounded-md text-sm font-bold cursor-pointer transition-all active:scale-[0.98] mb-5 border-none ${plan.highlight ? "text-white shadow-glow-primary-sm" : "bg-secondary text-secondary-foreground hover:opacity-80"}`} style={plan.highlight ? { background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" } : {}}>
                   {plan.name === "Agency" ? "Contact sales" : "Get started"} →
                 </button>
                 <div className="h-px bg-border mb-4" />
@@ -352,7 +415,7 @@ export function LandingPage() {
               <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
                 Start for free <ArrowRight size={15} />
               </button>
-              <button className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground text-sm font-medium cursor-pointer transition-all hover:bg-[var(--hover-overlay-md)]">
+              <button onClick={() => setShowDemo(true)} className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground text-sm font-medium cursor-pointer transition-all hover:bg-[var(--hover-overlay-md)]">
                 <Play size={13} fill="currentColor" /> Watch demo
               </button>
             </div>
@@ -372,6 +435,33 @@ export function LandingPage() {
       </div>
 
       <Footer />
+
+      {/* Demo Video Modal */}
+      <Modal open={showDemo} onClose={() => setShowDemo(false)} title="AutoTube in Action" subtitle="See how creators grow 3x faster." width="max-w-3xl">
+        <div className="pt-2">
+          <div className="w-full aspect-video rounded-2xl bg-black border border-border overflow-hidden flex items-center justify-center relative group cursor-pointer">
+            <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(124,92,252,0.15) 0%, rgba(168,85,247,0.1) 50%, rgba(244,114,182,0.08) 100%)" }} />
+            <div className="relative flex flex-col items-center gap-3">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform" style={{ background: "var(--gradient-aurora)", boxShadow: "var(--glow-primary)" }}>
+                <Play size={24} fill="currentColor" className="ml-1" />
+              </div>
+              <div className="text-white/60 text-sm font-medium">Click to play demo</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-3 mt-4">
+            {[
+              { label: "Gap Analysis", time: "0:00 - 1:30" },
+              { label: "Content Generation", time: "1:30 - 3:00" },
+              { label: "Analytics Dashboard", time: "3:00 - 4:15" },
+            ].map(ch => (
+              <div key={ch.label} className="p-3 rounded-xl bg-[var(--surface-1)] border border-border text-center cursor-pointer hover:bg-[var(--hover-overlay)] transition-all">
+                <div className="text-[11px] font-medium text-foreground">{ch.label}</div>
+                <div className="text-[9px] text-[var(--text-dim)] mt-0.5">{ch.time}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
