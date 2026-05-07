@@ -9,6 +9,11 @@ const config: Config = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        heading: ['Outfit', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -53,6 +58,7 @@ const config: Config = {
         lg: "var(--radius-card)",
         md: "var(--radius-button)",
         sm: "var(--radius)",
+        pill: "var(--radius-pill)",
       },
       boxShadow: {
         "glow-primary-sm": "var(--glow-primary-sm)",
@@ -60,6 +66,13 @@ const config: Config = {
         "elevation-xs": "var(--elevation-xs)",
         "elevation-sm": "var(--elevation-sm)",
         "elevation-md": "var(--elevation-md)",
+        "elevation-lg": "var(--elevation-lg)",
+      },
+      animation: {
+        "float": "at-float 12s ease-in-out infinite",
+        "shimmer": "at-shimmer 2s linear infinite",
+        "pulse-glow": "at-pulse-glow 3s ease-in-out infinite",
+        "gradient-shift": "at-gradient-shift 6s ease infinite",
       },
     },
   },

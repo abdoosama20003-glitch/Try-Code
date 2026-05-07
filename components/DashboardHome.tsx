@@ -4,213 +4,248 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Eye, Crosshair, Sparkles, Zap, Clock, ArrowRight,
-  FileText, Image, Target, ArrowUpRight, Play,
+  FileText, Image, ArrowUpRight, Play, Bell, Search,
+  TrendingUp, Menu, ChevronRight, Star, Flame,
 } from "lucide-react";
-import { TopBar } from "./TopBar";
-import { Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart } from "recharts";
+import { ThemeToggle } from "./ThemeToggle";
+import { useSidebar } from "@/context/SidebarContext";
+import { Area, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart } from "recharts";
 
 const D = motion.create("div" as any);
+const fade = (d = 0) => ({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { delay: d, duration: 0.5, ease: [0.16, 1, 0.3, 1] } });
 
 const chartData = [
-  { name: "Jan", analyses: 120, videos: 45 },
-  { name: "Feb", analyses: 180, videos: 62 },
-  { name: "Mar", analyses: 240, videos: 78 },
-  { name: "Apr", analyses: 310, videos: 95 },
-  { name: "May", analyses: 420, videos: 120 },
-  { name: "Jun", analyses: 380, videos: 140 },
-  { name: "Jul", analyses: 520, videos: 168 },
-];
-
-const activities = [
-  { id: 1, action: "Video pack generated",   topic: "Python Automation",  time: "2m",  icon: Sparkles,  dot: "var(--neon-purple)"  },
-  { id: 2, action: "Gap analysis done",      topic: "AI Tools Hidden",    time: "15m", icon: Crosshair, dot: "var(--neon-indigo)"  },
-  { id: 3, action: "Script written",         topic: "Learn Rust 30 Days", time: "1h",  icon: FileText,  dot: "var(--neon-pink)"    },
-  { id: 4, action: "Thumbnails generated",   topic: "Figma to Code",      time: "2h",  icon: Image,     dot: "var(--neon-amber)"   },
-  { id: 5, action: "Topic saved",            topic: "No-Code Dev",        time: "3h",  icon: Target,    dot: "var(--neon-emerald)" },
-];
-
-const quickActions = [
-  { label: "Analyze Gaps",     desc: "Find opportunities",  icon: Crosshair, path: "/dashboard/gap-analyzer",      color: "var(--neon-indigo)"  },
-  { label: "Generate Content", desc: "Create video packs",  icon: Sparkles,  path: "/dashboard/content-generator", color: "var(--neon-purple)"  },
-  { label: "Write Script",     desc: "Craft full scripts",  icon: FileText,  path: "/dashboard/script-writer",     color: "var(--neon-pink)"    },
-  { label: "Thumbnail Ideas",  desc: "Design eye-catchers", icon: Image,     path: "/dashboard/thumbnails",        color: "var(--neon-amber)"   },
-];
-
-const topOpps = [
-  { keyword: "Python Automation for Beginners", score: 94, trend: "+18%", vol: "74K/mo" },
-  { keyword: "AI Tools No One Talks About",     score: 91, trend: "+24%", vol: "45K/mo" },
-  { keyword: "Figma to Code Workflow",          score: 92, trend: "+15%", vol: "22K/mo" },
-  { keyword: "Learn Rust in 30 Days",           score: 89, trend: "+31%", vol: "28K/mo" },
+  { d: "Mon", v: 320 }, { d: "Tue", v: 480 }, { d: "Wed", v: 410 },
+  { d: "Thu", v: 620 }, { d: "Fri", v: 540 }, { d: "Sat", v: 710 }, { d: "Sun", v: 680 },
 ];
 
 const kpis = [
-  { label: "Analyses Run",     value: "2,847",   icon: Crosshair, color: "var(--neon-indigo)",  change: "12%" },
-  { label: "Videos Generated", value: "94",      icon: Play,      color: "var(--neon-purple)",  change: "31%" },
-  { label: "Content Views",    value: "1.2M",    icon: Eye,       color: "var(--neon-pink)",    change: "18%" },
-  { label: "Time Saved",       value: "342 hrs", icon: Clock,     color: "var(--neon-emerald)", change: "45%" },
+  { label: "Total Analyses", value: "2,847", icon: Crosshair, color: "#7C5CFC", delta: "+12%", sparkData: [30, 40, 35, 50, 45, 60, 55] },
+  { label: "Videos Created", value: "94", icon: Play, color: "#A855F7", delta: "+31%", sparkData: [10, 15, 12, 20, 18, 25, 30] },
+  { label: "Content Views", value: "1.2M", icon: Eye, color: "#F472B6", delta: "+18%", sparkData: [60, 55, 70, 65, 80, 75, 90] },
+  { label: "Hours Saved", value: "342", icon: Clock, color: "#34D399", delta: "+45%", sparkData: [20, 30, 25, 40, 35, 50, 48] },
 ];
 
-const ttStyle = {
-  backgroundColor: "var(--popover)", border: "1px solid var(--border)",
-  borderRadius: "var(--radius)", fontSize: "11px",
-  color: "var(--foreground)", fontFamily: "var(--font-sans)",
-  boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-};
+const tools = [
+  { icon: Crosshair, label: "Gap Analyzer", desc: "Find untapped topics", path: "/dashboard/gap-analyzer", color: "#7C5CFC", hot: true },
+  { icon: Sparkles, label: "All-in-One", desc: "Complete video pack", path: "/dashboard/content-generator", color: "#A855F7", hot: false },
+  { icon: FileText, label: "Script Writer", desc: "AI-powered scripts", path: "/dashboard/script-writer", color: "#F472B6", hot: false },
+  { icon: Image, label: "Thumbnails", desc: "Eye-catching designs", path: "/dashboard/thumbnails", color: "#FBBF24", hot: false },
+];
+
+const feed = [
+  { action: "Video pack generated", topic: "Python Automation Tips", time: "2m", icon: Sparkles, color: "#A855F7" },
+  { action: "Gap analysis completed", topic: "Hidden AI Tools 2024", time: "15m", icon: Crosshair, color: "#7C5CFC" },
+  { action: "Script written", topic: "Learn Rust in 30 Days", time: "1h", icon: FileText, color: "#F472B6" },
+  { action: "Thumbnails created", topic: "Figma to Code Guide", time: "2h", icon: Image, color: "#FBBF24" },
+];
+
+const opportunities = [
+  { title: "Python Automation for Beginners", score: 94, vol: "74K/mo", trend: "+18%" },
+  { title: "AI Tools No One Talks About", score: 91, vol: "45K/mo", trend: "+24%" },
+  { title: "Figma to Code Workflow", score: 92, vol: "22K/mo", trend: "+15%" },
+];
 
 export function DashboardHome() {
-  const navigate = useRouter();
-  const [range, setRange] = useState("7M");
+  const router = useRouter();
+  const { setIsMobileOpen } = useSidebar();
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
   return (
-    <>
-      <TopBar label="Overview" title="Dashboard" subtitle={`${today} — Welcome back, Alex`} actionLabel="Quick Analysis" actionIcon={Zap} onAction={() => navigate.push("/dashboard/gap-analyzer")} />
+    <div className="flex-1 overflow-y-auto">
+      {/* ── Header bar ── */}
+      <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border">
+        <div className="flex items-center justify-between h-14 px-5 md:px-8">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setIsMobileOpen(true)} className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border bg-transparent text-[var(--text-dim)] cursor-pointer hover:text-foreground">
+              <Menu size={16} />
+            </button>
+            <div>
+              <h1 className="font-heading font-bold text-base text-foreground tracking-tight m-0">Dashboard</h1>
+            </div>
+            <span className="hidden sm:block text-[11px] text-[var(--text-dim)] border-l border-border pl-3">{today}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] hover:text-foreground transition-colors"><Search size={15} /></button>
+            <ThemeToggle />
+            <div className="relative">
+              <button className="w-9 h-9 flex items-center justify-center rounded-lg bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:bg-[var(--hover-overlay)] hover:text-foreground transition-colors">
+                <Bell size={15} />
+                <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
+              </button>
+            </div>
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/dashboard/gap-analyzer")}
+              className="hidden md:inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-[11px] font-bold text-white border-none cursor-pointer ml-1"
+              style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
+              <Zap size={11} /> Quick Analysis
+            </motion.button>
+          </div>
+        </div>
+      </div>
 
-      <div className="p-4 md:p-7 xl:p-8 flex flex-col gap-5 flex-1">
+      {/* ── Content ── */}
+      <div className="p-5 md:p-8 space-y-5">
 
-        {/* KPI Strip */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[10px]">
+        {/* ── Welcome + KPIs in a bento row ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_1fr_1fr] gap-3">
           {kpis.map((k, i) => (
-            <D key={k.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}>
-              <div className="bg-card border border-border rounded-lg p-5 shadow-sm hover:border-surface-4 hover:shadow-md transition-all">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] font-semibold text-[var(--text-dim)] tracking-[0.03em]">{k.label}</span>
-                  <div className="w-[30px] h-[30px] rounded-sm bg-[var(--subtle-overlay)] border border-border flex items-center justify-center">
-                    <k.icon size={13} color={k.color} />
+            <D key={k.label} {...fade(0.05 + i * 0.06)}>
+              <div className="group bg-card border border-border rounded-2xl p-5 hover:border-[var(--surface-4)] transition-all duration-300 relative overflow-hidden h-full">
+                <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle at 100% 0%, ${k.color}10 0%, transparent 70%)` }} />
+                <div className="flex items-center justify-between mb-4 relative">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${k.color}12`, border: `1px solid ${k.color}20` }}>
+                    <k.icon size={17} color={k.color} />
+                  </div>
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: "rgba(52,211,153,0.1)" }}>
+                    <ArrowUpRight size={9} color="#34D399" />
+                    <span className="text-[10px] font-bold text-[#34D399]">{k.delta}</span>
                   </div>
                 </div>
-                <div className="font-mono text-2xl font-extrabold text-foreground tracking-tighter">{k.value}</div>
-                <div className="flex items-center gap-1 mt-[10px]">
-                  <ArrowUpRight size={10} color="var(--neon-emerald)" />
-                  <span className="text-[11px] font-semibold text-[var(--neon-emerald)]">{k.change}</span>
-                  <span className="text-[10px] text-[var(--text-dim)]">vs last month</span>
+                <div className="font-mono text-2xl font-extrabold text-foreground tracking-tighter leading-none mb-1 relative">{k.value}</div>
+                <div className="text-[11px] text-[var(--text-dim)] relative">{k.label}</div>
+                {/* Mini sparkline */}
+                <div className="flex items-end gap-[3px] mt-3 h-5 relative">
+                  {k.sparkData.map((v, si) => (
+                    <motion.div key={si} initial={{ height: 0 }} animate={{ height: `${(v / Math.max(...k.sparkData)) * 100}%` }}
+                      transition={{ delay: 0.3 + si * 0.04, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex-1 rounded-sm min-h-[2px]" style={{ background: si === k.sparkData.length - 1 ? k.color : `${k.color}40` }} />
+                  ))}
                 </div>
               </div>
             </D>
           ))}
         </div>
 
-        {/* Chart + Activity */}
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-[10px]">
-          <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}>
-            <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div className="flex justify-between items-start mb-5">
+        {/* ── Main bento: Chart (big) + Tools (side) ── */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-3">
+          {/* Chart */}
+          <D {...fade(0.3)}>
+            <div className="bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                 <div>
-                  <div className="text-[9.5px] font-bold tracking-[0.11em] uppercase text-[var(--text-dim)] mb-1">Performance</div>
-                  <div className="text-base font-semibold text-foreground tracking-[-0.01em]">Analyses &amp; Video Generation</div>
+                  <div className="text-sm font-bold text-foreground mb-0.5">Growth Overview</div>
+                  <div className="text-[11px] text-[var(--text-dim)]">Weekly content performance</div>
                 </div>
-                <div className="flex bg-[var(--surface-2)] rounded-sm border border-border overflow-hidden">
-                  {["1M", "3M", "7M"].map(t => (
-                    <button key={t} onClick={() => setRange(t)}
-                      className="px-[10px] py-1 text-[10px] border-none cursor-pointer transition-all duration-[120ms]"
-                      style={{ fontWeight: range === t ? 700 : 400, background: range === t ? "var(--active-overlay)" : "transparent", color: range === t ? "var(--foreground)" : "var(--text-dim)" }}>
-                      {t}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="flex gap-5 mb-[14px]">
-                {[{ l: "Analyses", c: "#6366F1" }, { l: "Videos", c: "#8B5CF6" }].map(l => (
-                  <div key={l.l} className="flex items-center gap-1.5">
-                    <div className="w-3 h-[3px] rounded-[2px]" style={{ background: l.c }} />
-                    <span className="text-[10px] text-[var(--text-dim)]">{l.l}</span>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <span className="text-[10px] text-[var(--text-dim)]">Performance</span>
                   </div>
-                ))}
+                </div>
               </div>
-              <ResponsiveContainer width="100%" height={196}>
-                <ComposedChart data={chartData} margin={{ top: 0, right: 0, left: -22, bottom: 0 }}>
-                  <CartesianGrid stroke="var(--border)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--text-dim)", fontFamily: "var(--font-sans)" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: "var(--text-dim)", fontFamily: "var(--font-sans)" }} axisLine={false} tickLine={false} width={36} />
-                  <Tooltip contentStyle={ttStyle} cursor={{ stroke: "var(--border)" }} />
-                  <Area type="monotone" dataKey="analyses" stroke="#6366F1" fill="#6366F1" fillOpacity={0.10} strokeWidth={1.5} />
-                  <Line type="monotone" dataKey="videos" stroke="#8B5CF6" strokeWidth={1.5} dot={false} />
-                </ComposedChart>
+              <ResponsiveContainer width="100%" height={240}>
+                <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#7C5CFC" stopOpacity={0.2} />
+                      <stop offset="100%" stopColor="#7C5CFC" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="d" tick={{ fontSize: 10, fill: "var(--text-dim)" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: "var(--text-dim)" }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 11, color: "var(--foreground)", boxShadow: "var(--elevation-md)" }} />
+                  <Area type="monotone" dataKey="v" stroke="#7C5CFC" fill="url(#areaGrad)" strokeWidth={2.5} dot={{ r: 3, fill: "#7C5CFC", stroke: "var(--card)", strokeWidth: 2 }} activeDot={{ r: 5, fill: "#7C5CFC", stroke: "var(--card)", strokeWidth: 2 }} />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </D>
 
-          <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <div className="bg-card border border-border rounded-lg shadow-sm p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-[18px]">
-                <span className="text-sm font-semibold text-foreground tracking-[-0.01em]">Activity</span>
-                <span className="text-[10px] text-[var(--text-dim)] cursor-pointer hover:text-foreground transition-colors">View all</span>
-              </div>
-              <div className="flex flex-col flex-1">
-                {activities.map((a, i) => (
-                  <div key={a.id} className="flex items-start gap-[10px] py-[10px]"
-                    style={{ borderBottom: i < activities.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <div className="w-7 h-7 rounded-sm flex items-center justify-center shrink-0"
-                      style={{ background: `color-mix(in srgb, ${a.dot} 10%, transparent)`, border: `1px solid color-mix(in srgb, ${a.dot} 20%, transparent)` }}>
-                      <a.icon size={11} color={a.dot} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[10px] text-[var(--text-dim)] mb-0.5">{a.action}</div>
-                      <div className="text-[11px] font-semibold text-foreground overflow-hidden text-ellipsis whitespace-nowrap">{a.topic}</div>
-                    </div>
-                    <span className="text-[10px] text-[var(--text-dim)] shrink-0 mt-0.5">{a.time}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </D>
-        </div>
-
-        {/* Quick Actions + Opportunities */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[10px]">
-          <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.36 }}>
-            <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div className="text-sm font-semibold text-foreground tracking-[-0.01em] mb-4">Quick Actions</div>
-              <div className="grid grid-cols-2 gap-2">
-                {quickActions.map(qa => (
-                  <button key={qa.label} onClick={() => navigate.push(qa.path)}
-                    className="flex flex-col items-start gap-[10px] p-[14px] rounded-[var(--radius-card)] bg-[var(--surface-1)] border border-border cursor-pointer text-left transition-all min-h-[90px] hover:border-[var(--surface-4)] hover:bg-[var(--surface-2)] hover:-translate-y-px">
-                    <div className="w-[30px] h-[30px] rounded-lg flex items-center justify-center"
-                      style={{ background: `color-mix(in srgb, ${qa.color} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${qa.color} 22%, transparent)` }}>
-                      <qa.icon size={13} color={qa.color} />
+          {/* Tools grid */}
+          <D {...fade(0.36)}>
+            <div className="bg-card border border-border rounded-2xl p-5 h-full flex flex-col">
+              <div className="text-sm font-bold text-foreground mb-4">Tools</div>
+              <div className="grid grid-cols-2 gap-2 flex-1">
+                {tools.map((t) => (
+                  <motion.button key={t.label} onClick={() => router.push(t.path)}
+                    whileHover={{ y: -3 }} whileTap={{ scale: 0.97 }}
+                    className="group relative flex flex-col items-start gap-3 p-4 rounded-xl border border-border bg-[var(--surface-1)] cursor-pointer text-left transition-all hover:border-[var(--surface-4)] overflow-hidden">
+                    {t.hot && (
+                      <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-[rgba(251,191,36,0.12)] border border-[rgba(251,191,36,0.2)]">
+                        <Flame size={8} color="#FBBF24" />
+                        <span className="text-[8px] font-bold text-[#FBBF24]">HOT</span>
+                      </div>
+                    )}
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110" style={{ background: `${t.color}12`, border: `1px solid ${t.color}20` }}>
+                      <t.icon size={15} color={t.color} />
                     </div>
                     <div>
-                      <div className="text-[12px] font-semibold text-foreground mb-0.5">{qa.label}</div>
-                      <div className="text-[10px] text-[var(--text-dim)]">{qa.desc}</div>
+                      <div className="text-[12px] font-semibold text-foreground mb-0.5">{t.label}</div>
+                      <div className="text-[10px] text-[var(--text-dim)] leading-relaxed">{t.desc}</div>
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </D>
-
-          <D initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.41 }}>
-            <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-semibold text-foreground tracking-[-0.01em]">Top Opportunities</span>
-                <button onClick={() => navigate.push("/dashboard/gap-analyzer")}
-                  className="flex items-center gap-[3px] text-[10px] text-[var(--text-dim)] bg-transparent border-none cursor-pointer hover:text-foreground transition-colors p-0">
-                  View all <ArrowRight size={10} />
-                </button>
-              </div>
-              <div className="flex flex-col">
-                {topOpps.map((opp, i) => (
-                  <div key={opp.keyword} className="flex items-center gap-3 py-[11px] cursor-pointer hover:opacity-70 transition-opacity"
-                    style={{ borderBottom: i < topOpps.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <div className="w-[34px] h-[34px] rounded-sm bg-[rgba(99,102,241,0.08)] border border-[rgba(99,102,241,0.16)] flex items-center justify-center shrink-0">
-                      <span className="font-mono text-[11px] font-extrabold text-[var(--primary-hover)] tracking-[-0.03em]">{opp.score}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[11px] font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap mb-[5px]">{opp.keyword}</div>
-                      <div className="at-progress"><div className="at-progress-fill" style={{ width: `${opp.score}%` }} /></div>
-                    </div>
-                    <div className="flex flex-col items-end gap-0.5 shrink-0">
-                      <span className="text-[10px] font-semibold text-[var(--neon-emerald)]">{opp.trend}</span>
-                      <span className="font-mono text-[9px] text-[var(--text-dim)]">{opp.vol}</span>
-                    </div>
-                  </div>
+                  </motion.button>
                 ))}
               </div>
             </div>
           </D>
         </div>
 
+        {/* ── Bottom: Opportunities + Feed ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {/* Opportunities */}
+          <D {...fade(0.42)}>
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[rgba(124,92,252,0.1)] border border-[rgba(124,92,252,0.18)]">
+                    <TrendingUp size={13} color="#7C5CFC" />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">Top Opportunities</span>
+                </div>
+                <button onClick={() => router.push("/dashboard/gap-analyzer")} className="flex items-center gap-1 text-[10px] text-primary bg-transparent border-none cursor-pointer hover:text-primary-hover font-medium">
+                  See all <ChevronRight size={10} />
+                </button>
+              </div>
+              {opportunities.map((o, i) => (
+                <div key={o.title} className="flex items-center gap-3 py-3 hover:bg-[var(--hover-overlay)] rounded-xl px-3 -mx-3 cursor-pointer transition-colors"
+                  style={{ borderBottom: i < opportunities.length - 1 ? "1px solid var(--border)" : "none" }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[rgba(124,92,252,0.08)] border border-[rgba(124,92,252,0.15)]">
+                    <span className="font-mono text-sm font-extrabold text-primary">{o.score}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-semibold text-foreground truncate mb-1.5">{o.title}</div>
+                    <div className="h-1 rounded-full bg-[var(--surface-2)] overflow-hidden">
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${o.score}%` }} transition={{ delay: 0.6 + i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full rounded-full" style={{ background: "var(--gradient-aurora)" }} />
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="text-[10px] font-bold text-[#34D399]">{o.trend}</div>
+                    <div className="text-[9px] font-mono text-[var(--text-dim)]">{o.vol}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </D>
+
+          {/* Activity feed */}
+          <D {...fade(0.48)}>
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[rgba(168,85,247,0.1)] border border-[rgba(168,85,247,0.18)]">
+                    <Sparkles size={13} color="#A855F7" />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">Recent Activity</span>
+                </div>
+                <span className="text-[10px] text-primary cursor-pointer hover:text-primary-hover font-medium">View all</span>
+              </div>
+              {feed.map((f, i) => (
+                <div key={i} className="flex items-center gap-3 py-3 hover:bg-[var(--hover-overlay)] rounded-xl px-3 -mx-3 cursor-pointer transition-colors"
+                  style={{ borderBottom: i < feed.length - 1 ? "1px solid var(--border)" : "none" }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${f.color}10`, border: `1px solid ${f.color}18` }}>
+                    <f.icon size={15} color={f.color} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-semibold text-foreground truncate">{f.topic}</div>
+                    <div className="text-[10px] text-[var(--text-dim)]">{f.action}</div>
+                  </div>
+                  <span className="text-[10px] font-mono text-[var(--text-dim)] shrink-0">{f.time}</span>
+                </div>
+              ))}
+            </div>
+          </D>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

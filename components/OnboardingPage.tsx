@@ -94,7 +94,7 @@ export function OnboardingPage() {
         <div className="hidden md:block mb-11">
           <div className="text-[9.5px] font-bold tracking-[0.12em] uppercase text-[var(--text-dim)] mb-[10px]">Setup</div>
           {/* clamp() font-size must stay inline */}
-          <h2 className="font-extrabold tracking-[-0.03em] text-foreground leading-[1.1] m-0"
+          <h2 className="font-heading font-extrabold tracking-[-0.03em] text-foreground leading-[1.1] m-0"
             style={{ fontSize: "clamp(22px, 2.5vw, 30px)" }}>
             Let&apos;s get<br />you set up.
           </h2>
@@ -166,7 +166,7 @@ export function OnboardingPage() {
             {step === 1 && (
               <MotionDiv key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
                 <div className="mb-8">
-                  <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
+                  <h2 className="font-heading font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
                     style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
                     {isLogin ? "Welcome back" : "Create your account"}
                   </h2>
@@ -375,7 +375,8 @@ export function OnboardingPage() {
                         <ArrowLeft size={13} /> Back
                       </button>
                       <button onClick={handleFinish}
-                        className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-primary text-white border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] shadow-[var(--glow-primary-sm)]">
+                        className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] text-white border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] shadow-glow-primary-sm"
+                        style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
                         <Sparkles size={14} />
                         Launch AutoTube
                       </button>

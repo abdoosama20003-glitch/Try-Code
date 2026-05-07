@@ -1,317 +1,213 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Crosshair, Sparkles, PenTool, Image as ImageIcon, BarChart3,
-  ArrowRight, Play, Star, Check, Zap, TrendingUp, Shield,
-  ChevronRight,
+  ArrowRight, ArrowUp, Play, Star, Check, Zap, Shield,
+  ChevronRight, Users, TrendingUp, Clock, Eye,
 } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 
 const D = motion.create("div" as any);
-const H  = motion.create("h1" as any);
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 32 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay },
-});
-
-const fadeIn = (delay = 0) => ({
-  initial: { opacity: 0 },
-  whileInView: { opacity: 1 },
-  viewport: { once: true },
-  transition: { duration: 0.55, ease: "easeOut", delay },
+  viewport: { once: true, margin: "-40px" },
+  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
 });
 
 /* ── Data ── */
 const tools = [
-  { icon: Crosshair,  color: "var(--neon-indigo)",  title: "Gap Analyzer",          desc: "Surface high-demand, low-competition topics with precise scoring." },
-  { icon: Sparkles,   color: "var(--neon-purple)",  title: "Video Pack Generator",  desc: "One click creates a complete, ready-to-upload content package." },
-  { icon: PenTool,    color: "var(--neon-pink)",    title: "Script Writer",         desc: "Full scripts with hooks, transitions, and CTAs built for watch time." },
-  { icon: ImageIcon,  color: "var(--neon-amber)",   title: "Thumbnail Concepts",    desc: "Visual briefs with color psychology and CTR probability estimates." },
-  { icon: BarChart3,  color: "var(--neon-emerald)", title: "Analytics Dashboard",   desc: "Real-time views, retention, CTR, and subscriber growth tracking." },
-  { icon: Shield,     color: "var(--neon-cyan)",    title: "Competitor Intel",       desc: "Find the blind spots your competitors consistently miss." },
+  { icon: Crosshair, color: "#7C5CFC", title: "Gap Analyzer", desc: "Surface high-demand, low-competition topics with AI-powered scoring.", size: "lg" },
+  { icon: Sparkles,  color: "#A855F7", title: "Video Pack Generator", desc: "One click creates a complete, ready-to-upload content package.", size: "sm" },
+  { icon: PenTool,   color: "#F472B6", title: "Script Writer", desc: "Full scripts with hooks, transitions, and CTAs built for watch time.", size: "sm" },
+  { icon: ImageIcon,  color: "#FBBF24", title: "Thumbnail Concepts", desc: "Visual briefs with color psychology and CTR probability estimates.", size: "sm" },
+  { icon: BarChart3,  color: "#34D399", title: "Analytics Dashboard", desc: "Real-time views, retention, CTR, and subscriber growth tracking.", size: "lg" },
+  { icon: Shield,     color: "#22D3EE", title: "Competitor Intel", desc: "Find the blind spots your competitors consistently miss.", size: "sm" },
 ];
 
 const testimonials = [
-  { name: "Sarah Chen",    sub: "450K",  init: "SC", c: "#6366F1", quote: "Found a gap nobody saw. 200K views in one week." },
-  { name: "Marcus Rivera", sub: "180K",  init: "MR", c: "#8B5CF6", quote: "Script writer saves me 6 hours per video. Unreal." },
-  { name: "Priya Patel",   sub: "320K",  init: "PP", c: "#EC4899", quote: "Went from 2 to 8 videos a month. Insane ROI." },
-  { name: "James Okafor",  sub: "620K",  init: "JO", c: "#10B981", quote: "The gap analyzer is pure gold. Total game changer." },
+  { name: "Sarah Chen", role: "Tech Creator · 450K subs", quote: "Found a gap nobody saw. 200K views in one week.", avatar: "SC", color: "#7C5CFC" },
+  { name: "Marcus Rivera", role: "Finance · 180K subs", quote: "Script writer saves me 6 hours per video. Unreal.", avatar: "MR", color: "#A855F7" },
+  { name: "Priya Patel", role: "Lifestyle · 320K subs", quote: "Went from 2 to 8 videos a month. Insane ROI.", avatar: "PP", color: "#F472B6" },
+  { name: "James Okafor", role: "Gaming · 620K subs", quote: "The gap analyzer is pure gold. Total game changer.", avatar: "JO", color: "#34D399" },
+  { name: "Luna Park", role: "Education · 290K subs", quote: "My subscriber growth tripled in the first month.", avatar: "LP", color: "#FBBF24" },
+  { name: "Dev Singh", role: "AI/ML · 510K subs", quote: "Best investment I've made for my YouTube channel.", avatar: "DS", color: "#22D3EE" },
 ];
 
 const pricing = [
-  {
-    name: "Starter", price: "$0",  period: "forever", highlight: false,
-    desc: "For creators just getting started",
-    features: ["5 gap analyses / month", "3 video packs", "Basic scripts"],
-  },
-  {
-    name: "Pro",     price: "$29", period: "/month",  highlight: true,
-    desc: "For creators serious about growth",
-    features: ["500 analyses / month", "200 video packs", "Advanced scripts", "Thumbnail concepts", "Priority support", "Full analytics"],
-  },
-  {
-    name: "Agency",  price: "$99", period: "/month",  highlight: false,
-    desc: "For teams and content agencies",
-    features: ["Unlimited everything", "Custom AI models", "Team workspace", "Dedicated manager", "White-label"],
-  },
+  { name: "Starter", price: "$0", period: "forever", highlight: false, desc: "For creators just getting started", features: ["5 gap analyses / month", "3 video packs", "Basic scripts", "Community support"] },
+  { name: "Pro", price: "$29", period: "/month", highlight: true, desc: "For creators serious about growth", features: ["500 analyses / month", "200 video packs", "Advanced scripts", "Thumbnail concepts", "Priority support", "Full analytics"] },
+  { name: "Agency", price: "$99", period: "/month", highlight: false, desc: "For teams and content agencies", features: ["Unlimited everything", "Custom AI models", "Team workspace", "Dedicated manager", "White-label", "API access"] },
 ];
 
-/* ── Reusable ── */
-function SectionLabel({ children }: { children: string }) {
-  return (
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 14 }}>
-      {children}
-    </div>
-  );
-}
+const stats = [
+  { icon: Users, value: "50K+", label: "Active creators", color: "#7C5CFC" },
+  { icon: Eye, value: "2.4M", label: "Analyses run", color: "#A855F7" },
+  { icon: TrendingUp, value: "340K", label: "Videos made", color: "#34D399" },
+  { icon: Clock, value: "1.2M hrs", label: "Time saved", color: "#F472B6" },
+];
 
-function PrimaryBtn({ children, onClick, large }: { children: React.ReactNode; onClick?: () => void; large?: boolean }) {
-  return (
-    <button onClick={onClick} className={`inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none bg-foreground text-background shadow-xs hover:opacity-90 ${large ? "at-btn-xl" : "at-btn-lg"}`}
-      style={{ fontFamily: "var(--font-sans)" }}>
-      {children}
-    </button>
-  );
-}
+const steps = [
+  { n: "01", title: "Discover Gaps", desc: "Enter your niche. AutoTube scans millions of data points to find topics your audience craves.", icon: Crosshair, color: "#7C5CFC" },
+  { n: "02", title: "Generate Content", desc: "One click builds titles, descriptions, tags, scripts, and thumbnail concepts.", icon: Sparkles, color: "#A855F7" },
+  { n: "03", title: "Publish & Grow", desc: "Upload with metadata pre-filled. Track CTR, views, and subscribers in real-time.", icon: BarChart3, color: "#34D399" },
+];
 
-function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
-  return (
-    <button onClick={onClick} className="inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none bg-transparent text-muted-foreground hover:bg-hover-overlay hover:text-foreground h-11 px-6"
-      style={{ fontFamily: "var(--font-sans)", border: "1px solid var(--border)", color: "var(--muted-foreground)" }}
-      onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--surface-4)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--foreground)"; }}
-      onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--muted-foreground)"; }}
-    >
-      {children}
-    </button>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   PRODUCT PREVIEW MOCKUP  (pure CSS, no image)
-───────────────────────────────────────────────*/
-function ProductPreview() {
-  return (
-    <div className="w-full rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface-1)] overflow-hidden shadow-[var(--elevation-lg)] overflow-x-auto">
-      <div className="min-w-[700px]">
-      {/* Titlebar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", borderBottom: "1px solid var(--border)", background: "var(--surface-0)" }}>
-        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444", opacity: 0.7 }} />
-        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#F59E0B", opacity: 0.7 }} />
-        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#10B981", opacity: 0.7 }} />
-        <div style={{ flex: 1, height: 22, borderRadius: 4, background: "var(--hover-overlay)", marginLeft: 8, display: "flex", alignItems: "center", paddingLeft: 10 }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "9px", color: "var(--text-dim)" }}>app.autotube.io/dashboard/gap-analyzer</span>
-        </div>
-      </div>
-      {/* Sidebar */}
-      <div style={{ display: "flex", height: 380 }}>
-        <div style={{ width: 48, borderRight: "1px solid var(--border)", background: "var(--surface-0)", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px 0", gap: 14 }}>
-          {["#6366F1","#10B981","#8B5CF6","#EC4899","#F59E0B","#06B6D4"].map((c, i) => (
-            <div key={i} style={{ width: 24, height: 24, borderRadius: 6, background: i === 0 ? `${c}22` : "var(--hover-overlay)", border: `1px solid ${i === 0 ? c + "44" : "transparent"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ width: 8, height: 8, borderRadius: 2, background: i === 0 ? c : "var(--surface-4)" }} />
-            </div>
-          ))}
-        </div>
-        {/* Content */}
-        <div style={{ flex: 1, padding: "20px", overflowY: "hidden", background: "var(--surface-0)" }}>
-          {/* Search row */}
-          <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-            <div style={{ flex: 1, height: 34, borderRadius: 8, background: "var(--surface-1)", border: "1px solid var(--border)", display: "flex", alignItems: "center", paddingLeft: 10, gap: 6 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", border: "1.5px solid var(--text-dim)" }} />
-              <div style={{ width: 140, height: 6, borderRadius: 4, background: "var(--surface-3)" }} />
-            </div>
-            <div style={{ width: 90, height: 34, borderRadius: 8, background: "var(--foreground)", opacity: 0.9 }} />
-          </div>
-          {/* KPI row */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 16 }}>
-            {["var(--neon-indigo)","var(--neon-purple)","var(--neon-emerald)","var(--neon-pink)"].map((c, i) => (
-              <div key={i} style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 10, padding: "10px 12px" }}>
-                <div style={{ width: "60%", height: 5, borderRadius: 3, background: "var(--surface-3)", marginBottom: 8 }} />
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "14px", fontWeight: 800, color: `var(--neon-${["indigo","purple","emerald","pink"][i]})`, letterSpacing: "-0.04em" }}>
-                  {["2.8K","94","1.2M","342"][i]}
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Table */}
-          <div style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
-            <div style={{ padding: "8px 14px", borderBottom: "1px solid var(--border)", display: "flex", gap: 8 }}>
-              {["40%","15%","15%","15%","15%"].map((w, i) => (
-                <div key={i} style={{ width: w, height: 5, borderRadius: 3, background: "var(--surface-3)" }} />
-              ))}
-            </div>
-            {[94, 91, 89, 76].map((score, i) => (
-              <div key={i} style={{ padding: "9px 14px", borderBottom: i < 3 ? "1px solid var(--border)" : "none", display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
-                  <div style={{ height: 5, borderRadius: 3, background: "var(--surface-3)", width: `${60 + i * 8}%` }} />
-                  <div style={{ display: "flex", gap: 4 }}>
-                    <div style={{ height: 4, width: 36, borderRadius: 3, background: i < 2 ? "rgba(16,185,129,0.2)" : i < 3 ? "rgba(245,158,11,0.2)" : "rgba(239,68,68,0.15)" }} />
-                    <div style={{ height: 4, width: 48, borderRadius: 3, background: "var(--surface-3)" }} />
-                  </div>
-                </div>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 800, color: "var(--primary-hover)" }}>{score}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═════════════════════════════════════��════════════
-   PAGE
-══════════════════════════════════════════════════ */
 export function LandingPage() {
-  const navigate = useRouter();
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const router = useRouter();
+  const go = (path: string) => router.push(path);
 
   return (
-    <div style={{ background: "var(--background)", fontFamily: "var(--font-sans)", overflowX: "hidden", minHeight: "100vh" }}>
+    <div className="bg-background font-sans overflow-x-hidden min-h-screen relative">
+      {/* Aurora orbs */}
+      <div className="at-aurora-orb" style={{ width: 600, height: 600, top: -200, right: -200, background: "rgba(124,92,252,0.10)" }} />
+      <div className="at-aurora-orb" style={{ width: 500, height: 500, top: 400, left: -200, background: "rgba(168,85,247,0.06)", animationDelay: "-4s" }} />
+      <div className="at-aurora-orb" style={{ width: 400, height: 400, bottom: 200, right: -100, background: "rgba(244,114,182,0.05)", animationDelay: "-8s" }} />
+
       <Navbar />
 
-      {/* ═══════════════════════════════════════
-          HERO
-      ═══════════════════════════════════════ */}
-      <section style={{ minHeight: "100vh", paddingTop: 80, position: "relative", overflow: "hidden" }}>
-        {/* Grid bg */}
-        <div className="at-hero-grid" style={{ position: "absolute", inset: 0, maskImage: "radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 75%)", pointerEvents: "none" }} />
+      {/* ═══ HERO — Split Layout ═══ */}
+      <section className="min-h-screen pt-36 md:pt-44 pb-24 relative overflow-hidden">
+        <div className="at-hero-grid absolute inset-0 pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 70% 50% at 50% 0%, black 20%, transparent 70%)" }} />
 
-        {/* Subtle radial glow */}
-        <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: 600, height: 300, background: "radial-gradient(ellipse at center, rgba(99,102,241,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div className="max-w-7xl mx-auto px-5 md:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            {/* Left — Text */}
+            <div>
+              <D {...fadeUp(0)}>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-[var(--accent)] border border-[var(--border-active)] mb-8">
+                  <Zap size={10} className="text-primary" />
+                  <span className="text-[11px] font-semibold text-accent-foreground">Gap Analyzer v2 is live</span>
+                  <ChevronRight size={12} className="text-accent-foreground" />
+                </div>
+              </D>
 
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-          {/* Top tag */}
-          <D {...fadeUp(0)} style={{ display: "flex", justifyContent: "center", marginBottom: 40, paddingTop: 48 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px 6px 8px", borderRadius: 100, background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 100, background: "var(--primary)", color: "white" }}>
-                <Zap size={9} fill="white" />
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em" }}>NEW</span>
-              </div>
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--primary-hover)", fontWeight: 500 }}>Gap Analyzer v2 is now live</span>
-              <ChevronRight size={12} color="var(--primary-hover)" />
+              <D {...fadeUp(0.05)}>
+                <h1 className="font-heading font-extrabold tracking-[-0.04em] leading-[0.95] text-foreground mb-6" style={{ fontSize: "clamp(44px, 6vw, 76px)" }}>
+                  Find what{" "}
+                  <span className="bg-clip-text text-transparent inline-block pr-2" style={{ backgroundImage: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", WebkitBackgroundClip: "text", paddingBottom: 4 }}>
+                    YouTube
+                  </span>
+                  <br />is missing.
+                </h1>
+              </D>
+
+              <D {...fadeUp(0.1)}>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg">
+                  AutoTube finds untapped content gaps, generates complete video packages, and grows your channel — all from one AI-powered workspace.
+                </p>
+              </D>
+
+              <D {...fadeUp(0.15)} className="flex flex-wrap gap-4 mb-12">
+                <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:shadow-glow-primary hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
+                  Start for free <ArrowRight size={15} />
+                </button>
+                <button className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--hover-overlay-md)] text-sm font-medium cursor-pointer transition-all">
+                  <Play size={13} fill="currentColor" /> Watch demo
+                </button>
+              </D>
+
+              {/* Stats row */}
+              <D {...fadeUp(0.2)} className="flex flex-wrap gap-6">
+                {stats.map(s => (
+                  <div key={s.label} className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${s.color}15`, border: `1px solid ${s.color}30` }}>
+                      <s.icon size={15} color={s.color} />
+                    </div>
+                    <div>
+                      <div className="font-mono text-base font-bold text-foreground tracking-tight">{s.value}</div>
+                      <div className="text-[10px] text-[var(--text-dim)]">{s.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </D>
             </div>
-          </D>
 
-          {/* Headline */}
-          <H {...fadeUp(0.06)} style={{ fontFamily: "var(--font-sans)", fontWeight: 800, letterSpacing: "-0.05em", lineHeight: 0.95, color: "var(--foreground)", textAlign: "center", fontSize: "clamp(48px, 8vw, 100px)", margin: "0 auto 28px", maxWidth: 900 }}>
-            Find what<br />
-            <span style={{ color: "var(--primary)" }}>YouTube</span> is<br />
-            missing.
-          </H>
-
-          <D {...fadeUp(0.12)} style={{ textAlign: "center", maxWidth: 520, margin: "0 auto 40px" }}>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-lg)", color: "var(--muted-foreground)", lineHeight: 1.65, margin: 0 }}>
-              AutoTube finds untapped content gaps, generates complete video packages, and grows your channel — from one workspace.
-            </p>
-          </D>
-
-          {/* CTAs */}
-          <D {...fadeUp(0.18)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 56 }}>
-            <PrimaryBtn onClick={() => navigate.push("/onboarding")} large>
-              Start for free <ArrowRight size={16} />
-            </PrimaryBtn>
-            <GhostBtn>
-              <Play size={13} fill="currentColor" /> Watch demo
-            </GhostBtn>
-          </D>
-
-          {/* Stats strip */}
-          <D {...fadeIn(0.3)} className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-0 mb-12 md:mb-[72px]">
-            {[
-              { v: "50K+",  l: "Active creators" },
-              { v: "2.4M",  l: "Analyses run" },
-              { v: "340K",  l: "Videos made" },
-              { v: <span className="flex items-center justify-center gap-[2px]">4.9<Star size={24} fill="currentColor" /></span>,  l: "Average rating" },
-            ].map((s, i) => (
-              <div key={s.l} className="px-0 sm:px-8 text-center sm:border-r border-[var(--border)] last:border-none">
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 4 }}>{s.v}</div>
-                <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", fontWeight: 500 }}>{s.l}</div>
+            {/* Right — Bento Preview */}
+            <D {...fadeUp(0.1)} className="relative">
+              <div className="at-glass-card p-1 shadow-elevation-lg">
+                {/* Window chrome */}
+                <div className="flex items-center gap-1.5 px-3 py-2 border-b border-border">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+                  <div className="flex-1 h-5 rounded ml-2 bg-[var(--hover-overlay)] flex items-center px-2">
+                    <span className="font-mono text-[9px] text-[var(--text-dim)]">app.autotube.io/dashboard</span>
+                  </div>
+                </div>
+                {/* Dashboard mock */}
+                <div className="p-4 space-y-3">
+                  {/* KPI cards */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[{ v: "2.8K", l: "Analyses", c: "#7C5CFC" }, { v: "94", l: "Videos", c: "#A855F7" }, { v: "1.2M", l: "Views", c: "#34D399" }].map(k => (
+                      <div key={k.l} className="rounded-lg p-3 border border-border bg-[var(--surface-1)]">
+                        <div className="text-[9px] text-[var(--text-dim)] mb-1">{k.l}</div>
+                        <div className="font-mono text-sm font-bold tracking-tight" style={{ color: k.c }}>{k.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Chart area */}
+                  <div className="rounded-lg border border-border bg-[var(--surface-1)] p-3 h-32 flex items-end gap-1">
+                    {[40, 55, 35, 70, 60, 85, 75, 95, 80, 65, 90, 100].map((h, i) => (
+                      <motion.div key={i} initial={{ height: 0 }} whileInView={{ height: `${h}%` }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex-1 rounded-sm" style={{ background: `linear-gradient(to top, ${i % 2 === 0 ? '#7C5CFC' : '#A855F7'}40, ${i % 2 === 0 ? '#7C5CFC' : '#A855F7'})` }} />
+                    ))}
+                  </div>
+                  {/* Table rows */}
+                  <div className="rounded-lg border border-border bg-[var(--surface-1)] overflow-hidden">
+                    {[94, 91, 89].map((score, i) => (
+                      <div key={i} className="flex items-center gap-2 px-3 py-2" style={{ borderBottom: i < 2 ? "1px solid var(--border)" : "none" }}>
+                        <div className="flex-1 space-y-1">
+                          <div className="h-1.5 rounded-full bg-[var(--surface-3)]" style={{ width: `${60 + i * 12}%` }} />
+                          <div className="h-1 rounded-full bg-[var(--surface-3)]" style={{ width: "30%" }} />
+                        </div>
+                        <div className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-mono font-bold" style={{ background: "#7C5CFC18", border: "1px solid #7C5CFC30", color: "#9B80FF" }}>{score}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            ))}
-          </D>
-
-          {/* Product preview */}
-          <D {...fadeIn(0.24)} style={{ maxWidth: 900, margin: "0 auto" }}>
-            <ProductPreview />
-          </D>
-        </div>
-      </section>
-
-      <div className="at-section-divider" />
-
-      {/* ══════════════════════════════════════
-          TOOLS / FEATURES
-      ═══════════════════════════════════════ */}
-      <section className="py-[60px] md:py-[100px] max-w-[1280px] mx-auto px-5 md:px-10" id="features">
-        <D {...fadeUp(0)} style={{ marginBottom: 60 }}>
-          <SectionLabel>Features</SectionLabel>
-          <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: 0, maxWidth: 560 }}>
-            Six tools. <br />One unfair edge.
-          </h2>
-        </D>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2px]">
-          {tools.map((t, i) => (
-            <D key={t.title} {...fadeUp(i * 0.07)} className="at-tool-card">
-              <div style={{ width: 42, height: 42, borderRadius: 10, background: `color-mix(in srgb, ${t.color} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${t.color} 25%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <t.icon size={17} color={t.color} />
-              </div>
-              <div>
-                <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", fontWeight: 600, color: "var(--foreground)", marginBottom: 6, letterSpacing: "-0.01em" }}>{t.title}</div>
-                <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.65 }}>{t.desc}</div>
-              </div>
+              {/* Floating glow behind */}
+              <div className="absolute -inset-8 -z-10 rounded-3xl" style={{ background: "radial-gradient(ellipse at center, rgba(124,92,252,0.08) 0%, transparent 70%)" }} />
             </D>
-          ))}
+          </div>
         </div>
-
-        <D {...fadeUp(0.5)} style={{ display: "flex", justifyContent: "center", marginTop: 48 }}>
-          <PrimaryBtn onClick={() => navigate.push("/onboarding")} large>
-            Explore <ArrowRight size={16} />
-          </PrimaryBtn>
-        </D>
       </section>
 
       <div className="at-section-divider" />
 
-      {/* ═══════════════════════════════════════
-          HOW IT WORKS
-      ═══════════════════════════════════════ */}
-      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto">
-        <D {...fadeUp(0)} style={{ marginBottom: 64 }}>
-          <SectionLabel>Process</SectionLabel>
-          <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: 0 }}>
-            From zero to<br />viral in 3 steps.
+      {/* ═══ FEATURES — Bento Grid ═══ */}
+      <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-10" id="features">
+        <D {...fadeUp(0)} className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-[var(--accent)] border border-[var(--border-active)] mb-5">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-accent-foreground">Features</span>
+          </div>
+          <h2 className="font-heading font-extrabold tracking-tight text-foreground mb-4" style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+            Six tools. One unfair edge.
           </h2>
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">Everything you need to dominate YouTube — research, create, publish, and grow.</p>
         </D>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px]">
-          {[
-            { n: "01", title: "Discover Gaps",    desc: "Enter your niche. AutoTube scans millions of data points to surface topics your audience is actively searching for — and creators are ignoring.", icon: Crosshair,  color: "var(--neon-indigo)"  },
-            { n: "02", title: "Generate Content", desc: "One click builds a complete package: optimized title, full description, 15+ tags, complete script with hooks, and 4 thumbnail concepts.", icon: Sparkles,   color: "var(--neon-purple)"  },
-            { n: "03", title: "Publish & Grow",   desc: "Upload with all metadata pre-filled. Track your CTR, views, and subscriber count climbing in real-time through the analytics dashboard.", icon: BarChart3,  color: "var(--neon-emerald)" },
-          ].map((s, i) => (
-            <D key={s.n} {...fadeUp(i * 0.1)} style={{ padding: "32px 28px", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--card)", position: "relative", boxShadow: "0 1px 3px rgba(0,0,0,0.25)" }}>
-              {/* Number */}
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: "11px", fontWeight: 700, color: "var(--text-dim)", letterSpacing: "0.06em", marginBottom: 20 }}>{s.n}</div>
-              {/* Icon */}
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: `color-mix(in srgb, ${s.color} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${s.color} 20%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                <s.icon size={18} color={s.color} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {tools.map((t, i) => (
+            <D key={t.title} {...fadeUp(i * 0.06)}
+              className={`group relative p-6 rounded-[var(--radius-card)] border border-border bg-card hover:border-[${t.color}40] transition-all duration-300 cursor-pointer overflow-hidden ${t.size === "lg" ? "md:col-span-2 lg:col-span-1 lg:row-span-2 flex flex-col justify-between min-h-[220px]" : ""}`}
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: `radial-gradient(ellipse at 30% 20%, ${t.color}08 0%, transparent 60%)` }} />
+              <div className="relative">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110" style={{ background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
+                  <t.icon size={18} color={t.color} />
+                </div>
+                <h3 className="font-heading text-base font-semibold text-foreground mb-2">{t.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
               </div>
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-lg)", fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em", marginBottom: 10 }}>{s.title}</div>
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.7 }}>{s.desc}</div>
-              {/* Connector arrow */}
-              {i < 2 && (
-                <div className="hidden md:flex absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[var(--surface-2)] border border-[var(--border)] items-center justify-center z-10">
-                  <ChevronRight size={12} color="var(--text-dim)" />
+              {t.size === "lg" && (
+                <div className="flex items-center gap-1 mt-4 text-xs font-medium text-accent-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                  Learn more <ArrowRight size={12} />
                 </div>
               )}
             </D>
@@ -321,101 +217,32 @@ export function LandingPage() {
 
       <div className="at-section-divider" />
 
-      {/* ═══════════════════════════════════════
-          TESTIMONIALS
-      ═══════════════════════════════════════ */}
-      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto" id="testimonials">
-        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-10 lg:gap-20 items-start">
-          {/* Left */}
-          <D {...fadeUp(0)}>
-            <SectionLabel>Testimonials</SectionLabel>
-            <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: "0 0 24px" }}>
-              Creators who<br />trust AutoTube.
-            </h2>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.7, marginBottom: 32 }}>
-              Thousands of YouTubers use AutoTube to find their next viral idea, write their next script, and grow faster — every single week.
-            </p>
-            <div style={{ display: "flex", gap: 1, marginBottom: 8 }}>
-              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="var(--neon-amber)" color="var(--neon-amber)" />)}
-            </div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.04em", lineHeight: 1 }}>4.9 / 5</div>
-            <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", marginTop: 4 }}>2,400+ verified reviews</div>
-          </D>
-
-          {/* Testimonials grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {testimonials.map((t, i) => (
-              <D key={t.name} {...fadeUp(i * 0.08)} style={{ padding: "24px", borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--card)", display: "flex", flexDirection: "column", gap: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.25)", transition: "border-color 0.2s, transform 0.2s", cursor: "default" }}
-                onMouseEnter={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--surface-4)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e: React.MouseEvent<any>) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)"; }}
-              >
-                <div style={{ display: "flex", gap: 1 }}>
-                  {[...Array(5)].map((_, si) => <Star key={si} size={11} fill="var(--neon-amber)" color="var(--neon-amber)" />)}
-                </div>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--secondary-foreground)", lineHeight: 1.65, margin: 0, flex: 1 }}>
-                  "{t.quote}"
-                </p>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: "50%", background: t.c, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 800, color: "white" }}>{t.init}</span>
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--foreground)" }}>{t.name}</div>
-                    <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", color: "var(--text-dim)" }}>{t.sub} subscribers</div>
-                  </div>
-                </div>
-              </D>
-            ))}
+      {/* ═══ PROCESS — Vertical Timeline ═══ */}
+      <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-10">
+        <D {...fadeUp(0)} className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-[var(--accent)] border border-[var(--border-active)] mb-5">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-accent-foreground">How it works</span>
           </div>
-        </div>
-      </section>
-
-      <div className="at-section-divider" />
-
-      {/* ═══════════════════════════════════════
-          PRICING
-      ═══════════════════════════════════════ */}
-      <section className="py-[60px] md:py-[100px] px-5 md:px-10 max-w-[1280px] mx-auto" id="pricing">
-        <D {...fadeUp(0)} style={{ textAlign: "center", marginBottom: 64 }}>
-          <SectionLabel>Pricing</SectionLabel>
-          <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4.5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: "0 auto 16px", maxWidth: 480 }}>
-            Simple,<br />transparent pricing.
+          <h2 className="font-heading font-extrabold tracking-tight text-foreground" style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+            Three steps to viral.
           </h2>
-          <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", color: "var(--muted-foreground)", margin: 0 }}>No hidden fees. No lock-in. Cancel anytime.</p>
         </D>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {pricing.map((plan, i) => (
-            <D key={plan.name} {...fadeUp(i * 0.08)} className={`at-pricing-card ${plan.highlight ? "at-pricing-card-featured" : ""}`} style={{ position: "relative", overflow: "hidden" }}>
-              {plan.highlight && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, var(--primary), var(--neon-purple))" }} />}
-              <div style={{ marginBottom: 6 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--text-dim)" }}>{plan.name}</span>
-                  {plan.highlight && <span style={{ padding: "1px 6px", borderRadius: "var(--radius)", background: "var(--accent)", color: "var(--primary-hover)", fontFamily: "var(--font-sans)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>Popular</span>}
-                </div>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "11px", color: "var(--text-dim)", margin: 0 }}>{plan.desc}</p>
+        <div className="max-w-2xl mx-auto space-y-0">
+          {steps.map((s, i) => (
+            <D key={s.n} {...fadeUp(i * 0.1)} className="relative flex gap-6 pb-12 last:pb-0">
+              {/* Vertical line */}
+              {i < steps.length - 1 && <div className="absolute left-[22px] top-12 bottom-0 w-px bg-border" />}
+              {/* Circle */}
+              <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 relative z-10 border-2" style={{ background: `${s.color}15`, borderColor: `${s.color}40` }}>
+                <s.icon size={16} color={s.color} />
               </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "20px 0 6px" }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "clamp(36px, 4vw, 48px)", fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.05em", lineHeight: 1 }}>{plan.price}</span>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--text-dim)" }}>{plan.period}</span>
-              </div>
-              <button
-                onClick={() => navigate.push("/onboarding")}
-                className={`inline-flex items-center justify-center gap-1.5 font-semibold text-sm rounded-md transition-all active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none h-9 px-4 ${plan.highlight ? "at-btn-primary" : "at-btn-secondary"}`}
-                style={{ width: "100%", marginBottom: 24, fontFamily: "var(--font-sans)" }}
-              >
-                {plan.name === "Agency" ? "Contact sales" : "Get started"} <ArrowRight size={13} />
-              </button>
-              <div style={{ height: 1, background: "var(--border)", marginBottom: 20 }} />
-              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                {plan.features.map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                    <div style={{ width: 16, height: 16, borderRadius: "50%", background: plan.highlight ? "var(--primary)" : "var(--hover-overlay-md)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Check size={8} color={plan.highlight ? "white" : "var(--muted-foreground)"} />
-                    </div>
-                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)" }}>{f}</span>
-                  </div>
-                ))}
+              {/* Content */}
+              <div className="pt-1">
+                <span className="font-mono text-xs text-[var(--text-dim)] mb-1 block">Step {s.n}</span>
+                <h3 className="font-heading text-xl font-bold text-foreground mb-2">{s.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
               </div>
             </D>
           ))}
@@ -424,27 +251,125 @@ export function LandingPage() {
 
       <div className="at-section-divider" />
 
-      {/* ═══════════════════════════════════════
-          FINAL CTA
-      ═══════════════════════════════════════ */}
-      <section style={{ padding: "100px 40px", maxWidth: 1280, margin: "0 auto" }}>
-        <D {...fadeUp(0)} className="bg-[var(--surface-1)] border border-[var(--border)] rounded-[var(--radius-card)] p-8 md:p-16 lg:p-[72px_64px] flex items-center justify-between gap-8 md:gap-12 flex-wrap relative overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
-          {/* Background accent */}
-          <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)" }} />
-          <div style={{ position: "relative" }}>
-            <div style={{ fontFamily: "var(--font-sans)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-dim)", marginBottom: 16 }}>Get started today</div>
-            <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--foreground)", margin: "0 0 16px", maxWidth: 500 }}>
-              Grow your channel.<br />Start for free.
-            </h2>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-base)", color: "var(--muted-foreground)", margin: 0 }}>
-              Join 50,000+ creators already using AutoTube to find their next viral video.
-            </p>
+      {/* ═══ TESTIMONIALS — Marquee Cards ═══ */}
+      <section className="py-20 md:py-28 overflow-hidden" id="testimonials">
+        <D {...fadeUp(0)} className="text-center mb-14 px-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-[var(--accent)] border border-[var(--border-active)] mb-5">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-accent-foreground">Our Rates</span>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start", flexShrink: 0, position: "relative" }}>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "16px", fontStyle: "italic", color: "var(--foreground)", maxWidth: 300, lineHeight: 1.6 }}>"The best time to start was yesterday. The next best time is now."</span>
+          <h2 className="font-heading font-extrabold tracking-tight text-foreground mb-4" style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+            Loved by 50,000+ creators.
+          </h2>
+          <div className="flex items-center justify-center gap-1 mb-2">
+            {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="#FBBF24" color="#FBBF24" />)}
+          </div>
+          <p className="text-sm text-[var(--text-dim)]">4.9/5 from 2,400+ reviews</p>
+        </D>
+
+        {/* Scrolling row */}
+        <div className="relative">
+          <div className="flex gap-4 animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused]" style={{ width: "max-content" }}>
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div key={i} className="w-[320px] shrink-0 p-5 rounded-[var(--radius-card)] border border-border bg-card hover:border-[var(--surface-4)] transition-all duration-200">
+                <div className="flex gap-1 mb-3">{[...Array(5)].map((_, si) => <Star key={si} size={11} fill="#FBBF24" color="#FBBF24" />)}</div>
+                <p className="text-sm text-secondary-foreground leading-relaxed mb-4">"{t.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold text-white" style={{ background: t.color }}>{t.avatar}</div>
+                  <div>
+                    <div className="text-xs font-semibold text-foreground">{t.name}</div>
+                    <div className="text-[10px] text-[var(--text-dim)]">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="at-section-divider" />
+
+      {/* ═══ PRICING ═══ */}
+      <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-10" id="pricing">
+        <D {...fadeUp(0)} className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-[var(--accent)] border border-[var(--border-active)] mb-5">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-accent-foreground">Pricing</span>
+          </div>
+          <h2 className="font-heading font-extrabold tracking-tight text-foreground mb-3" style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}>
+            Simple, transparent pricing.
+          </h2>
+          <p className="text-muted-foreground">No hidden fees. Cancel anytime.</p>
+        </D>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          {pricing.map((plan, i) => (
+            <D key={plan.name} {...fadeUp(i * 0.08)} className={`relative p-7 rounded-[var(--radius-card)] border bg-card transition-all duration-300 hover:-translate-y-1 overflow-hidden ${plan.highlight ? "border-[var(--border-active)] shadow-glow-primary-sm" : "border-border hover:shadow-elevation-md"}`}>
+              {plan.highlight && <div className="absolute top-0 inset-x-0 h-0.5" style={{ background: "var(--gradient-aurora)" }} />}
+              {plan.highlight && <div className="absolute inset-0 pointer-events-none" style={{ background: "var(--gradient-subtle)" }} />}
+              <div className="relative">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-[var(--text-dim)]">{plan.name}</span>
+                  {plan.highlight && <span className="px-2 py-0.5 rounded-pill bg-[var(--accent)] text-accent-foreground text-[9px] font-bold tracking-wide uppercase">Popular</span>}
+                </div>
+                <p className="text-[11px] text-[var(--text-dim)] mb-4">{plan.desc}</p>
+                <div className="flex items-baseline gap-1 mb-5">
+                  <span className="font-mono font-extrabold text-foreground tracking-tighter" style={{ fontSize: "clamp(36px, 4vw, 44px)" }}>{plan.price}</span>
+                  <span className="text-sm text-[var(--text-dim)]">{plan.period}</span>
+                </div>
+                <button onClick={() => go("/onboarding")} className={`w-full h-10 rounded-md text-sm font-bold cursor-pointer transition-all active:scale-[0.98] mb-5 border-none ${plan.highlight ? "text-white shadow-glow-primary-sm" : "bg-secondary text-secondary-foreground hover:opacity-80"}`} style={plan.highlight ? { background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" } : {}}>
+                  {plan.name === "Agency" ? "Contact sales" : "Get started"} →
+                </button>
+                <div className="h-px bg-border mb-4" />
+                <div className="space-y-2.5">
+                  {plan.features.map(f => (
+                    <div key={f} className="flex items-center gap-2.5">
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${plan.highlight ? "bg-primary" : "bg-[var(--hover-overlay-md)]"}`}>
+                        <Check size={8} color={plan.highlight ? "white" : "var(--muted-foreground)"} />
+                      </div>
+                      <span className="text-sm text-muted-foreground">{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </D>
+          ))}
+        </div>
+      </section>
+
+      <div className="at-section-divider" />
+
+      {/* ═══ FINAL CTA — Full-width gradient ═══ */}
+      <section className="py-24 md:py-32 px-5 md:px-10">
+        <D {...fadeUp(0)} className="max-w-5xl mx-auto relative overflow-hidden rounded-3xl border border-border p-12 md:p-20 text-center" style={{ background: "var(--gradient-subtle)" }}>
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(124,92,252,0.12) 0%, transparent 60%)" }} />
+          <div className="relative">
+            <h2 className="font-heading font-extrabold tracking-tight text-foreground mb-4" style={{ fontSize: "clamp(28px, 4vw, 48px)" }}>
+              Ready to grow your channel?
+            </h2>
+            <p className="text-muted-foreground mb-8 max-w-lg mx-auto">Join 50,000+ creators already using AutoTube to find their next viral video.</p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
+                Start for free <ArrowRight size={15} />
+              </button>
+              <button className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground text-sm font-medium cursor-pointer transition-all hover:bg-[var(--hover-overlay-md)]">
+                <Play size={13} fill="currentColor" /> Watch demo
+              </button>
+            </div>
           </div>
         </D>
       </section>
+
+      {/* Scroll to top */}
+      <div className="flex justify-center pb-8">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="group flex items-center gap-2 px-5 py-2.5 rounded-pill text-xs font-medium text-[var(--text-dim)] hover:text-foreground bg-transparent border border-border hover:border-[var(--surface-4)] hover:bg-[var(--hover-overlay)] transition-all cursor-pointer"
+        >
+          <ArrowUp size={13} className="transition-transform group-hover:-translate-y-0.5" />
+          Back to top
+        </button>
+      </div>
 
       <Footer />
     </div>

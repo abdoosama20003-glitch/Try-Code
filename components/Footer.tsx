@@ -111,7 +111,7 @@ const mainPagesCol1 = [
   { label: "Home",         href: "/" },
   { label: "Features",     href: "#features" },
   { label: "Pricing",      href: "#pricing" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Our Rates", href: "#testimonials" },
   { label: "Blog",         href: "#blog" },
   { label: "About",        href: "#about" },
 ];
@@ -155,7 +155,7 @@ export function Footer() {
         style={{
           background: "var(--card)",
           borderRadius: "var(--radius-card)",
-          border: "1px solid #2a2a2e",
+          border: "1px solid var(--border)",
           overflow: "hidden",
           width: "100%",
         }}
@@ -166,9 +166,9 @@ export function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 460 }}>
             <h2
               style={{
-                fontFamily: "var(--font-sans)",
+                fontFamily: "var(--font-heading)",
                 fontSize: "clamp(28px, 4vw, 40px)",
-                fontWeight: "var(--font-weight-bold)",
+                fontWeight: 800,
                 color: "var(--foreground)",
                 letterSpacing: "-0.03em",
                 lineHeight: 1.15,
@@ -219,17 +219,20 @@ export function Footer() {
               justifyContent: "center",
               height: 52,
               padding: "0 28px",
-              borderRadius: 26,
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.18)",
+              borderRadius: 100,
+              background: "var(--gradient-aurora)",
+              backgroundSize: "200% 200%",
+              animation: "at-gradient-shift 4s ease infinite",
+              border: "none",
               cursor: "pointer",
               fontFamily: "var(--font-sans)",
               fontSize: "14px",
-              fontWeight: "var(--font-weight-normal)",
-              color: "var(--foreground)",
+              fontWeight: 600,
+              color: "#FFFFFF",
               whiteSpace: "nowrap",
               flexShrink: 0,
               alignSelf: "center",
+              boxShadow: "var(--glow-primary-sm)",
             }}
           >
             Get started →
@@ -237,7 +240,7 @@ export function Footer() {
         </div>
 
         {/* ── Divider ── */}
-        <div style={{ height: 1, background: "rgba(255,255,255,0.07)", margin: "0 32px" }} />
+        <div style={{ height: 1, background: "var(--border)", margin: "0 32px" }} />
 
         {/* ── Link Columns ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto] gap-10 lg:gap-12 p-8 md:p-12 lg:p-[40px_56px_36px] flex-wrap">
@@ -292,7 +295,7 @@ export function Footer() {
         </div>
 
         {/* ── Divider ── */}
-        <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "0 32px" }} />
+        <div style={{ height: 1, background: "var(--border)", margin: "0 32px" }} />
 
         {/* ── Bottom bar: copyright + socials ── */}
         <div className="flex flex-col-reverse md:flex-row items-center justify-between p-6 md:p-8 lg:p-[18px_56px_22px] gap-6 flex-wrap text-center md:text-left">
@@ -301,7 +304,7 @@ export function Footer() {
               fontFamily: "var(--font-sans)",
               fontSize: "12px",
               fontWeight: "var(--font-weight-normal)",
-              color: "#333340",
+              color: "var(--text-dim)",
               lineHeight: 1,
             }}
           >
