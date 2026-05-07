@@ -235,34 +235,6 @@ export function SettingsPage() {
                 </div>
               </div>
             )}
-
-            {/* ═══ SECURITY ═══ */}
-            {tab === "security" && (
-              <div className="space-y-4">
-                <div className="bg-card border border-border rounded-2xl p-6">
-                  <div className="text-sm font-bold text-foreground mb-5">Password</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <Field label="Current Password" type="password" value="••••••••" />
-                    <Field label="New Password" type="password" />
-                  </div>
-                  <button onClick={() => { setPwdSaved(true); setTimeout(() => setPwdSaved(false), 2000); }} className="h-9 px-5 rounded-xl text-[11px] font-bold text-white border-none cursor-pointer flex items-center gap-1.5" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>{pwdSaved ? <><Check size={10} /> Updated!</> : "Update Password"}</button>
-                </div>
-                <div className="bg-card border border-border rounded-2xl p-6">
-                  <div className="text-sm font-bold text-foreground mb-1">Two-Factor Authentication</div>
-                  <div className="text-[11px] text-[var(--text-dim)] mb-4">Add an extra layer of security.</div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[rgba(52,211,153,0.1)] border border-[rgba(52,211,153,0.18)]"><Shield size={14} color="#34D399" /></div>
-                      <div>
-                        <div className="text-[13px] font-medium text-foreground">2FA Enabled</div>
-                        <div className="text-[10px] text-[var(--text-dim)]">Authenticator app configured</div>
-                      </div>
-                    </div>
-                    <button onClick={() => setShowReconfigure(true)} className="h-8 px-3 rounded-lg text-[11px] font-medium text-[var(--text-dim)] border border-border bg-transparent cursor-pointer hover:text-foreground transition-all">Reconfigure</button>
-                  </div>
-                </div>
-              </div>
-            )}
           </D>
         </AnimatePresence>
       </div>
