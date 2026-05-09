@@ -7,7 +7,7 @@ import {
   Image, BarChart3, Settings, LogOut, Crown, Film, X, Menu,
 } from "lucide-react";
 import { LogoMark } from "./LogoMark";
-import { useSidebar } from "@/context/SidebarContext";
+import { useSidebar } from "@/hooks/useSidebar";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Home",          path: "/dashboard" },

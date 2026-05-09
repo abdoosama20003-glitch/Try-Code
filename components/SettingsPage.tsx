@@ -3,7 +3,7 @@ import { useState } from "react";
 import { User, CreditCard, Save, Check, Trash2, Crown, Menu, Shield, Link2, Crosshair, Sparkles, PenTool, Image, Upload, CreditCard as CardIcon, AlertTriangle } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Modal, ModalField } from "./Modal";
-import { useSidebar } from "@/context/SidebarContext";
+import { useSidebar } from "@/hooks/useSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 
 const D = motion.create("div" as any);

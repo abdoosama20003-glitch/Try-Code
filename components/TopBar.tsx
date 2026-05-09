@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bell, X, Menu, Search } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
-import { useSidebar } from "@/context/SidebarContext";
+import { useSidebar } from "@/hooks/useSidebar";
 
 interface TopBarProps {
   title: string;

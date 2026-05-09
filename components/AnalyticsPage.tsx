@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BarChart3, Eye, Clock, Target, Users, ArrowUpRight, ArrowDownRight, Search, Bell, Menu } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { ExportModal, NotificationPanel } from "./Overlays";
-import { useSidebar } from "@/context/SidebarContext";
+import { useSidebar } from "@/hooks/useSidebar";
 import {
   Area, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart,

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { NotificationPanel } from "./Overlays";
-import { useSidebar } from "@/context/SidebarContext";
+import { useSidebar } from "@/hooks/useSidebar";
 import { Area, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart } from "recharts";
 
 const D = motion.create("div" as any);
