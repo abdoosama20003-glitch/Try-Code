@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { StoreProvider } from "@/store/StoreProvider";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -27,9 +27,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className={`${dmSans.className} antialiased`}>
-        <ThemeProvider>
+        <StoreProvider>
           {children}
-        </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );
