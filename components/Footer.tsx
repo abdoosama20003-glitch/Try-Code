@@ -112,8 +112,8 @@ const mainPagesCol1 = [
   { label: "Features",     href: "#features" },
   { label: "Pricing",      href: "#pricing" },
   { label: "Our Rates", href: "#testimonials" },
-  { label: "Blog",         href: "#blog" },
-  { label: "About",        href: "#about" },
+  { label: "About Us",     href: "/about" },
+  { label: "FAQs",         href: "/faqs" },
 ];
 
 const mainPagesCol2 = [
