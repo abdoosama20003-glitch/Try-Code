@@ -99,7 +99,7 @@ export function Navbar() {
               <ThemeToggle />
 
               <motion.button
-                onClick={() => router.push("/onboarding")}
+                onClick={() => router.push("/login")}
                 className="hidden sm:block text-sm font-medium text-muted-foreground hover:text-foreground bg-transparent border-none cursor-pointer px-3 py-1.5 rounded-lg transition-colors"
                 whileHover={{ y: -1 }}
               >
@@ -107,7 +107,7 @@ export function Navbar() {
               </motion.button>
 
               <motion.button
-                onClick={() => router.push("/onboarding")}
+                onClick={() => router.push("/signup")}
                 className="hidden md:inline-flex items-center gap-1.5 h-9 px-5 rounded-[100px] text-[13px] font-semibold text-white border-none cursor-pointer"
                 style={{
                   background: "var(--gradient-aurora)",
@@ -184,13 +184,13 @@ export function Navbar() {
 
               <div className="mt-auto flex flex-col gap-3">
                 <button
-                  onClick={() => router.push("/onboarding")}
+                  onClick={() => router.push("/login")}
                   className="w-full text-foreground text-sm font-medium h-12 rounded-xl border border-border hover:bg-[var(--hover-overlay)] transition-colors cursor-pointer bg-transparent"
                 >
                   Log in
                 </button>
                 <button
-                  onClick={() => router.push("/onboarding")}
+                  onClick={() => router.push("/signup")}
                   className="w-full text-sm font-bold h-12 rounded-xl border-none cursor-pointer text-white transition-all hover:scale-[0.98]"
                   style={{
                     background: "var(--gradient-aurora)",

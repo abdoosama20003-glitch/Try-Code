@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowRight, ArrowLeft, Check, Youtube, Github, Globe,
+  ArrowRight, ArrowLeft, Check,
   Sparkles, Crosshair, PenTool, Image, BarChart3, Target, Loader2,
-  Terminal, Bot, Palette, Briefcase, Gamepad2, TrendingUp, HeartPulse, BookOpen, Music, Utensils
+  Terminal, Bot, Globe, Palette, Briefcase, Gamepad2, TrendingUp, HeartPulse, BookOpen, Music, Utensils
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogoMark } from "./LogoMark";
@@ -37,15 +37,9 @@ const goals = [
 ];
 
 const stepLabels = [
-  { n: 1, l: "Account" },
-  { n: 2, l: "Niche"   },
-  { n: 3, l: "Goals"   },
-  { n: 4, l: "Launch"  },
-];
-
-const authProviders = [
-  { l: "Continue with Google",  icon: Globe   },
-  { l: "Continue with YouTube", icon: Youtube },
+  { n: 1, l: "Niche"  },
+  { n: 2, l: "Goals"  },
+  { n: 3, l: "Launch" },
 ];
 
 export function OnboardingPage() {
@@ -54,8 +48,6 @@ export function OnboardingPage() {
   const [selNiches, setSelNiches] = useState<Set<string>>(new Set());
   const [selGoals, setSelGoals]   = useState<Set<string>>(new Set());
   const [loading, setLoading]     = useState(false);
-  const [isLogin, setIsLogin]     = useState(false);
-  const [formData, setFormData]   = useState({ name: "", email: "", password: "" });
 
   const toggleSet = (set: Set<string>, setFn: (s: Set<string>) => void, id: string) => {
     const n = new Set(set);
@@ -162,75 +154,9 @@ export function OnboardingPage() {
         <div className="w-full max-w-[480px]">
           <AnimatePresence mode="wait">
 
-            {/* Step 1: Account */}
+            {/* Step 1: Niche */}
             {step === 1 && (
               <MotionDiv key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-                <div className="mb-8">
-                  <h2 className="font-heading font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
-                    style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
-                    {isLogin ? "Welcome back" : "Create your account"}
-                  </h2>
-                  <p className="text-sm text-[var(--text-dim)] m-0">
-                    {isLogin ? "Sign in to your AutoTube workspace." : "Get started in seconds. No credit card required."}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-2 mb-6">
-                  {authProviders.map(p => (
-                    <button key={p.l} onClick={() => setStep(2)}
-                      className="flex items-center gap-3 w-full h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)] hover:bg-[var(--hover-overlay)]">
-                      <p.icon size={16} />
-                      {p.l}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex-1 h-px bg-border" />
-                  <span className="text-[11px] text-[var(--text-dim)]">or continue with email</span>
-                  <div className="flex-1 h-px bg-border" />
-                </div>
-
-                <div className="flex flex-col gap-3 mb-6">
-                  {(!isLogin ? ["Full Name", "Email address", "Password"] : ["Email address", "Password"]).map(f => {
-                    const fieldKey = f === "Password" ? "password" : f === "Email address" ? "email" : "name";
-                    return (
-                      <div key={f}>
-                        <div className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--text-dim)] mb-1.5">{f}</div>
-                        <input
-                          type={f === "Password" ? "password" : f === "Email address" ? "email" : "text"}
-                          placeholder={f === "Email address" ? "you@example.com" : f === "Password" ? "Min. 8 characters" : "Alex Turner"}
-                          value={formData[fieldKey as keyof typeof formData]}
-                          onChange={(e) => setFormData(prev => ({ ...prev, [fieldKey]: e.target.value }))}
-                          className="w-full h-[42px] px-[14px] bg-[var(--surface-1)] border border-border rounded-[var(--radius-button)] text-foreground text-sm outline-none transition-[border-color,box-shadow] focus:border-primary focus:ring-2 focus:ring-[var(--ring)]"
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <button 
-                  onClick={() => setStep(2)}
-                  disabled={isLogin ? (!formData.email || !formData.password) : (!formData.name || !formData.email || !formData.password)}
-                  className="flex items-center justify-center gap-2 w-full h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity hover:opacity-[0.86] mb-4 disabled:opacity-40 disabled:cursor-not-allowed">
-                  {isLogin ? "Sign in" : "Create account"} <ArrowRight size={14} />
-                </button>
-
-                <div className="text-center text-sm text-[var(--text-dim)]">
-                  {isLogin ? "Don't have an account? " : "Already have an account? "}
-                  <button onClick={() => setIsLogin(!isLogin)} className="bg-transparent border-none p-0 cursor-pointer text-[var(--foreground)] font-semibold hover:underline">
-                    {isLogin ? "Sign up" : "Sign in"}
-                  </button>
-                </div>
-                <div className="text-center text-[12px] text-[var(--text-dim)] mt-3">
-                  Admin? <button onClick={() => navigate.push("/admin")} className="bg-transparent border-none p-0 cursor-pointer text-primary font-semibold hover:underline text-[12px]">Login here</button>
-                </div>
-              </MotionDiv>
-            )}
-
-            {/* Step 2: Niche */}
-            {step === 2 && (
-              <MotionDiv key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
                 <div className="mb-7">
                   <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
                     style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
@@ -259,11 +185,11 @@ export function OnboardingPage() {
                 </div>
 
                 <div className="flex gap-[10px]">
-                  <button onClick={() => setStep(1)}
+                  <button onClick={() => navigate.back()}
                     className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)]">
                     <ArrowLeft size={13} /> Back
                   </button>
-                  <button onClick={() => setStep(3)} disabled={selNiches.size === 0}
+                  <button onClick={() => setStep(2)} disabled={selNiches.size === 0}
                     className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
                     Continue <ArrowRight size={14} />
                   </button>
@@ -271,9 +197,9 @@ export function OnboardingPage() {
               </MotionDiv>
             )}
 
-            {/* Step 3: Goals */}
-            {step === 3 && (
-              <MotionDiv key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
+            {/* Step 2: Goals */}
+            {step === 2 && (
+              <MotionDiv key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
                 <div className="mb-7">
                   <h2 className="font-extrabold tracking-[-0.03em] text-foreground m-0 mb-2 leading-[1.2]"
                     style={{ fontSize: "clamp(22px, 3vw, 28px)" }}>
@@ -310,11 +236,11 @@ export function OnboardingPage() {
                 </div>
 
                 <div className="flex gap-[10px]">
-                  <button onClick={() => setStep(2)}
+                  <button onClick={() => setStep(1)}
                     className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium transition-all hover:border-[var(--surface-4)]">
                     <ArrowLeft size={13} /> Back
                   </button>
-                  <button onClick={() => setStep(4)} disabled={selGoals.size === 0}
+                  <button onClick={() => setStep(3)} disabled={selGoals.size === 0}
                     className="flex-1 flex items-center justify-center gap-2 h-[46px] rounded-[var(--radius-button)] bg-foreground text-background border-none cursor-pointer text-sm font-bold transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
                     Continue <ArrowRight size={14} />
                   </button>
@@ -322,9 +248,9 @@ export function OnboardingPage() {
               </MotionDiv>
             )}
 
-            {/* Step 4: Launch */}
-            {step === 4 && (
-              <MotionDiv key="s4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
+            {/* Step 3: Launch */}
+            {step === 3 && (
+              <MotionDiv key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 py-10">
                     <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
@@ -373,7 +299,7 @@ export function OnboardingPage() {
                     </div>
 
                     <div className="flex gap-[10px]">
-                      <button onClick={() => setStep(3)}
+                      <button onClick={() => setStep(2)}
                         className="flex items-center gap-1.5 h-[46px] px-[18px] rounded-[var(--radius-button)] bg-transparent border border-border text-muted-foreground cursor-pointer text-sm font-medium">
                         <ArrowLeft size={13} /> Back
                       </button>

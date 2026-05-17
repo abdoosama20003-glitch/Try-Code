@@ -126,7 +126,7 @@ const mainPagesCol2 = [
 ];
 
 const utilityPages = [
-  { label: "Get started",        href: "/onboarding" },
+  { label: "Get started",        href: "/signup" },
   { label: "Style guide",        href: "#" },
   { label: "Password protected", href: "#" },
   { label: "Privacy policy",     href: "#" },
@@ -209,7 +209,7 @@ export function Footer() {
 
           {/* Right: CTA button */}
           <motion.button
-            onClick={() => navigate.push("/onboarding")}
+            onClick={() => navigate.push("/signup")}
             whileHover={{ scale: 1.03, background: "rgba(255,255,255,0.10)" }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.15 }}

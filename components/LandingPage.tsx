@@ -112,7 +112,7 @@ export function LandingPage() {
               </D>
 
               <D {...fadeUp(0.15)} className="flex flex-wrap gap-4 mb-12">
-                <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:shadow-glow-primary hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
+                <button onClick={() => go("/signup")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:shadow-glow-primary hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
                   Start for free <ArrowRight size={15} />
                 </button>
                 <button onClick={() => setShowDemo(true)} className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--hover-overlay-md)] text-sm font-medium cursor-pointer transition-all">
@@ -232,7 +232,7 @@ export function LandingPage() {
 
         {/* Explore All button */}
         <D {...fadeUp(0.3)} className="flex justify-center mt-10">
-          <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => go("/onboarding")}
+          <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => go("/signup")}
             className="inline-flex items-center gap-2 h-12 px-8 rounded-full text-sm font-bold text-white border-none cursor-pointer"
             style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite", boxShadow: "var(--glow-primary-sm)" }}>
             Explore All Features <ArrowRight size={14} />
@@ -267,7 +267,7 @@ export function LandingPage() {
                   <button onClick={() => setSelectedTool(null)} className="w-8 h-8 rounded-lg flex items-center justify-center bg-transparent border-none text-[var(--text-dim)] cursor-pointer hover:text-foreground hover:bg-[var(--hover-overlay)] transition-colors"><X size={15} /></button>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">{selectedTool.detail}</p>
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => { setSelectedTool(null); go("/onboarding"); }}
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => { setSelectedTool(null); go("/signup"); }}
                   className="w-full h-11 rounded-xl text-sm font-bold text-white border-none cursor-pointer flex items-center justify-center gap-2"
                   style={{ background: `linear-gradient(135deg, ${selectedTool.color}, ${selectedTool.color}cc)`, boxShadow: `0 0 20px ${selectedTool.color}30` }}>
                   Try {selectedTool.title} <ArrowRight size={13} />
@@ -412,7 +412,7 @@ export function LandingPage() {
             </h2>
             <p className="text-muted-foreground mb-8 max-w-lg mx-auto">Join 50,000+ creators already using AutoTube to find their next viral video.</p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <button onClick={() => go("/onboarding")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
+              <button onClick={() => go("/signup")} className="inline-flex items-center gap-2.5 h-12 px-8 py-3 rounded-pill text-white text-sm font-bold cursor-pointer border-none shadow-glow-primary transition-all hover:scale-[1.02] active:scale-[0.98]" style={{ background: "var(--gradient-aurora)", backgroundSize: "200% 200%", animation: "at-gradient-shift 4s ease infinite" }}>
                 Start for free <ArrowRight size={15} />
               </button>
               <button onClick={() => setShowDemo(true)} className="inline-flex items-center gap-2.5 h-12 px-7 py-3 rounded-pill bg-transparent border border-border text-muted-foreground hover:text-foreground text-sm font-medium cursor-pointer transition-all hover:bg-[var(--hover-overlay-md)]">
